@@ -1,0 +1,121 @@
+"3.2 (created: 2011/06/03 11:51:34)
+
+" vim: set ft=vimperator:
+
+"-----------------------------------------------------------------------
+" 基本設定
+"-----------------------------------------------------------------------
+
+" アプリケーション名
+set titlestring="Mozilla Firegorilla"
+
+" ローカルrc
+source! /Users/sinsaiho/.vimperatorrc.local
+
+" デフォルトの検索エンジン
+set defsearch=google
+
+" Beep音無効
+set visualbell
+hi Bell display: none;
+
+" 最後のタブを閉じたときに Firefox を終了しない
+set! browser.tabs.closeWindowWithLastTab=false
+
+"-----------------------------------------------------------------------
+" 画面設定
+"-----------------------------------------------------------------------
+
+" gui
+" Alt+↑/↓でナビゲーションバーの表示/非表示
+set gui=tabs,nonavigation,noaddons
+map <A-Up> :set gui=navigation<CR>
+map <A-Down> :set gui=nonavigation<CR>
+
+" カラースキーム
+colorscheme mycolor
+
+" 情報表示レベル
+set verbose=9
+
+" ステータスライン左寄せ
+js <<EOM
+    document.getElementById("liberator-status").style.textAlign = "start"
+EOM
+
+" ステータスラインにfaviconを移動
+js <<EOM
+let statusLine = document.getElementById("liberator-statusline");
+let (favicon = document.getElementById("page-proxy-stack")) {
+  favicon.style.maxWidth = favicon.style.maxHeight = "20px";
+  favicon.style.margin = "0 -6px 0 5px";
+  statusLine.insertBefore(favicon, statusLine.firstChild);
+}
+EOM
+
+"-----------------------------------------------------------------------
+" 操作設定
+"-----------------------------------------------------------------------
+
+" hint文字
+set hintchars=wertyuioasdfghjkl
+
+" タブを閉じたら直前のタブにフォーカス
+nnoremap d <M-w>
+
+" undo一覧から開く
+nnoremap U :undo<Space>
+
+" ページロード時にテキストボックスにフォーカスするのを防ぐ
+set focuscontent
+
+" :[tab]open の補完対象と順番
+set complete=slb
+
+" コマンドラインでIMEを自動的にOFFにする
+style -name commandline-ime chrome://* #liberator-commandline-command input {ime-mode: inactive;}
+
+"-----------------------------------------------------------------------
+" スクロール設定
+"-----------------------------------------------------------------------
+
+" _smooziee.jsを使用
+let g:smooziee_scroll_amount=320
+let g:smooziee_intarval=20
+
+"-----------------------------------------------------------------------
+" 検索設定
+"-----------------------------------------------------------------------
+
+" /,? 検索結果をハイライト
+set hlsearch
+
+" 検索での大文字小文字を無視
+set ignorecase
+
+" インクリメンタル検索
+set incsearch
+
+"-----------------------------------------------------------------------
+" twittperator設定
+"-----------------------------------------------------------------------
+" ChirpUserStreamsを使用
+let g:twittperator_use_chirp=1
+
+" 現在のURLを短縮表示して:tw
+nmap ,tu :<C-u>twuri<CR><C-a><Right><Right><Right>
+js <<EOM
+commands.addUserCommand(
+    ["twuri"],
+    "Twittperator tweet with URI",
+    function(){
+        let uri = 'https://www.googleapis.com/urlshortener/v1/url';
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", uri, false);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(JSON.stringify({ longUrl: buffer.URI }));
+        let result = JSON.parse(xhr.responseText).id;
+        commandline.open(":",["tw"," /",buffer.title,result].join(" "),modes.EX);
+    }
+);
+EOM
