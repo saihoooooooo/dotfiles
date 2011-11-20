@@ -186,7 +186,7 @@ set list
 set listchars=tab:>\ ,trail:-,nbsp:%,precedes:<
 
 " 全角スペースを視覚化
-autocmd MyAutoCmd VimEnter,WinEnter,WinLeave * match IdeographicSpace /　/
+autocmd MyAutoCmd VimEnter,BufRead,WinEnter,WinLeave * match IdeographicSpace /　/
 if (has('gui_running'))
     autocmd MyAutoCmd GUIEnter * highlight IdeographicSpace term=underline ctermbg=Gray guibg=Gray50
 else
@@ -543,7 +543,7 @@ endfunction
 "=============================================================================
 " ウィンドウ設定 : {{{
 
-" 自動調整を行わない
+" 自動調整を行う
 set equalalways
 
 " サイズ調整は幅と高さ
@@ -724,7 +724,6 @@ endif
 
 " 各種plugin
 NeoBundle 'git://github.com/anyakichi/vim-surround.git'
-NeoBundle 'git://github.com/basyura/TweetVim.git'
 NeoBundle 'git://github.com/h1mesuke/unite-outline.git'
 NeoBundle 'git://github.com/h1mesuke/vim-alignta.git'
 NeoBundle 'git://github.com/kana/vim-operator-replace.git'
@@ -738,6 +737,7 @@ NeoBundle 'git://github.com/kana/vim-textobj-user.git'
 NeoBundle 'git://github.com/mattn/calendar-vim.git'
 NeoBundle 'git://github.com/mattn/mahjong-vim.git'
 NeoBundle 'git://github.com/mattn/webapi-vim.git'
+NeoBundle 'git://github.com/saihoooooooo/vim-textobj-space.git'
 NeoBundle 'git://github.com/Shougo/git-vim.git'
 NeoBundle 'git://github.com/Shougo/unite.vim.git'
 NeoBundle 'git://github.com/Shougo/neobundle.vim.git'
@@ -753,6 +753,7 @@ NeoBundle 'git://github.com/thinca/vim-unite-history.git'
 NeoBundle 'git://github.com/tpope/vim-repeat.git'
 NeoBundle 'git://github.com/tsaleh/vim-matchit.git'
 NeoBundle 'git://github.com/tsukkee/unite-help.git'
+NeoBundle 'git://github.com/tyru/open-browser.vim.git'
 NeoBundle 'git://github.com/tyru/operator-camelize.vim.git'
 NeoBundle 'git://github.com/vim-jp/vimdoc-ja.git'
 NeoBundle 'git://github.com/vim-scripts/TwitVim.git'
@@ -872,14 +873,6 @@ call textobj#user#plugin('camelcase', {
 \     '-': {
 \         '*pattern*': '[A-Za-z][a-z0-9]\+\|[A-Z]\+',
 \         'select': ['ac', 'ic'],
-\     },
-\ })
-
-" スペース
-call textobj#user#plugin('space', {
-\     '-': {
-\         '*pattern*': '\s\+',
-\         'select': ['as', 'is'],
 \     },
 \ })
 
@@ -1138,6 +1131,13 @@ let g:ref_phpmanual_cmd = 'w3m -dump %s'
 " vim-matchit # %での対応移動を強化 : {{{
 
 " 設定なし
+
+" }}}
+"=============================================================================
+" openbrowser.vim # カーソル位置のURLをブラウザで開く : {{{
+
+" URLなら開き、URLでない場合は検索を実行
+nmap xu <Plug>(openbrowser-smart-search)
 
 " }}}
 "=============================================================================
