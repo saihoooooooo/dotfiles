@@ -87,10 +87,6 @@ command! -bang -bar -complete=file -nargs=? Unix edit<bang> ++fileformat=unix <a
 command! -bang -bar -complete=file -nargs=? Dos edit<bang> ++fileformat=dos <args>
 command! -bang -bar -complete=file -nargs=? Mac edit<bang> ++fileformat=mac <args>
 
-" 文字コード/改行コード指定（Scratch用）
-nnoremap xft :set ft=
-nnoremap xff :set ff=
-
 " }}}
 "=============================================================================
 " 表示設定 : {{{
@@ -147,9 +143,9 @@ set laststatus=2
 
 " ステータスライン表示内容
 let &statusline = ''
-let &statusline .= '%{expand("%:p:t")}'
+let &statusline .= '%{expand("%:t")}'
 let &statusline .= '%h%w%m%r'
-let &statusline .= ' (%<%{expand("%:p:h")}) '
+let &statusline .= ' (%<%{expand("%:p:~:h")}) '
 let &statusline .= '%='
 let &statusline .= '[HEX:%B][R:%l][C:%c]'
 let &statusline .= '%y'
@@ -465,6 +461,9 @@ endif
 " 拡張子毎のfiletype指定
 autocmd MyAutoCmd BufRead,BufNewFile *.ctp set filetype=php
 
+" ファイルタイプ指定
+nnoremap xf :set ft=
+
 " 編集中ファイルのリネーム
 command! -nargs=1 -complete=file Rename file <args> | w | call delete(expand('#'))
 
@@ -480,6 +479,10 @@ function! s:OpenJunkFile()
         execute 'edit ' . l:filename
     endif
 endfunction
+
+" gfは別ウィンドウで開く
+nnoremap gf <C-w>f
+xnoremap gf <C-w>f
 
 " }}}
 "=============================================================================
@@ -672,8 +675,11 @@ nnoremap [Tag]t <C-]>
 nnoremap [Tag]n :<C-u>tag<CR>
 nnoremap [Tag]p :<C-u>pop<CR>
 
+" 別ウィンドウで開く
+nnoremap [Tag]o :<C-u>stjump<CR>
+
 " プレビューウィンドウで開く
-nnoremap [Tag]o <C-w>}<C-w>P
+nnoremap [Tag]O <C-w>}<C-w>P
 
 " プレビューウィンドウを閉じる
 nmap [Tag]z <C-w>z
@@ -1006,6 +1012,9 @@ endif
 " カレントディレクトリ以下を探す
 call unite#set_substitute_pattern('files', '^@', '\=getcwd()')
 
+" 親ディレクトリを探す
+call unite#set_substitute_pattern('files', ';', '../')
+
 " file_mruの保存数
 let g:unite_source_file_mru_limit = 1000
 
@@ -1069,6 +1078,9 @@ nnoremap E :<C-u>VimFiler<CR>
 " vimfilerファイルタイプ設定
 autocmd MyAutoCmd FileType vimfiler call <SID>VimfilerMySetting()
 function! s:VimfilerMySetting()
+    " ドットファイルを表示
+    normal .
+
     " リネーム
     nmap <buffer><silent> R <Plug>(vimfiler_rename_file)
 
@@ -1137,7 +1149,8 @@ let g:ref_phpmanual_cmd = 'w3m -dump %s'
 " openbrowser.vim # カーソル位置のURLをブラウザで開く : {{{
 
 " URLなら開き、URLでない場合は検索を実行
-nmap xu <Plug>(openbrowser-smart-search)
+nmap xo <Plug>(openbrowser-smart-search)
+xmap xo <Plug>(openbrowser-smart-search)
 
 " }}}
 "=============================================================================
