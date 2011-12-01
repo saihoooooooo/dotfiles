@@ -358,6 +358,7 @@ noremap K 10k
 
 " wの動作をeに変更
 noremap w e
+noremap W E
 
 " カーソルを行頭、行末で止まらないようにする
 set whichwrap=h,l,[,],<,>
@@ -445,6 +446,10 @@ function! s:CmdCapture(cmd)
     setlocal bufhidden=unload nobuflisted buftype=nofile noswapfile
     call setline(1, split(substitute(result, '^\n\+', '', ''), '\n'))
 endfunction
+
+" ファイルパス簡易入力
+cnoremap <C-f> <C-r>=expand('%:t')<CR>
+cnoremap <C-d> <C-r>=expand('%:p:h')<CR>/
 
 " q:を無効化
 nnoremap q: <Nop>
@@ -761,7 +766,6 @@ NeoBundle 'git://github.com/tsaleh/vim-matchit.git'
 NeoBundle 'git://github.com/tsukkee/unite-help.git'
 NeoBundle 'git://github.com/tyru/open-browser.vim.git'
 NeoBundle 'git://github.com/tyru/operator-camelize.vim.git'
-NeoBundle 'git://github.com/vim-jp/vimdoc-ja.git'
 NeoBundle 'git://github.com/vim-scripts/TwitVim.git'
 NeoBundle 'git://github.com/vim-scripts/vcscommand.vim.git'
 NeoBundle 'git://github.com/vim-scripts/ZoomWin.git'
@@ -976,22 +980,8 @@ function! s:UniteMySetting()
     imap <buffer><expr>i unite#smart_map("i", "\<ESC>\<Plug>(unite_insert_enter)")
 
     " uniteを終了
+    imap <buffer><ESC> <Plug>(unite_exit)
     nmap <buffer><ESC> <Plug>(unite_exit)
-
-    " 上に開く
-    " imap <silent><buffer><expr><C-k> unite#do_action('above')
-
-    " 下に開く
-    " imap <silent><buffer><expr><C-j> unite#do_action('below')
-
-    " 左に開く
-    " imap <silent><buffer><expr><C-h> unite#do_action('left')
-
-    " 右に開く
-    " imap <silent><buffer><expr><C-l> unite#do_action('right')
-
-    " タブで開く
-    " imap <silent><buffer><expr><C-t> unite#do_action('tabopen')
 
     " エディット
     imap <silent><buffer><expr><C-e> unite#do_action('edit')
@@ -1017,6 +1007,14 @@ call unite#set_substitute_pattern('files', ';', '../')
 
 " file_mruの保存数
 let g:unite_source_file_mru_limit = 1000
+
+" file_mruの無視パターン
+let g:unite_source_file_mru_ignore_pattern = ''
+let g:unite_source_file_mru_ignore_pattern .= '\~$'
+let g:unite_source_file_mru_ignore_pattern .= '\|\.\%(o\|exe\|dll\|bak\|sw[po]\)$'
+let g:unite_source_file_mru_ignore_pattern .= '\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'
+let g:unite_source_file_mru_ignore_pattern .= '\|^\%(\\\\\|/mnt/\|/media/\|/Volumes/\)'
+let g:unite_source_file_mru_ignore_pattern .= '\|AppData/Local/Temp'
 
 " 検索キーワードをハイライトしない
 let g:unite_source_line_enable_highlight = 0
