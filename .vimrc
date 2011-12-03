@@ -163,8 +163,9 @@ set showmode
 " 相対行番号を表示
 set relativenumber
 
-" 行を折り返さない
-set nowrap
+" 行を折り返して表示
+set wrap
+nnoremap xw :<C-u>call <SID>ToggleOption('wrap')<CR>
 
 " 現在行のハイライト
 set cursorline
@@ -391,6 +392,7 @@ set smartcase
 
 " 循環検索
 set wrapscan
+nnoremap x/ :<C-u>call <SID>ToggleOption('wrapscan')<CR>
 
 " *による検索時に初回は移動しない
 nnoremap * g*N
@@ -412,9 +414,6 @@ function! s:RangeSearch(d)
         call feedkeys(s, 'n')
     endif
 endfunction
-
-" 循環検索のトグル
-nnoremap <expr>x/ &wrapscan ? ":\<C-u>set nowrapscan\<CR>" : ":\<C-u>set wrapscan\<CR>"
 
 " <ESC>でハイライト消去
 nnoremap <silent><ESC> :nohlsearch<CR>
@@ -472,7 +471,7 @@ nnoremap xf :set ft=
 " 編集中ファイルのリネーム
 command! -nargs=1 -complete=file Rename file <args> | w | call delete(expand('#'))
 
-" 使い捨てファイル
+" ジャンクファイル
 command! -nargs=0 JunkFile call s:OpenJunkFile()
 function! s:OpenJunkFile()
     let l:junk_dir = $HOME . '/.vim_junk' . strftime('/%Y/%m')
@@ -704,6 +703,12 @@ set directory=$DOTVIM/tmp/swap
 " }}}
 "=============================================================================
 " その他設定 : {{{
+
+" オプションのトグル
+function! s:ToggleOption(option)
+    execute 'setlocal' a:option.'!'
+    execute 'setlocal' a:option.'?'
+endfunction
 
 " vimスカウター
 command! -bar -bang -nargs=? -complete=file Scouter echo s:Scouter(empty(<q-args>) ? $MYVIMRC : expand(<q-args>), <bang>0)
@@ -977,13 +982,13 @@ nnoremap [Unite]<SPACE> :<C-u>Unite source -no-split<CR>
 autocmd MyAutoCmd FileType unite call <SID>UniteMySetting()
 function! s:UniteMySetting()
     " 入力欄にフォーカス
-    imap <buffer><expr>i unite#smart_map("i", "\<ESC>\<Plug>(unite_insert_enter)")
+    imap <buffer><expr>i unite#smart_map("i", "\<Plug>(unite_insert_leave)\<Plug>(unite_insert_enter)")
 
     " uniteを終了
     imap <buffer><ESC> <Plug>(unite_exit)
     nmap <buffer><ESC> <Plug>(unite_exit)
 
-    " エディット
+    " 編集
     imap <silent><buffer><expr><C-e> unite#do_action('edit')
 
     " ノーマルモードでの上下移動
@@ -1033,10 +1038,10 @@ let g:neocomplcache_enable_ignore_case = 1
 let g:neocomplcache_enable_smart_case = 1
 
 " キャメルケース補完
-let g:neocomplcache_enable_underbar_completion = 1
-
-" アンダーバー区切り補完
 let g:neocomplcache_enable_camel_case_completion = 1
+
+" スネークケース補完
+let g:neocomplcache_enable_underbar_completion = 1
 
 " 日本語は収集しない
 if !exists('g:neocomplcache_keyword_patterns')
