@@ -165,7 +165,7 @@ set relativenumber
 
 " 行を折り返して表示
 set wrap
-nnoremap xw :<C-u>call <SID>ToggleOption('wrap')<CR>
+nnoremap xow :<C-u>call <SID>ToggleOption('wrap')<CR>
 
 " 現在行のハイライト
 set cursorline
@@ -392,7 +392,7 @@ set smartcase
 
 " 循環検索
 set wrapscan
-nnoremap x/ :<C-u>call <SID>ToggleOption('wrapscan')<CR>
+nnoremap xo/ :<C-u>call <SID>ToggleOption('wrapscan')<CR>
 
 " *による検索時に初回は移動しない
 nnoremap * g*N
@@ -582,7 +582,7 @@ endfunction
 set showtabline=2
 
 " ラベル表示内容
-set guitablabel=%t%m
+set guitablabel=%m\ %t
 
 " 基本マップ
 nnoremap [Tab] <Nop>
@@ -726,9 +726,6 @@ endfunction
 "=============================================================================
 " プラグイン設定 : {{{
 
-"=============================================================================
-" neobundle.vim # プラグイン管理 : {{{
-
 " 初期化
 if has('vim_starting')
     filetype off
@@ -753,6 +750,7 @@ NeoBundle 'git://github.com/kana/vim-textobj-user.git'
 NeoBundle 'git://github.com/mattn/calendar-vim.git'
 NeoBundle 'git://github.com/mattn/mahjong-vim.git'
 NeoBundle 'git://github.com/mattn/webapi-vim.git'
+NeoBundle 'git://github.com/mattn/zencoding-vim.git'
 NeoBundle 'git://github.com/saihoooooooo/vim-textobj-space.git'
 NeoBundle 'git://github.com/Shougo/git-vim.git'
 NeoBundle 'git://github.com/Shougo/unite.vim.git'
@@ -775,7 +773,6 @@ NeoBundle 'git://github.com/vim-scripts/TwitVim.git'
 NeoBundle 'git://github.com/vim-scripts/vcscommand.vim.git'
 NeoBundle 'git://github.com/vim-scripts/ZoomWin.git'
 
-" }}}
 "=============================================================================
 " vim-surround # テキストオブジェクトでの囲い操作 : {{{
 
@@ -926,6 +923,23 @@ function! GCalc(expr, banged)
     endif
     echo result
 endfunction
+
+" }}}
+"=============================================================================
+" zencoding-vim # HTML/CSSの簡易入力 : {{{
+
+" キーマップ
+let g:user_zen_leader_key = '<C-j>'
+
+let g:user_zen_settings = {
+    \   'indentation' : '    '
+    \ }
+
+" }}}
+"=============================================================================
+" vim-textobj-space # 空白テキストオブジェクト : {{{
+
+" 設定なし
 
 " }}}
 "=============================================================================
@@ -1152,8 +1166,8 @@ let g:ref_phpmanual_cmd = 'w3m -dump %s'
 " openbrowser.vim # カーソル位置のURLをブラウザで開く : {{{
 
 " URLなら開き、URLでない場合は検索を実行
-nmap xo <Plug>(openbrowser-smart-search)
-xmap xo <Plug>(openbrowser-smart-search)
+nmap x@ <Plug>(openbrowser-smart-search)
+xmap x@ <Plug>(openbrowser-smart-search)
 
 " }}}
 "=============================================================================
