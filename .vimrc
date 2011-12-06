@@ -113,6 +113,7 @@ else
 endif
 
 " GUIオプション
+set guioptions&
 set guioptions-=m
 set guioptions-=T
 set guioptions+=b
@@ -300,7 +301,7 @@ nnoremap <silent>O :call append(expand('.'), '')<CR>j
 nnoremap <S-CR> i<CR><ESC>
 
 " コメントを継続しない
-autocmd MyAutoCmd FileType * setlocal formatoptions-=o formatoptions-=r
+autocmd MyAutoCmd FileType * setlocal formatoptions& formatoptions-=o formatoptions-=r
 
 " インサートモード中の履歴保存
 inoremap <C-u> <C-g>u<C-u>
@@ -485,8 +486,17 @@ function! s:OpenJunkFile()
 endfunction
 
 " gfは別ウィンドウで開く
-nnoremap gf <C-w>f
-xnoremap gf <C-w>f
+nnoremap gf <C-w>F
+xnoremap gf <C-w>F
+
+" ファイル/パス名判定文字
+if s:iswin
+    set isfname&
+    set isfname-=:
+endif
+
+" php構文チェック
+command! -nargs=0 PHPl !php -l %
 
 " }}}
 "=============================================================================
@@ -644,7 +654,7 @@ nnoremap <expr> l foldclosed(line('.')) != -1 ? 'zo' : 'l'
 nnoremap R :<C-u>registers<CR>
 
 " クリップボードと連携
-set clipboard+=unnamed
+set clipboard=unnamed
 
 " }}}
 "=============================================================================
@@ -680,7 +690,7 @@ nnoremap [Tag]n :<C-u>tag<CR>
 nnoremap [Tag]p :<C-u>pop<CR>
 
 " 別ウィンドウで開く
-nnoremap [Tag]o :<C-u>stjump<CR>
+nnoremap [Tag]o <C-w>]
 
 " プレビューウィンドウで開く
 nnoremap [Tag]O <C-w>}<C-w>P
@@ -979,7 +989,7 @@ nnoremap [Unite]: :<C-u>Unite history/command -no-split<CR>
 " 検索履歴
 nnoremap [Unite]/ :<C-u>Unite history/search -no-split<CR>
 
-" PHPマニュアル
+" phpマニュアル
 nnoremap [Unite]p :<C-u>Unite ref/phpmanual -no-split<CR>
 
 " バッファ内検索
