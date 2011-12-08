@@ -306,9 +306,6 @@ autocmd MyAutoCmd FileType * setlocal formatoptions& formatoptions-=o formatopti
 inoremap <C-u> <C-g>u<C-u>
 inoremap <C-w> <C-g>u<C-w>
 
-" 最後に編集した内容を選択
-nnoremap gs `[v`]<LEFT>
-
 " 強制全保存終了を無効化
 nnoremap ZZ <Nop>
 
@@ -387,9 +384,10 @@ set matchpairs=(:),{:},[:],<:>
 " 対応移動をeにマップ
 map e %
 
-" ワンキー関数移動
-nmap } ]]
-nmap { [[
+" 最後に編集した内容を選択
+nnoremap gm `[v`]
+vnoremap gm :<C-u>normal gm<CR>
+onoremap gm :<C-u>normal gm<CR>
 
 " }}}
 "=============================================================================
@@ -462,6 +460,9 @@ endfunction
 " ファイルパス簡易入力
 cnoremap <C-f> <C-r>=expand('%:t')<CR>
 cnoremap <C-d> <C-r>=expand('%:p:h')<CR>/
+
+" カーソル位置の文字列を:help
+nnoremap <C-h> :<C-u>help <C-r><C-w><CR>
 
 " q:を無効化
 nnoremap q: <Nop>
