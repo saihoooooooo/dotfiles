@@ -166,7 +166,6 @@ set relativenumber
 
 " 行を折り返して表示
 set wrap
-nnoremap xow :<C-u>call <SID>ToggleOption('wrap')<CR>
 
 " 現在行のハイライト
 set cursorline
@@ -350,6 +349,20 @@ function! s:ToggleComment(cs, ce) range
     normal! k
 endfunction
 
+" undo情報を破棄
+nnoremap xU :<C-u>call <SID>DropUndoInfo()<CR>
+function! s:DropUndoInfo()
+    if &modified
+        echoerr "This buffer has been modified!"
+        return
+    endif
+    let l:old_undolevels = &undolevels
+    set undolevels=-1
+    execute "normal! aa\<BS>\<ESC>"
+    let &modified = 0
+    let &undolevels = l:old_undolevels
+endfunction
+
 " }}}
 "=============================================================================
 " 移動設定 : {{{
@@ -393,7 +406,6 @@ set smartcase
 
 " 循環検索
 set wrapscan
-nnoremap xo/ :<C-u>call <SID>ToggleOption('wrapscan')<CR>
 
 " *による検索時に初回は移動しない
 nnoremap * g*N
@@ -715,10 +727,26 @@ set directory=$DOTVIM/tmp/swap
 " その他設定 : {{{
 
 " オプションのトグル
+nnoremap [Option] <Nop>
+nmap xo [Option]
+nnoremap <silent>[Option]n :<C-u>call <SID>ToggleOption('number')<CR>
+nnoremap <silent>[Option]w :<C-u>call <SID>ToggleOption('wrap')<CR>
+nnoremap <silent>[Option]/ :<C-u>call <SID>ToggleOption('wrapscan')<CR>
 function! s:ToggleOption(option)
-    execute 'setlocal' a:option.'!'
-    execute 'setlocal' a:option.'?'
+    if has_key(g:toggle_option_extra, a:option)
+        for e in g:toggle_option_extra[a:option]
+            if exists('+' . e) && eval("&" . e) == 0
+                execute 'setlocal' e . '!' e . '?'
+                return
+            endif
+        endfor
+    elseif exists('+' . a:option)
+        execute 'setlocal' a:option . '!' a:option . '?'
+    endif
 endfunction
+let g:toggle_option_extra = {
+\     'number' : ['number', 'relativenumber']
+\ }
 
 " vimスカウター
 command! -bar -bang -nargs=? -complete=file Scouter echo s:Scouter(empty(<q-args>) ? $MYVIMRC : expand(<q-args>), <bang>0)
