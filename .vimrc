@@ -461,9 +461,6 @@ endfunction
 cnoremap <C-f> <C-r>=expand('%:t')<CR>
 cnoremap <C-d> <C-r>=expand('%:p:h')<CR>/
 
-" カーソル位置の文字列を:help
-nnoremap <C-h> :<C-u>help <C-r><C-w><CR>
-
 " q:を無効化
 nnoremap q: <Nop>
 
@@ -1008,6 +1005,7 @@ let g:unite_source_grep_default_opts = '-iRHn'
 
 " ヘルプ
 nnoremap [Unite]h :<C-u>Unite help -no-split<CR>
+nnoremap [Unite]H :<C-u>UniteWithCursorWord help -no-split<CR>
 
 " アウトライン
 nnoremap [Unite]o :<C-u>Unite outline -no-split<CR>
