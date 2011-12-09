@@ -360,6 +360,26 @@ function! s:DropUndoInfo()
     let &undolevels = l:old_undolevels
 endfunction
 
+" 日時の短縮入力
+iabbrev *datetime* <C-r>=strftime("%Y/%m/%d %H:%M:%S")<CR><C-R>=<SID>Eatchar('\s')<CR>
+iabbrev *date* <C-r>=strftime("%Y/%m/%d")<CR><C-R>=<SID>Eatchar('\s')<CR>
+iabbrev *time* <C-r>=strftime("%H:%M:%S")<CR><C-R>=<SID>Eatchar('\s')<CR>
+function! s:Eatchar(pattern)
+    let l:c = nr2char(getchar(0))
+    return (l:c =~ a:pattern) ? '' : l:c
+endfunction
+
+" 番号付きリストを作成
+nnoremap <silent>xl :<C-u>call <SID>MakeOrderedList()<CR>
+function! s:MakeOrderedList()
+    let l:count = v:count
+    normal! i1.
+    if l:count > 1
+        let @l = 'yyp'
+        execute 'normal!' (l:count - 1) . '@l'
+    endif
+endfunction
+
 " }}}
 "=============================================================================
 " 移動設定 : {{{
