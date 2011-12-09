@@ -277,6 +277,15 @@ function! s:GetHighlight(hi)
     return hl
 endfunction
 
+" 日時の短縮入力
+iabbrev *datetime* <C-r>=strftime("%Y/%m/%d %H:%M:%S")<CR><C-R>=<SID>Eatchar('\s')<CR>
+iabbrev *date* <C-r>=strftime("%Y/%m/%d")<CR><C-R>=<SID>Eatchar('\s')<CR>
+iabbrev *time* <C-r>=strftime("%H:%M:%S")<CR><C-R>=<SID>Eatchar('\s')<CR>
+function! s:Eatchar(pattern)
+    let l:c = nr2char(getchar(0))
+    return (l:c =~ a:pattern) ? '' : l:c
+endfunction
+
 " }}}
 "=============================================================================
 " 編集設定 : {{{
@@ -358,15 +367,6 @@ function! s:DropUndoInfo()
     execute "normal! aa\<BS>\<ESC>"
     let &modified = 0
     let &undolevels = l:old_undolevels
-endfunction
-
-" 日時の短縮入力
-iabbrev *datetime* <C-r>=strftime("%Y/%m/%d %H:%M:%S")<CR><C-R>=<SID>Eatchar('\s')<CR>
-iabbrev *date* <C-r>=strftime("%Y/%m/%d")<CR><C-R>=<SID>Eatchar('\s')<CR>
-iabbrev *time* <C-r>=strftime("%H:%M:%S")<CR><C-R>=<SID>Eatchar('\s')<CR>
-function! s:Eatchar(pattern)
-    let l:c = nr2char(getchar(0))
-    return (l:c =~ a:pattern) ? '' : l:c
 endfunction
 
 " 番号付きリストを作成
