@@ -31,6 +31,9 @@ nnoremap <silent>vv :<C-u>e $MYVIMRC<CR>
 " vimrc変更時は自動で再読み込み
 autocmd MyAutoCmd BufWritePost $MYVIMRC source $MYVIMRC
 
+" 起動時にvimrcを開く
+autocmd! MyAutoCmd VimEnter * edit $MYVIMRC | set filetype=vim
+
 " }}}
 "=============================================================================
 " 文字コード設定 : {{{
@@ -408,6 +411,19 @@ map e %
 nnoremap gm `[v`]
 vnoremap gm :<C-u>normal gm<CR>
 onoremap gm :<C-u>normal gm<CR>
+
+" phpにてlast_patternを変更しない関数移動
+autocmd MyAutoCmd FileType php call <SID>RemapPHPSectionJump()
+function! s:RemapPHPSectionJump()
+    let l:function = '\(abstract\s\+\|final\s\+\|private\s\+\|protected\s\+\|public\s\+\|static\s\+\)*function'
+    let l:class = '\(abstract\s\+\|final\s\+\)*class'
+    let l:interface = 'interface'
+    let l:section = '\(.*\%#\)\@!\_^\s*\zs\('.l:function.'\|'.l:class.'\|'.l:interface.'\)'
+    exe "nno <buffer> <silent> [[ :call search('" . escape(l:section, '|') . "', 'b')<CR>"
+    exe "nno <buffer> <silent> ]] :call search('" . escape(l:section, '|') . "')<CR>"
+    exe "ono <buffer> <silent> [[ :call search('" . escape(l:section, '|') . "', 'b')<CR>"
+    exe "ono <buffer> <silent> ]] :call search('" . escape(l:section, '|') . "')<CR>"
+endfunction
 
 " }}}
 "=============================================================================
