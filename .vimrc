@@ -32,7 +32,7 @@ nnoremap <silent>vv :<C-u>e $MYVIMRC<CR>
 autocmd MyAutoCmd BufWritePost $MYVIMRC source $MYVIMRC
 
 " 起動時にvimrcを開く
-autocmd! MyAutoCmd VimEnter * edit $MYVIMRC | set filetype=vim
+autocmd! MyAutoCmd VimEnter * nested if bufname('%') == '' | edit $MYVIMRC | endif
 
 " }}}
 "=============================================================================
