@@ -415,14 +415,14 @@ onoremap gm :<C-u>normal gm<CR>
 " phpにてlast_patternを変更しない関数移動
 autocmd MyAutoCmd FileType php call <SID>RemapPHPSectionJump()
 function! s:RemapPHPSectionJump()
-    let l:function = '\(abstract\s\+\|final\s\+\|private\s\+\|protected\s\+\|public\s\+\|static\s\+\)*function'
-    let l:class = '\(abstract\s\+\|final\s\+\)*class'
-    let l:interface = 'interface'
-    let l:section = '\(.*\%#\)\@!\_^\s*\zs\('.l:function.'\|'.l:class.'\|'.l:interface.'\)'
-    exe "nno <buffer> <silent> [[ :call search('" . escape(l:section, '|') . "', 'b')<CR>"
-    exe "nno <buffer> <silent> ]] :call search('" . escape(l:section, '|') . "')<CR>"
-    exe "ono <buffer> <silent> [[ :call search('" . escape(l:section, '|') . "', 'b')<CR>"
-    exe "ono <buffer> <silent> ]] :call search('" . escape(l:section, '|') . "')<CR>"
+    let function = '\(abstract\s\+\|final\s\+\|private\s\+\|protected\s\+\|public\s\+\|static\s\+\)*function'
+    let class = '\(abstract\s\+\|final\s\+\)*class'
+    let interface = 'interface'
+    let section = '\(.*\%#\)\@!\_^\s*\zs\('.function.'\|'.class.'\|'.interface.'\)'
+    exe "nno <buffer> <silent> [[ :call search('" . escape(section, '|') . "', 'b')<CR>"
+    exe "nno <buffer> <silent> ]] :call search('" . escape(section, '|') . "')<CR>"
+    exe "ono <buffer> <silent> [[ :call search('" . escape(section, '|') . "', 'b')<CR>"
+    exe "ono <buffer> <silent> ]] :call search('" . escape(section, '|') . "')<CR>"
 endfunction
 
 " }}}
@@ -638,7 +638,20 @@ endfunction
 set showtabline=2
 
 " ラベル表示内容
-set guitablabel=%m\ %t
+autocmd MyAutoCmd GUIEnter * set guitablabel=%{GetMyTabLabel()}
+function! GetMyTabLabel()
+    let label = ''
+    for bufnr in tabpagebuflist(v:lnum)
+        if getbufvar(bufnr, "&modified")
+            let label .= '[+]'
+            break
+        endif
+    endfor
+    let label .= '(' . tabpagewinnr(v:lnum, '$') . ')'
+    let label .= ' '
+    let label .= expand('%:t')
+    return label
+endfunction
 
 " 基本マップ
 nnoremap [Tab] <Nop>
