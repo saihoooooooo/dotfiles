@@ -637,19 +637,41 @@ endfunction
 " タブバーは常に表示
 set showtabline=2
 
+" GUIタブ不使用
+set guioptions-=e
+
 " ラベル表示内容
-autocmd MyAutoCmd GUIEnter * set guitablabel=%{GetMyTabLabel()}
-function! GetMyTabLabel()
+set tabline=%!MakeTabLine()
+function! MakeTabLine()
+    let titles = map(range(1, tabpagenr('$')), '<SID>TabpageLabel(v:val)')
+    let sep = ' | '
+    " let tabpages = join(titles, sep) . sep . '%#TabLineFill#%T'
+    let tabpages = join(titles, sep)
+    let info = '%#TabLineSel#%=' . 'unko' .'%T'
+    return tabpages . info
+endfunction
+autocmd MyAutoCmd BufEnter * call <SID>SetTabBuffer()
+function! s:SetTabBuffer()
+    if !exists('t:tab_buffer_dictionary')
+        let t:tab_buffer_dictionary  = {}
+    endif
+    let t:tab_buffer_dictionary[bufnr('%')] = 1
+endfunction
+function! s:TabpageLabel(n)
     let label = ''
-    for bufnr in tabpagebuflist(v:lnum)
-        if getbufvar(bufnr, "&modified")
-            let label .= '[+]'
-            break
-        endif
-    endfor
-    let label .= '(' . tabpagewinnr(v:lnum, '$') . ')'
+    if a:n > 1
+        let label .= '%T'
+    endif
+    let label .= a:n == tabpagenr() ? '%#TabLineFill#' : '%#TabLineSel#'
+    if bufname(tabpagebuflist(a:n)[tabpagewinnr(a:n) - 1]) != ''
+        let label .= expand('#' . tabpagebuflist(a:n)[tabpagewinnr(a:n) - 1] . ':t')
+    else
+        let label .= '[No Name]'
+    endif
     let label .= ' '
-    let label .= expand('%:t')
+    let label .= len(filter(copy(keys(gettabvar(a:n, 'tab_buffer_dictionary'))), 'getbufvar(v:val + 0, "&modified")')) ? '[+]' : ''
+    let label .= '[w:' . len(filter(keys(gettabvar(a:n, 'tab_buffer_dictionary')), 'buflisted(v:val + 0)')) . ']'
+    let label .= '%T%#TabLineSel#'
     return label
 endfunction
 
