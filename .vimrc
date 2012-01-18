@@ -82,8 +82,6 @@ command! -bang -bar -complete=file -nargs=? Utf8 edit<bang> ++enc=utf-8 <args>
 command! -bang -bar -complete=file -nargs=? Jis edit<bang> ++enc=iso-2022-jp <args>
 command! -bang -bar -complete=file -nargs=? Sjis edit<bang> ++enc=cp932 <args>
 command! -bang -bar -complete=file -nargs=? Euc edit<bang> ++enc=euc-jp <args>
-command! -bang -bar -complete=file -nargs=? Utf16 edit<bang> ++enc=ucs-2le <args>
-command! -bang -bar -complete=file -nargs=? Utf16be edit<bang> ++enc=ucs-2 <args>
 
 " 各種改行コードで開き直す
 command! -bang -bar -complete=file -nargs=? Unix edit<bang> ++fileformat=unix <args>
@@ -129,8 +127,9 @@ else
 endif
 
 " カラースキーム
-if !exists("colors_name")
-    autocmd MyAutoCmd GUIEnter * colorscheme BlackSea
+if !exists('g:colors_name')
+    " autocmd MyAutoCmd GUIEnter * colorscheme BlackSea
+    autocmd MyAutoCmd GUIEnter * colorscheme nevfn
 endif
 
 " 半透明
@@ -169,6 +168,9 @@ set relativenumber
 
 " 行を折り返して表示
 set wrap
+
+" 折り返された行の先頭に表示する文字列
+let &showbreak = '+++ '
 
 " 現在行のハイライト
 set cursorline
@@ -249,11 +251,16 @@ if has('multi_byte_ime')
     inoremap <silent><ESC> <ESC>
 endif
 
+" ;と:を入れ替え
+noremap ; :
+noremap : ;
+
 " xを封印
 nnoremap x <Nop>
 
-" 全角入力時のカーソルの色を変更
-autocmd MyAutoCmd GUIEnter * highlight CursorIM guibg=Purple guifg=NONE
+" 半角/全角入力時のカーソルの色を変更
+autocmd MyAutoCmd GUIEnter * highlight Cursor guifg=#000000 guibg=#99ff99 gui=NONE
+autocmd MyAutoCmd GUIEnter * highlight CursorIM guifg=#000000 guibg=#cc9999 gui=NONE
 
 " インサートモード時のステータスバーの色を変更
 let g:hi_insert = 'hi StatusLine guibg=#1f001f guifg=Tomato cterm=NONE ctermfg=White ctermbg=LightRed'
@@ -637,43 +644,8 @@ endfunction
 " タブバーは常に表示
 set showtabline=2
 
-" GUIタブ不使用
-set guioptions-=e
-
 " ラベル表示内容
-set tabline=%!MakeTabLine()
-function! MakeTabLine()
-    let titles = map(range(1, tabpagenr('$')), '<SID>TabpageLabel(v:val)')
-    let sep = ' | '
-    " let tabpages = join(titles, sep) . sep . '%#TabLineFill#%T'
-    let tabpages = join(titles, sep)
-    let info = '%#TabLineSel#%=' . 'unko' .'%T'
-    return tabpages . info
-endfunction
-autocmd MyAutoCmd BufEnter * call <SID>SetTabBuffer()
-function! s:SetTabBuffer()
-    if !exists('t:tab_buffer_dictionary')
-        let t:tab_buffer_dictionary  = {}
-    endif
-    let t:tab_buffer_dictionary[bufnr('%')] = 1
-endfunction
-function! s:TabpageLabel(n)
-    let label = ''
-    if a:n > 1
-        let label .= '%T'
-    endif
-    let label .= a:n == tabpagenr() ? '%#TabLineFill#' : '%#TabLineSel#'
-    if bufname(tabpagebuflist(a:n)[tabpagewinnr(a:n) - 1]) != ''
-        let label .= expand('#' . tabpagebuflist(a:n)[tabpagewinnr(a:n) - 1] . ':t')
-    else
-        let label .= '[No Name]'
-    endif
-    let label .= ' '
-    let label .= len(filter(copy(keys(gettabvar(a:n, 'tab_buffer_dictionary'))), 'getbufvar(v:val + 0, "&modified")')) ? '[+]' : ''
-    let label .= '[w:' . len(filter(keys(gettabvar(a:n, 'tab_buffer_dictionary')), 'buflisted(v:val + 0)')) . ']'
-    let label .= '%T%#TabLineSel#'
-    return label
-endfunction
+autocmd MyAutoCmd GUIEnter * set guitablabel=%t
 
 " 基本マップ
 nnoremap [Tab] <Nop>
@@ -735,7 +707,8 @@ nnoremap <expr> l foldclosed(line('.')) != -1 ? 'zo' : 'l'
 nnoremap R :<C-u>registers<CR>
 
 " クリップボードと連携
-set clipboard=unnamed
+set clipboard&
+set clipboard+=unnamed
 
 " }}}
 "=============================================================================
@@ -842,7 +815,8 @@ if has('vim_starting')
     filetype indent on
 endif
 
-" 各種plugin
+" from Github
+NeoBundle 'git://github.com/altercation/vim-colors-solarized.git'
 NeoBundle 'git://github.com/anyakichi/vim-surround.git'
 NeoBundle 'git://github.com/h1mesuke/unite-outline.git'
 NeoBundle 'git://github.com/h1mesuke/vim-alignta.git'
@@ -852,6 +826,7 @@ NeoBundle 'git://github.com/kana/vim-submode.git'
 NeoBundle 'git://github.com/kana/vim-textobj-indent.git'
 NeoBundle 'git://github.com/kana/vim-textobj-entire.git'
 NeoBundle 'git://github.com/kana/vim-textobj-lastpat.git'
+NeoBundle 'git://github.com/kana/vim-textobj-line.git'
 NeoBundle 'git://github.com/kana/vim-textobj-syntax.git'
 NeoBundle 'git://github.com/kana/vim-textobj-user.git'
 NeoBundle 'git://github.com/mattn/calendar-vim.git'
@@ -867,6 +842,7 @@ NeoBundle 'git://github.com/Shougo/vimfiler.git'
 NeoBundle 'git://github.com/Shougo/vimproc.git'
 NeoBundle 'git://github.com/Shougo/vimshell.git'
 NeoBundle 'git://github.com/taku-o/vim-changed.git'
+NeoBundle 'git://github.com/therubymug/vim-pyte.git'
 NeoBundle 'git://github.com/thinca/vim-textobj-between.git'
 NeoBundle 'git://github.com/thinca/vim-quickrun.git'
 NeoBundle 'git://github.com/thinca/vim-ref.git'
@@ -876,9 +852,14 @@ NeoBundle 'git://github.com/tsaleh/vim-matchit.git'
 NeoBundle 'git://github.com/tsukkee/unite-help.git'
 NeoBundle 'git://github.com/tyru/open-browser.vim.git'
 NeoBundle 'git://github.com/tyru/operator-camelize.vim.git'
+NeoBundle 'git://github.com/ujihisa/unite-colorscheme.git'
 NeoBundle 'git://github.com/vim-scripts/TwitVim.git'
 NeoBundle 'git://github.com/vim-scripts/vcscommand.vim.git'
 NeoBundle 'git://github.com/vim-scripts/ZoomWin.git'
+
+" from vim-script
+NeoBundle 'BlackSea'
+NeoBundle 'nevfn'
 
 "=============================================================================
 " vim-surround # テキストオブジェクトでの囲い操作 : {{{
@@ -927,9 +908,9 @@ unlet s:comment_leadings
 "=============================================================================
 " vim-operator-replace # 置換オペレータ : {{{
 
-" zpを置換用キーに設定
-map zp "*<Plug>(operator-replace)
-map zP zp$
+" xpを置換用キーに設定
+map xp "*<Plug>(operator-replace)
+map xP xp$
 
 " }}}
 "=============================================================================
@@ -974,6 +955,12 @@ nmap yae yae`'
 " }}}
 "=============================================================================
 " vim-textobj-lastpat # 検索結果テキストオブジェクト : {{{
+
+" 設定なし
+
+" }}}
+"=============================================================================
+" vim-textobj-line # 行テキストオブジェクト : {{{
 
 " 設定なし
 
@@ -1086,6 +1073,9 @@ nnoremap [Unite]: :<C-u>Unite history/command -no-split<CR>
 
 " 検索履歴
 nnoremap [Unite]/ :<C-u>Unite history/search -no-split<CR>
+
+" カラースキーム
+nnoremap [Unite]c :<C-u>Unite colorscheme -auto-preview<CR>
 
 " phpマニュアル
 nnoremap [Unite]p :<C-u>Unite ref/phpmanual -no-split<CR>
