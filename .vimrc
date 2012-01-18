@@ -128,7 +128,6 @@ endif
 
 " カラースキーム
 if !exists('g:colors_name')
-    " autocmd MyAutoCmd GUIEnter * colorscheme BlackSea
     autocmd MyAutoCmd GUIEnter * colorscheme nevfn
 endif
 
@@ -153,12 +152,6 @@ let &statusline .= '%='
 let &statusline .= '[HEX:%B][R:%l][C:%c]'
 let &statusline .= '%y'
 let &statusline .= '[%{&fileencoding}][%{&fileformat}]'
-
-" コマンドライン行数
-autocmd MyAutoCmd GUIEnter * set cmdheight=1
-
-" 入力中コマンドを表示
-set showcmd
 
 " 現在のモードを表示
 set showmode
@@ -199,6 +192,34 @@ endif
 if exists('&ambiwidth')
     set ambiwidth=double
 endif
+
+" 全角入力時のカーソルの色を変更
+autocmd MyAutoCmd ColorScheme * highlight CursorIM guifg=#000000 guibg=#cc9999 gui=NONE
+
+" インサートモード時のステータスバーの色を変更
+let g:hi_insert = 'hi StatusLine guibg=#1f001f guifg=Tomato cterm=NONE ctermfg=White ctermbg=LightRed'
+if has('syntax')
+    autocmd MyAutoCmd InsertEnter * call s:StatusLine('Enter')
+    autocmd MyAutoCmd InsertLeave * call s:StatusLine('Leave')
+endif
+let s:slhlcmd = ''
+function! s:StatusLine(mode)
+    if a:mode == 'Enter'
+        silent! let s:slhlcmd = 'highlight ' . s:GetHighlight('StatusLine')
+        silent execute g:hi_insert
+    else
+        highlight clear StatusLine
+        silent execute s:slhlcmd
+    endif
+endfunction
+function! s:GetHighlight(hi)
+    redir => hl
+    execute 'highlight ' . a:hi
+    redir END
+    let hl = substitute(hl, '[\r\n]', '', 'g')
+    let hl = substitute(hl, 'xxx', '', '')
+    return hl
+endfunction
 
 " }}}
 "=============================================================================
@@ -255,37 +276,8 @@ endif
 noremap ; :
 noremap : ;
 
-" xを封印
+" xを汎用キー化
 nnoremap x <Nop>
-
-" 半角/全角入力時のカーソルの色を変更
-autocmd MyAutoCmd GUIEnter * highlight Cursor guifg=#000000 guibg=#99ff99 gui=NONE
-autocmd MyAutoCmd GUIEnter * highlight CursorIM guifg=#000000 guibg=#cc9999 gui=NONE
-
-" インサートモード時のステータスバーの色を変更
-let g:hi_insert = 'hi StatusLine guibg=#1f001f guifg=Tomato cterm=NONE ctermfg=White ctermbg=LightRed'
-if has('syntax')
-    autocmd MyAutoCmd InsertEnter * call s:StatusLine('Enter')
-    autocmd MyAutoCmd InsertLeave * call s:StatusLine('Leave')
-endif
-let s:slhlcmd = ''
-function! s:StatusLine(mode)
-    if a:mode == 'Enter'
-        silent! let s:slhlcmd = 'highlight ' . s:GetHighlight('StatusLine')
-        silent execute g:hi_insert
-    else
-        highlight clear StatusLine
-        silent execute s:slhlcmd
-    endif
-endfunction
-function! s:GetHighlight(hi)
-    redir => hl
-    execute 'highlight ' . a:hi
-    redir END
-    let hl = substitute(hl, '[\r\n]', '', 'g')
-    let hl = substitute(hl, 'xxx', '', '')
-    return hl
-endfunction
 
 " 日時の短縮入力
 iabbrev *datetime* <C-r>=strftime("%Y/%m/%d %H:%M:%S")<CR><C-R>=<SID>Eatchar('\s')<CR>
@@ -487,6 +479,12 @@ set wildmode=full
 
 " コマンド実行中は再描画しない
 " set lazyredraw
+
+" コマンドライン行数
+autocmd MyAutoCmd GUIEnter * set cmdheight=1
+
+" 入力中コマンドを表示
+set showcmd
 
 " コマンドの出力を別ウィンドウで開く
 command! -nargs=+ -complete=command Capture call <SID>CmdCapture(<q-args>)
