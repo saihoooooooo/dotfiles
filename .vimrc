@@ -378,8 +378,8 @@ endfunction
 " 移動設定 : {{{
 
 " 10行移動
-nnoremap J 10j
-nnoremap K 10k
+noremap J 10j
+noremap K 10k
 
 " wの動作をeに変更
 noremap w e
