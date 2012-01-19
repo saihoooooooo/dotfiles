@@ -32,7 +32,7 @@ nnoremap <silent>vv :<C-u>e $MYVIMRC<CR>
 autocmd MyAutoCmd BufWritePost $MYVIMRC source $MYVIMRC
 
 " 起動時にvimrcを開く
-autocmd! MyAutoCmd VimEnter * nested if bufname('%') == '' | edit $MYVIMRC | endif
+autocmd! MyAutoCmd VimEnter * nested if @% == '' | edit $MYVIMRC | endif
 
 " }}}
 "=============================================================================
@@ -173,9 +173,6 @@ autocmd MyAutoCmd WinEnter,BufRead * set cursorline
 " 括弧の対応表示を行う
 set showmatch
 
-" カーソルの上または下に表示する最低行数
-set scrolloff=5
-
 " <TAB>、行末スペース、スクロール中の行頭文字の可視化
 set list
 set listchars=tab:>\ ,trail:-,nbsp:%,precedes:<
@@ -228,7 +225,7 @@ endfunction
 " <TAB>は空白を使用
 set expandtab
 
-" <Tab>が対応する空白量
+" <TAB>が対応する空白量
 set tabstop=8
 
 " <TAB>で挿入される空白量
@@ -259,6 +256,10 @@ set timeoutlen=10000
 " <Leader>
 let mapleader = ","
 
+" ;と:を入れ替え
+" noremap ; :
+" noremap : ;
+
 " キーマップ確定
 nnoremap <CR> <Nop>
 
@@ -272,20 +273,16 @@ if has('multi_byte_ime')
     inoremap <silent><ESC> <ESC>
 endif
 
-" ;と:を入れ替え
-noremap ; :
-noremap : ;
-
 " xを汎用キー化
 nnoremap x <Nop>
 
 " 日時の短縮入力
-iabbrev *datetime* <C-r>=strftime("%Y/%m/%d %H:%M:%S")<CR><C-R>=<SID>Eatchar('\s')<CR>
-iabbrev *date* <C-r>=strftime("%Y/%m/%d")<CR><C-R>=<SID>Eatchar('\s')<CR>
-iabbrev *time* <C-r>=strftime("%H:%M:%S")<CR><C-R>=<SID>Eatchar('\s')<CR>
+iabbrev *datetime* <C-r>=strftime("%Y/%m/%d %H:%M:%S")<CR><C-r>=<SID>Eatchar('\s')<CR>
+iabbrev *date* <C-r>=strftime("%Y/%m/%d")<CR><C-r>=<SID>Eatchar('\s')<CR>
+iabbrev *time* <C-r>=strftime("%H:%M:%S")<CR><C-r>=<SID>Eatchar('\s')<CR>
 function! s:Eatchar(pattern)
-    let l:c = nr2char(getchar(0))
-    return (l:c =~ a:pattern) ? '' : l:c
+    let c = nr2char(getchar(0))
+    return (c =~ a:pattern) ? '' : c
 endfunction
 
 " }}}
@@ -297,9 +294,6 @@ set backspace=indent,eol,start
 
 " Yの動作をDやCと同じにする
 map Y y$
-
-" ビジュアルモード時は最後にヤンクした内容をペースト
-" vnoremap p "0p
 
 " 行連結
 noremap + J
@@ -316,9 +310,6 @@ autocmd MyAutoCmd FileType * setlocal formatoptions& formatoptions-=o formatopti
 " インサートモード中の履歴保存
 inoremap <C-u> <C-g>u<C-u>
 inoremap <C-w> <C-g>u<C-w>
-
-" 強制全保存終了を無効化
-nnoremap ZZ <Nop>
 
 " ^Mを取り除く
 command! -nargs=0 RemoveCr :silent! normal! mg:%s/<C-v><CR>//g<CR>:nohlsearch<CR>`g
@@ -387,8 +378,8 @@ endfunction
 " 移動設定 : {{{
 
 " 10行移動
-noremap J 10j
-noremap K 10k
+nnoremap J 10j
+nnoremap K 10k
 
 " wの動作をeに変更
 noremap w e
@@ -398,13 +389,19 @@ noremap W E
 set whichwrap=h,l,[,],<,>
 
 " ビジュアルモード時の$は改行まで移動しない
-vnoremap $ $<LEFT>
+set selection=old
 
 " 対応移動ペア
-set matchpairs=(:),{:},[:],<:>
+set matchpairs=(:),{:},[:],<:>,=:;
 
 " 対応移動をeにマップ
 map e %
+
+" カーソルの上または下に表示する最低行数
+set scrolloff=5
+
+" スクロール時に列を維持する
+set nostartofline
 
 " 最後に編集した内容を選択
 nnoremap gm `[v`]
@@ -620,9 +617,6 @@ set eadirection=both
 " 他のウィンドウを閉じる
 nnoremap <C-w>O <C-w>o
 
-" ウィンドウを複製
-nnoremap <C-w>w :<C-u>vert new %<CR>
-
 " プレビューウィンドウの高さ
 set previewheight=15
 
@@ -766,6 +760,9 @@ set directory=$DOTVIM/tmp/swap
 "=============================================================================
 " その他設定 : {{{
 
+" 強制全保存終了を無効化
+nnoremap ZZ <Nop>
+
 " オプションのトグル
 nnoremap [Option] <Nop>
 nmap xo [Option]
@@ -814,7 +811,6 @@ if has('vim_starting')
 endif
 
 " from Github
-NeoBundle 'git://github.com/altercation/vim-colors-solarized.git'
 NeoBundle 'git://github.com/anyakichi/vim-surround.git'
 NeoBundle 'git://github.com/h1mesuke/unite-outline.git'
 NeoBundle 'git://github.com/h1mesuke/vim-alignta.git'
@@ -832,15 +828,12 @@ NeoBundle 'git://github.com/mattn/mahjong-vim.git'
 NeoBundle 'git://github.com/mattn/webapi-vim.git'
 NeoBundle 'git://github.com/mattn/zencoding-vim.git'
 NeoBundle 'git://github.com/saihoooooooo/vim-textobj-space.git'
-NeoBundle 'git://github.com/Shougo/git-vim.git'
 NeoBundle 'git://github.com/Shougo/unite.vim.git'
 NeoBundle 'git://github.com/Shougo/neobundle.vim.git'
 NeoBundle 'git://github.com/Shougo/neocomplcache.git'
 NeoBundle 'git://github.com/Shougo/vimfiler.git'
 NeoBundle 'git://github.com/Shougo/vimproc.git'
 NeoBundle 'git://github.com/Shougo/vimshell.git'
-NeoBundle 'git://github.com/taku-o/vim-changed.git'
-NeoBundle 'git://github.com/therubymug/vim-pyte.git'
 NeoBundle 'git://github.com/thinca/vim-textobj-between.git'
 NeoBundle 'git://github.com/thinca/vim-quickrun.git'
 NeoBundle 'git://github.com/thinca/vim-ref.git'
@@ -850,7 +843,6 @@ NeoBundle 'git://github.com/tsaleh/vim-matchit.git'
 NeoBundle 'git://github.com/tsukkee/unite-help.git'
 NeoBundle 'git://github.com/tyru/open-browser.vim.git'
 NeoBundle 'git://github.com/tyru/operator-camelize.vim.git'
-NeoBundle 'git://github.com/ujihisa/unite-colorscheme.git'
 NeoBundle 'git://github.com/vim-scripts/TwitVim.git'
 NeoBundle 'git://github.com/vim-scripts/vcscommand.vim.git'
 NeoBundle 'git://github.com/vim-scripts/ZoomWin.git'
@@ -1035,12 +1027,6 @@ let g:user_zen_settings = {
 
 " }}}
 "=============================================================================
-" git-vim # vim上でgitコマンドを実行 : {{{
-
-" 設定なし
-
-" }}}
-"=============================================================================
 " unite.vim # すべてのsourceを統合する : {{{
 
 " 基本マップ
@@ -1215,13 +1201,6 @@ endfunction
 " vimshell # vim用shell : {{{
 
 " 設定なし
-
-" }}}
-"=============================================================================
-" vim-changed # 変更箇所の可視化 : {{{
-
-" キーマップ
-nnoremap <silent><F8> :<C-u>Changed<CR>
 
 " }}}
 "=============================================================================
