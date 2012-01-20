@@ -41,6 +41,12 @@ autocmd! MyAutoCmd VimEnter * nested if @% == '' | edit $MYVIMRC | endif
 " 内部文字コード
 set encoding=utf-8
 
+" ターミナルエンコーディング
+if has('gui_running') && s:iswin
+    set termencoding=cp932
+endif
+
+
 " 文字コード判別リスト
 if has('iconv')
     let s:enc_euc = 'euc-jp'
@@ -257,8 +263,8 @@ set timeoutlen=10000
 let mapleader = ","
 
 " ;と:を入れ替え
-" noremap ; :
-" noremap : ;
+noremap ; :
+noremap : ;
 
 " キーマップ確定
 nnoremap <CR> <Nop>
