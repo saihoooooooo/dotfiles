@@ -57,6 +57,10 @@ EOM
 " 操作設定
 "-----------------------------------------------------------------------
 
+" ;と:を入れ替え
+noremap ; :
+noremap : ;
+
 " hint文字
 set hintchars=wertyuioasdfghjkl
 
@@ -95,27 +99,3 @@ set ignorecase
 
 " インクリメンタル検索
 set incsearch
-
-"-----------------------------------------------------------------------
-" twittperator設定
-"-----------------------------------------------------------------------
-" ChirpUserStreamsを使用
-let g:twittperator_use_chirp=1
-
-" 現在のURLを短縮表示して:tw
-nmap ,tu :<C-u>twuri<CR><C-a><Right><Right><Right>
-js <<EOM
-commands.addUserCommand(
-    ["twuri"],
-    "Twittperator tweet with URI",
-    function(){
-        let uri = 'https://www.googleapis.com/urlshortener/v1/url';
-        let xhr = new XMLHttpRequest();
-        xhr.open("POST", uri, false);
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.send(JSON.stringify({ longUrl: buffer.URI }));
-        let result = JSON.parse(xhr.responseText).id;
-        commandline.open(":",["tw"," /",buffer.title,result].join(" "),modes.EX);
-    }
-);
-EOM
