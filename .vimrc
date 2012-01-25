@@ -620,6 +620,9 @@ set equalalways
 " サイズ調整は幅と高さ
 set eadirection=both
 
+" ウィンドウを最大化
+nnoremap <C-w>o <C-w>_<C-w>\|
+
 " 他のウィンドウを閉じる
 nnoremap <C-w>O <C-w>o
 
@@ -851,7 +854,6 @@ NeoBundle 'git://github.com/tyru/open-browser.vim.git'
 NeoBundle 'git://github.com/tyru/operator-camelize.vim.git'
 NeoBundle 'git://github.com/vim-scripts/TwitVim.git'
 NeoBundle 'git://github.com/vim-scripts/vcscommand.vim.git'
-NeoBundle 'git://github.com/vim-scripts/ZoomWin.git'
 
 " from vim-script
 NeoBundle 'BlackSea'
@@ -1277,12 +1279,6 @@ endfunction
 " }}}
 "=============================================================================
 " vcscommand.vim # vim上でVCSコマンドを実行 : {{{
-
-" 設定なし
-
-" }}}
-"=============================================================================
-" ZoomWin # 複数ウィンドウ、単一ウィンドウの切り替え : {{{
 
 " 設定なし
 
