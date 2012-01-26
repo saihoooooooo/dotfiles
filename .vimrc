@@ -521,7 +521,7 @@ endif
 autocmd MyAutoCmd BufRead,BufNewFile *.ctp set filetype=php
 
 " ファイルタイプ指定
-nnoremap xf :set ft=
+nnoremap xf :set filetype=
 
 " 編集中ファイルのリネーム
 command! -nargs=1 -complete=file Rename file <args> | w | call delete(expand('#'))
