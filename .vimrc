@@ -280,16 +280,26 @@ if has('multi_byte_ime')
 endif
 
 " xを汎用キー化
-nnoremap x <Nop>
+noremap x <Nop>
 
 " 日時の短縮入力
-iabbrev *datetime* <C-r>=strftime("%Y/%m/%d %H:%M:%S")<CR><C-r>=<SID>Eatchar('\s')<CR>
-iabbrev *date* <C-r>=strftime("%Y/%m/%d")<CR><C-r>=<SID>Eatchar('\s')<CR>
-iabbrev *time* <C-r>=strftime("%H:%M:%S")<CR><C-r>=<SID>Eatchar('\s')<CR>
+iabbrev *dt* <C-r>=strftime("%Y/%m/%d %H:%M:%S")<CR><C-r>=<SID>Eatchar('\s')<CR>
+iabbrev *d* <C-r>=strftime("%Y/%m/%d")<CR><C-r>=<SID>Eatchar('\s')<CR>
+iabbrev *t* <C-r>=strftime("%H:%M:%S")<CR><C-r>=<SID>Eatchar('\s')<CR>
 function! s:Eatchar(pattern)
     let c = nr2char(getchar(0))
     return (c =~ a:pattern) ? '' : c
 endfunction
+
+" テキストオブジェクト簡易入力
+vnoremap ia i<
+onoremap ia i<
+vnoremap aa a<
+onoremap aa a<
+vnoremap ir i[
+onoremap ir i[
+vnoremap ar a[
+onoremap ar a[
 
 " }}}
 "=============================================================================
@@ -305,7 +315,7 @@ map Y y$
 noremap + J
 
 " 空行を挿入
-nnoremap <silent>O :call append(expand('.'), '')<CR>j
+nnoremap <silent>O :<C-u>call append(expand('.'), '')<CR>j
 
 " ノーマルモードでの改行
 nnoremap <S-CR> i<CR><ESC>
@@ -322,6 +332,9 @@ command! -nargs=0 RemoveCr :silent! normal! mg:%s/<C-v><CR>//g<CR>:nohlsearch<CR
 
 " 行末のスペースを取り除く
 command! -nargs=0 RemoveEolSpace :silent! normal! mg:%s/ \+$//g<CR>:nohlsearch<CR>`g
+
+" 空行を取り除く
+command! -nargs=0 RemoveBlankLine :silent! normal! mg:%s/^\n//g<CR>:nohlsearch<CR>`g
 
 " 手動コメントアウト
 noremap [Comment] <Nop>
@@ -355,7 +368,7 @@ function! s:ToggleComment(cs, ce) range
 endfunction
 
 " undo情報を破棄
-nnoremap xU :<C-u>call <SID>DropUndoInfo()<CR>
+nnoremap <silent>xU :<C-u>call <SID>DropUndoInfo()<CR>
 function! s:DropUndoInfo()
     if &modified
         echoerr "This buffer has been modified!"
@@ -421,10 +434,10 @@ function! s:RemapPHPSectionJump()
     let class = '\(abstract\s\+\|final\s\+\)*class'
     let interface = 'interface'
     let section = '\(.*\%#\)\@!\_^\s*\zs\('.function.'\|'.class.'\|'.interface.'\)'
-    exe "nno <buffer> <silent> [[ :call search('" . escape(section, '|') . "', 'b')<CR>"
-    exe "nno <buffer> <silent> ]] :call search('" . escape(section, '|') . "')<CR>"
-    exe "ono <buffer> <silent> [[ :call search('" . escape(section, '|') . "', 'b')<CR>"
-    exe "ono <buffer> <silent> ]] :call search('" . escape(section, '|') . "')<CR>"
+    exe "nno <buffer> <silent> [[ :<C-u>call search('" . escape(section, '|') . "', 'b')<CR>"
+    exe "nno <buffer> <silent> ]] :<C-u>call search('" . escape(section, '|') . "')<CR>"
+    exe "ono <buffer> <silent> [[ :<C-u>call search('" . escape(section, '|') . "', 'b')<CR>"
+    exe "ono <buffer> <silent> ]] :<C-u>call search('" . escape(section, '|') . "')<CR>"
 endfunction
 
 " }}}
@@ -465,7 +478,7 @@ function! s:RangeSearch(d)
 endfunction
 
 " <ESC>でハイライト消去
-nnoremap <silent><ESC> :nohlsearch<CR>
+nnoremap <silent><ESC> :<C-u>nohlsearch<CR>
 
 " q/を無効化
 nnoremap q/ <Nop>
@@ -598,7 +611,7 @@ function! s:BdKeepWin()
 endfunction
 
 " 現在のバッファを削除
-nnoremap <silent><S-BS> :bwipeout<CR>
+nnoremap <silent><S-BS> :<C-u>bwipeout!<CR>
 
 " 全バッファを削除
 command! -nargs=0 AllWipeout call <SID>AllWipeout()
@@ -654,7 +667,7 @@ nmap <C-t> [Tab]
 
 " タプを作成
 nnoremap [Tab]n :<C-u>99tabnew<CR>
-nnoremap [Tab]N :tabnew<CR>
+nnoremap [Tab]N :<C-u>tabnew<CR>
 
 " 次/前のタプ
 nnoremap [Tab]l gt
@@ -1066,9 +1079,6 @@ nnoremap [Unite]: :<C-u>Unite history/command -no-split<CR>
 " 検索履歴
 nnoremap [Unite]/ :<C-u>Unite history/search -no-split<CR>
 
-" カラースキーム
-nnoremap [Unite]c :<C-u>Unite colorscheme -auto-preview<CR>
-
 " phpマニュアル
 nnoremap [Unite]p :<C-u>Unite ref/phpmanual -no-split<CR>
 
@@ -1093,7 +1103,7 @@ function! s:UniteMySetting()
     nmap <buffer><ESC> <Plug>(unite_exit)
 
     " 編集
-    imap <silent><buffer><expr><C-e> unite#do_action('edit')
+    inoremap <silent><buffer><expr><C-e> unite#do_action('edit')
 
     " ノーマルモードでの上下移動
     nmap <buffer><C-n> <Plug>(unite_loop_cursor_down)
