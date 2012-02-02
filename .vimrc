@@ -46,7 +46,6 @@ if has('gui_running') && s:iswin
     set termencoding=cp932
 endif
 
-
 " 文字コード判別リスト
 if has('iconv')
     let s:enc_euc = 'euc-jp'
@@ -311,9 +310,6 @@ set backspace=indent,eol,start
 " Yの動作をDやCと同じにする
 map Y y$
 
-" 行連結
-noremap + J
-
 " 空行を挿入
 nnoremap <silent>O :<C-u>call append(expand('.'), '')<CR>j
 
@@ -397,8 +393,8 @@ endfunction
 " 移動設定 : {{{
 
 " 10行移動
-noremap J 10j
-noremap K 10k
+noremap <C-j> 10j
+noremap <C-k> 10k
 
 " wの動作をeに変更
 noremap w e
@@ -493,8 +489,11 @@ set wildmenu
 " 補完モード
 set wildmode=full
 
-" コマンド実行中は再描画しない
-" set lazyredraw
+" zsh風履歴検索
+cnoremap <C-p> <Up>
+cnoremap <Up> <C-p>
+cnoremap <C-n> <Down>
+cnoremap <Down> <C-n>
 
 " コマンドライン行数
 autocmd MyAutoCmd GUIEnter * set cmdheight=1
@@ -509,8 +508,8 @@ function! s:CmdCapture(cmd)
     silent execute a:cmd
     redir END
     new
-    file `='Capture: ' . a:cmd`
     setlocal bufhidden=unload nobuflisted buftype=nofile noswapfile
+    file `='Capture: ' . a:cmd`
     call setline(1, split(substitute(result, '^\n\+', '', ''), '\n'))
 endfunction
 
@@ -833,6 +832,7 @@ if has('vim_starting')
 endif
 
 " from Github
+NeoBundle 'git://github.com/akiyan/vim-textobj-php.git'
 NeoBundle 'git://github.com/anyakichi/vim-surround.git'
 NeoBundle 'git://github.com/h1mesuke/unite-outline.git'
 NeoBundle 'git://github.com/h1mesuke/vim-alignta.git'
@@ -873,12 +873,24 @@ NeoBundle 'BlackSea'
 NeoBundle 'nevfn'
 
 "=============================================================================
+" vim-textobj-php # phpタグテキストオブジェクト : {{{
+
+" 設定なし
+
+" }}}
+"=============================================================================
 " vim-surround # テキストオブジェクトでの囲い操作 : {{{
 
 " キーマップ
 nmap s <Plug>Ysurround
 nmap ss <Plug>Yssurround
 nmap S <Plug>Ysurround$
+
+" }}}
+"=============================================================================
+" unite-outline # unite用アウトラインsource : {{{
+
+" 設定なし
 
 " }}}
 "=============================================================================
@@ -1034,7 +1046,7 @@ endfunction
 " zencoding-vim # HTML/CSSの簡易入力 : {{{
 
 " キーマップ
-let g:user_zen_leader_key = '<C-j>'
+let g:user_zen_leader_key = '<C-l>'
 
 let g:user_zen_settings = {
 \     'indentation' : '    '
@@ -1119,7 +1131,7 @@ if s:iswin && &shellslash == 0
 endif
 
 " カレントディレクトリ以下を探す
-call unite#set_substitute_pattern('files', '^@', '\=getcwd()')
+call unite#set_substitute_pattern('files', '^@/', '\=getcwd()', 1)
 
 " 親ディレクトリを探す
 call unite#set_substitute_pattern('files', ';', '../')
@@ -1178,9 +1190,6 @@ inoremap <expr><CR>  neocomplcache#smart_close_popup() . "\<CR>"
 
 " 補完をキャンセル
 imap <expr><C-e> neocomplcache#cancel_popup()
-
-" unite.vimでの候補絞り込み
-imap <C-l> <Plug>(neocomplcache_start_unite_complete)
 
 " }}}
 "=============================================================================
@@ -1244,6 +1253,12 @@ let g:ref_phpmanual_cmd = 'w3m -dump %s'
 
 " }}}
 "=============================================================================
+" unite-history # unite用コマンド/検索履歴source : {{{
+
+" 設定なし
+
+" }}}
+"=============================================================================
 " vim-repeat # surround.vimを.に対応 : {{{
 
 " 設定なし
@@ -1251,6 +1266,12 @@ let g:ref_phpmanual_cmd = 'w3m -dump %s'
 " }}}
 "=============================================================================
 " vim-matchit # %での対応移動を強化 : {{{
+
+" 設定なし
+
+" }}}
+"=============================================================================
+" unite-help # unite用ヘルプsource : {{{
 
 " 設定なし
 
