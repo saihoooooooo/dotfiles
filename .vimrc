@@ -32,7 +32,7 @@ nnoremap <silent>vv :<C-u>e $MYVIMRC<CR>
 autocmd MyAutoCmd BufWritePost $MYVIMRC source $MYVIMRC
 
 " 起動時にvimrcを開く
-autocmd! MyAutoCmd VimEnter * nested if @% == '' | edit $MYVIMRC | endif
+autocmd MyAutoCmd VimEnter * nested if @% == '' | edit $MYVIMRC | endif
 
 " }}}
 "=============================================================================
@@ -101,7 +101,7 @@ command! -bang -bar -complete=file -nargs=? Mac edit<bang> ++fileformat=mac <arg
 language message C
 
 " シンタックスON
-if !exists("syntax_on")
+if !exists('syntax_on')
     syntax enable
 endif
 
@@ -109,7 +109,7 @@ endif
 set synmaxcol=1000
 
 " シンタックスON/OFF切り替え
-nnoremap <expr><F3> exists("syntax_on") ? ":\<C-u>syntax off\<CR>" : ":\<C-u>syntax enable\<CR>"
+nnoremap <expr><F3> exists('syntax_on') ? ":\<C-u>syntax off\<CR>" : ":\<C-u>syntax enable\<CR>"
 
 " 全画面表示
 if s:iswin
@@ -265,9 +265,6 @@ let mapleader = ","
 noremap ; :
 noremap : ;
 
-" キーマップ確定
-nnoremap <CR> <Nop>
-
 " 全てのキーマップを表示
 command! -nargs=* -complete=mapping AllMaps map <args> | map! <args> | lmap <args>
 
@@ -381,7 +378,7 @@ endfunction
 nnoremap <silent>xl :<C-u>call <SID>MakeOrderedList()<CR>
 function! s:MakeOrderedList()
     let l:count = v:count
-    normal! i1.
+    normal! i1. 
     if l:count > 1
         let @l = 'yyp'
         execute 'normal!' (l:count - 1) . '@l'
@@ -476,9 +473,6 @@ endfunction
 " <ESC>でハイライト消去
 nnoremap <silent><ESC> :<C-u>nohlsearch<CR>
 
-" q/を無効化
-nnoremap q/ <Nop>
-
 " }}}
 "=============================================================================
 " コマンド設定 : {{{
@@ -514,11 +508,8 @@ function! s:CmdCapture(cmd)
 endfunction
 
 " ファイルパス簡易入力
-cnoremap <C-f> <C-r>=expand('%:t')<CR>
-cnoremap <C-d> <C-r>=expand('%:p:h')<CR>/
-
-" q:を無効化
-nnoremap q: <Nop>
+cnoremap <C-g>f <C-r>=expand('%:t')<CR>
+cnoremap <C-g>d <C-r>=expand('%:p:h')<CR>/
 
 " }}}
 "=============================================================================
@@ -727,14 +718,31 @@ set clipboard+=unnamed
 "=============================================================================
 " マーク設定 : {{{
 
-" 内容確認
-nnoremap M :<C-u>marks<CR>
+" 起動時に初期化を行う
+autocmd MyAutoCmd VimEnter * delmarks!
 
-" gg実行時に現在行をマーク
-nnoremap gg mggg
+" 基本マップ
+nnoremap [Mark] <Nop>
+nmap m [Mark]
 
-" G実行時に現在行をマーク
-nnoremap G mgG
+" 現在位置をマーク
+nnoremap [Mark]m :<C-u>call <SID>AutoMark()<CR>
+function! s:AutoMark()
+    if !exists('b:marks_current_pos') || (b:marks_current_pos == 'z')
+        let b:marks_current_pos = 'a'
+    else
+        let b:marks_current_pos = 'a'
+    endif
+    echo 'mark' b:marks_current_pos
+    execute 'mark' b:marks_current_pos
+endfunction
+
+" 次/前のマーク
+nnoremap [Mark]n ]'
+nnoremap [Mark]p ['
+
+" 一覧表示
+nnoremap [Mark]l :<C-u>marks<CR>
 
 " }}}
 "=============================================================================
