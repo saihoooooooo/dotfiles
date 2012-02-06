@@ -1294,16 +1294,6 @@ map _ <Plug>(operator-camelize-toggle)iwbvu
 " 取得数
 let twitvim_count = 100
 
-" vimfilerファイルタイプ設定
-autocmd FileType twitvim call <SID>TwitVimMySetting()
-function! s:TwitVimMySetting()
-    " 折り返し表示
-    set wrap
-
-    " リロード
-    nnoremap <buffer>r :<C-u>FriendsTwitter<CR>
-endfunction
-
 " }}}
 "=============================================================================
 " vcscommand.vim # vim上でVCSコマンドを実行 : {{{
