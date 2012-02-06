@@ -321,13 +321,13 @@ inoremap <C-u> <C-g>u<C-u>
 inoremap <C-w> <C-g>u<C-w>
 
 " ^Mを取り除く
-command! -nargs=0 RemoveCr :silent! normal! mg:%s/<C-v><CR>//g<CR>:nohlsearch<CR>`g
+command! -nargs=0 RemoveCr :silent! normal! :%s/<C-v><CR>//g<CR>:nohlsearch<CR>``
 
 " 行末のスペースを取り除く
-command! -nargs=0 RemoveEolSpace :silent! normal! mg:%s/ \+$//g<CR>:nohlsearch<CR>`g
+command! -nargs=0 RemoveEolSpace :silent! normal! :%s/ \+$//g<CR>:nohlsearch<CR>``
 
 " 空行を取り除く
-command! -nargs=0 RemoveBlankLine :silent! normal! mg:%s/^\n//g<CR>:nohlsearch<CR>`g
+command! -nargs=0 RemoveBlankLine :silent! normal! :%s/^\n//g<CR>:nohlsearch<CR>``
 
 " 手動コメントアウト
 noremap [Comment] <Nop>
@@ -436,6 +436,9 @@ endfunction
 " }}}
 "=============================================================================
 " 検索設定 : {{{
+
+" 検索パターンにマッチした箇所を強調表示
+set hlsearch
 
 " インクリメンタル検索
 set incsearch
@@ -651,40 +654,15 @@ set showtabline=2
 " ラベル表示内容
 autocmd MyAutoCmd GUIEnter * set guitablabel=%t
 
-" 基本マップ
-nnoremap [Tab] <Nop>
-nmap <C-t> [Tab]
-
 " タプを作成
-nnoremap [Tab]n :<C-u>99tabnew<CR>
-nnoremap [Tab]N :<C-u>tabnew<CR>
+nnoremap <C-t> :<C-u>99tabnew<CR>
 
 " 次/前のタプ
-nnoremap [Tab]l gt
-nnoremap [Tab]h gT
-
-" タブを移動
-nnoremap [Tab]H :<C-u>call <SID>MoveTabPosition('left')<CR>
-nnoremap [Tab]L :<C-u>call <SID>MoveTabPosition('right')<CR>
-nnoremap [Tab]K :<C-u>call <SID>MoveTabPosition('top')<CR>
-nnoremap [Tab]J :<C-u>call <SID>MoveTabPosition('bottom')<CR>
-function! s:MoveTabPosition(direction)
-    if a:direction == 'left'
-        execute 'tabmove ' . (tabpagenr() - 2)
-    elseif a:direction == 'right'
-        execute 'tabmove ' . (tabpagenr())
-    elseif a:direction == 'top'
-        execute 'tabmove 0'
-    elseif a:direction == 'bottom'
-        execute 'tabmove 99'
-    endif
-endfunction
+nnoremap <C-n> gt
+nnoremap <C-p> gT
 
 " タプを閉じる
-nnoremap [Tab]c :<C-u>tabclose<CR>
-
-" 現在以外のタプを閉じる
-nnoremap [Tab]o :<C-u>tabonly<CR>
+nnoremap xc :<C-u>tabclose<CR>
 
 " }}}
 "=============================================================================
@@ -841,7 +819,8 @@ endif
 
 " from Github
 NeoBundle 'git://github.com/akiyan/vim-textobj-php.git'
-NeoBundle 'git://github.com/anyakichi/vim-surround.git'
+NeoBundle 'git://github.com/saihoooooooo/vim-surround.git'
+" NeoBundle 'git://github.com/anyakichi/vim-surround.git'
 NeoBundle 'git://github.com/h1mesuke/unite-outline.git'
 NeoBundle 'git://github.com/h1mesuke/vim-alignta.git'
 NeoBundle 'git://github.com/kana/vim-operator-replace.git'
@@ -947,7 +926,17 @@ map xP xp$
 "=============================================================================
 " vim-operator-user # ユーザ定義オペレータ : {{{
 
-" 設定なし
+" 検索オペレータ
+map x/ <Plug>(operator-search)
+call operator#user#define('search', 'OperatorSearch')
+function! OperatorSearch(motion_wise)
+    if a:motion_wise == 'char'
+        silent normal! `[v`]"zy
+        call search(@z)
+        let @/ = @z
+        set hlsearch
+    endif
+endfunction
 
 " }}}
 "=============================================================================

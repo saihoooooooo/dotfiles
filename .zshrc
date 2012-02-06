@@ -16,6 +16,7 @@ bindkey "^N" history-beginning-search-forward-end
 alias gvim='open -a "MacVim"'
 alias ls='ls -a'
 alias rm='rm -i'
+alias ctags="`brew --prefix`/bin/ctags"
 
 # 補完
 autoload -U compinit
