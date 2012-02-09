@@ -308,7 +308,7 @@ set backspace=indent,eol,start
 map Y y$
 
 " 空行を挿入
-nnoremap <silent>O :<C-u>call append(expand('.'), '')<CR>j
+nnoremap <silent><C-Enter> :<C-u>call append(expand('.'), '')<CR>j
 
 " ノーマルモードでの改行
 nnoremap <S-CR> i<CR><ESC>
@@ -662,7 +662,7 @@ nnoremap <C-n> gt
 nnoremap <C-p> gT
 
 " タプを閉じる
-nnoremap xc :<C-u>tabclose<CR>
+nnoremap dt :<C-u>tabclose<CR>
 
 " }}}
 "=============================================================================
@@ -704,17 +704,22 @@ nnoremap [Mark] <Nop>
 nmap m [Mark]
 
 " 現在位置をマーク
-nnoremap [Mark]m :<C-u>call <SID>AutoMark()<CR>
+nnoremap <silent>[Mark]m :<C-u>call <SID>AutoMark()<CR>
+if !exists('g:marks_pos')
+    let g:marks_char = [
+    \     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+    \     'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+    \ ]
+endif
 function! s:AutoMark()
-    if !exists('b:marks_current_pos') || (b:marks_current_pos == 'z')
-        let b:marks_current_pos = 'a'
+    if !exists('b:marks_current_pos') || (b:marks_current_pos == len(g:marks_char) - 1)
+        let b:marks_current_pos = 0
     else
-        let b:marks_current_pos = 'a'
+        let b:marks_current_pos = b:marks_current_pos + 1
     endif
-    echo 'mark' b:marks_current_pos
-    execute 'mark' b:marks_current_pos
+    execute 'mark' g:marks_char[b:marks_current_pos]
+    echo 'marked' g:marks_char[b:marks_current_pos]
 endfunction
-
 " 次/前のマーク
 nnoremap [Mark]n ]'
 nnoremap [Mark]p ['
@@ -860,13 +865,13 @@ NeoBundle 'BlackSea'
 NeoBundle 'nevfn'
 
 "=============================================================================
-" vim-textobj-php # phpタグテキストオブジェクト : {{{
+" vim-textobj-php : {{{
 
 " 設定なし
 
 " }}}
 "=============================================================================
-" vim-surround # テキストオブジェクトでの囲い操作 : {{{
+" vim-surround : {{{
 
 " キーマップ
 nmap s <Plug>Ysurround
@@ -875,13 +880,13 @@ nmap S <Plug>Ysurround$
 
 " }}}
 "=============================================================================
-" unite-outline # unite用アウトラインsource : {{{
+" unite-outline : {{{
 
 " 設定なし
 
 " }}}
 "=============================================================================
-" vim-alignta # テキスト整形 : {{{
+" vim-alignta : {{{
 
 " テキスト整形
 xnoremap <silent>[Unite]a :<C-u>Unite alignta:arguments<CR>
@@ -916,7 +921,7 @@ unlet s:comment_leadings
 
 " }}}
 "=============================================================================
-" vim-operator-replace # 置換オペレータ : {{{
+" vim-operator-replace : {{{
 
 " xpを置換用キーに設定
 map xp "*<Plug>(operator-replace)
@@ -924,7 +929,7 @@ map xP xp$
 
 " }}}
 "=============================================================================
-" vim-operator-user # ユーザ定義オペレータ : {{{
+" vim-operator-user : {{{
 
 " 検索オペレータ
 map x/ <Plug>(operator-search)
@@ -940,7 +945,7 @@ endfunction
 
 " }}}
 "=============================================================================
-" submode.vim # ユーザ定義モード : {{{
+" submode.vim : {{{
 
 " タイムアウトあり
 let g:submode_timeout = 1
@@ -960,13 +965,13 @@ call submode#map('winsize', 'n', '', '>', '<C-w>5>')
 
 " }}}
 "=============================================================================
-" vim-textobj-indent # インデントテキストオブジェクト : {{{
+" vim-textobj-indent : {{{
 
 " 設定なし
 
 " }}}
 "=============================================================================
-" vim-textobj-entire # 全行テキストオブジェクト : {{{
+" vim-textobj-entire : {{{
 
 " 全行コピー
 nmap yie yie`'
@@ -974,25 +979,25 @@ nmap yae yae`'
 
 " }}}
 "=============================================================================
-" vim-textobj-lastpat # 検索結果テキストオブジェクト : {{{
+" vim-textobj-lastpat : {{{
 
 " 設定なし
 
 " }}}
 "=============================================================================
-" vim-textobj-line # 行テキストオブジェクト : {{{
+" vim-textobj-line : {{{
 
 " 設定なし
 
 " }}}
 "=============================================================================
-" vim-textobj-syntax # シンタックステキストオブジェクト : {{{
+" vim-textobj-syntax : {{{
 
 " 設定なし
 
 " }}}
 "=============================================================================
-" vim-textobj-user # ユーザ定義テキストオブジェクト : {{{
+" vim-textobj-user : {{{
 
 " キャメルケース、スネークケース
 call textobj#user#plugin('camelcase', {
@@ -1004,7 +1009,7 @@ call textobj#user#plugin('camelcase', {
 
 " }}}
 "=============================================================================
-" calender.vim # カレンダー表示 : {{{
+" calender.vim : {{{
 
 " キーマップ
 nnoremap <silent><F7> :<C-u>CalendarH<CR>
@@ -1015,13 +1020,13 @@ let g:calendar_datetime='statusline'
 
 " }}}
 "=============================================================================
-" mahjong-vim # 麻雀早上がりゲーム : {{{
+" mahjong-vim : {{{
 
 " 設定なし
 
 " }}}
 "=============================================================================
-" webapi-vim # WEBAPI取得 : {{{
+" webapi-vim : {{{
 
 " Google電卓
 command! -bang -nargs=+ GCalc call GCalc(<q-args>, <bang>0)
@@ -1040,7 +1045,7 @@ endfunction
 
 " }}}
 "=============================================================================
-" zencoding-vim # HTML/CSSの簡易入力 : {{{
+" zencoding-vim : {{{
 
 " キーマップ
 let g:user_zen_leader_key = '<C-l>'
@@ -1051,13 +1056,13 @@ let g:user_zen_settings = {
 
 " }}}
 "=============================================================================
-" vim-textobj-space # 空白テキストオブジェクト : {{{
+" vim-textobj-space : {{{
 
 " 設定なし
 
 " }}}
 "=============================================================================
-" unite.vim # すべてのsourceを統合する : {{{
+" unite.vim : {{{
 
 " 基本マップ
 nnoremap [Unite] <Nop>
@@ -1149,7 +1154,7 @@ let g:unite_source_line_enable_highlight = 0
 
 " }}}
 "=============================================================================
-" neocomplcache # 自動補完 : {{{
+" neocomplcache : {{{
 
 " neocomplcache有効
 let g:neocomplcache_enable_at_startup = 1
@@ -1190,7 +1195,7 @@ imap <expr><C-e> neocomplcache#cancel_popup()
 
 " }}}
 "=============================================================================
-" vimfiler # 高機能ファイラ : {{{
+" vimfiler : {{{
 
 " デフォルトのファイラに設定
 let vimfilerAsDefaultExplorer = 1
@@ -1216,31 +1221,33 @@ endfunction
 
 " }}}
 "=============================================================================
-" vimproc # 非同期実行 : {{{
+" vimproc : {{{
 
 " 設定なし
 
 " }}}
 "=============================================================================
-" vimshell # vim用shell : {{{
+" vimshell : {{{
 
 " 設定なし
 
 " }}}
 "=============================================================================
-" vim-textobj-between # 指定文字内テキストオブジェクト : {{{
+" vim-textobj-between : {{{
 
 " 設定なし
 
 " }}}
 "=============================================================================
-" vim-quickrun # 編集中スクリプトを実行 : {{{
+" vim-quickrun : {{{
 
-" 設定なし
+" 実行コマンド設定
+let g:quickrun_config = {}
+let g:quickrun_config.javascript = {'command': $HOME . '/.nave/installed/0.7.3/bin/node'}
 
 " }}}
 "=============================================================================
-" vim-ref # リファレンス : {{{
+" vim-ref : {{{
 
 " phpマニュアルパス
 let g:ref_phpmanual_path = '/Applications/XAMPP/xamppfiles/lib/php/php-chunked-xhtml/'
@@ -1250,31 +1257,31 @@ let g:ref_phpmanual_cmd = 'w3m -dump %s'
 
 " }}}
 "=============================================================================
-" unite-history # unite用コマンド/検索履歴source : {{{
+" unite-history : {{{
 
 " 設定なし
 
 " }}}
 "=============================================================================
-" vim-repeat # surround.vimを.に対応 : {{{
+" vim-repeat : {{{
 
 " 設定なし
 
 " }}}
 "=============================================================================
-" vim-matchit # %での対応移動を強化 : {{{
+" vim-matchit : {{{
 
 " 設定なし
 
 " }}}
 "=============================================================================
-" unite-help # unite用ヘルプsource : {{{
+" unite-help : {{{
 
 " 設定なし
 
 " }}}
 "=============================================================================
-" openbrowser.vim # カーソル位置のURLをブラウザで開く : {{{
+" openbrowser.vim : {{{
 
 " URLなら開き、URLでない場合は検索を実行
 nmap x@ <Plug>(openbrowser-smart-search)
@@ -1282,21 +1289,21 @@ xmap x@ <Plug>(openbrowser-smart-search)
 
 " }}}
 "=============================================================================
-" operator-camelize.vim # キャメルケース変換オペレータ : {{{
+" operator-camelize.vim : {{{
 
 " カーソル位置の単語をキャメルケース化/解除のトグル
 map _ <Plug>(operator-camelize-toggle)iwbvu
 
 " }}}
 "=============================================================================
-" TwitVim # Twitterクライアント : {{{
+" TwitVim : {{{
 
 " 取得数
 let twitvim_count = 100
 
 " }}}
 "=============================================================================
-" vcscommand.vim # vim上でVCSコマンドを実行 : {{{
+" vcscommand.vim : {{{
 
 " 設定なし
 
