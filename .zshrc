@@ -1,5 +1,6 @@
-export PATH=/opt/local/bin:/opt/local/sbin/:/Applications/XAMPP/xamppfiles/bin/:$PATH
-export MANPATH=/opt/local/man:$MANPATH
+export PATH=/opt/local/bin:/opt/local/sbin/:/Applications/XAMPP/xamppfiles/bin/:~/.npm/bin:$PATH
+export MANPATH=/opt/local/man:~/.npm/man:$MANPATH
+export NODE_PATH=~/.npm/libraries:$NODE_PATH
 
 # 文字コードの設定
 export LANG=ja_JP.UTF-8
@@ -13,10 +14,10 @@ bindkey "^P" history-beginning-search-backward-end
 bindkey "^N" history-beginning-search-forward-end
 
 # エイリアス
-alias gvim='open -a "MacVim"'
 alias ls='ls -a'
 alias rm='rm -i'
 alias ctags="`brew --prefix`/bin/ctags"
+alias nave=$HOME/.nave/nave/nave.sh
 
 # 補完
 autoload -U compinit
@@ -65,14 +66,8 @@ setopt auto_menu
 # カッコの対応などを自動的に補完
 setopt auto_param_keys
 
-# ディレクトリ名の補完で末尾の / を自動的に付加し、次の補完に備える
-setopt auto_param_slash
-
 # ビープ音を鳴らさないようにする
 setopt no_beep
-
-# 行頭がスペースで始まるコマンドラインはヒストリに記録しない
-# setopt hist_ignore_spece
 
 # 8 ビット目を通すようになり、日本語のファイル名を表示可能
 setopt print_eight_bit
@@ -86,9 +81,6 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 # cd をしたときにlsを実行する
 function chpwd() { ls }
 
-# ディレクトリ名だけで､ディレクトリの移動をする｡
-setopt auto_cd
-
 # cdの履歴を保存
 setopt auto_pushd
 
@@ -96,3 +88,6 @@ setopt auto_pushd
 autoload bashcompinit
 bashcompinit
 source ~/.git-completion.sh
+
+# node
+nave use 0.7.3
