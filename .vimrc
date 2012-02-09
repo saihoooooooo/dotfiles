@@ -297,6 +297,14 @@ onoremap ir i[
 vnoremap ar a[
 onoremap ar a[
 
+" phpにて$this->を@で入力
+autocmd MyAutoCmd FileType php inoremap <expr><buffer> @ <SID>at()
+function! s:at()
+    let syntax = synstack(line('.'), col('.'))
+    let name = empty(syntax) ? '' : synIDattr(syntax[-1], "name")
+    return name =~# 'String\|Comment\|None' ? '@' : '$this->'
+endfunction
+
 " }}}
 "=============================================================================
 " 編集設定 : {{{
