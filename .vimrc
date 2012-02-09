@@ -720,6 +720,7 @@ function! s:AutoMark()
     execute 'mark' g:marks_char[b:marks_current_pos]
     echo 'marked' g:marks_char[b:marks_current_pos]
 endfunction
+
 " 次/前のマーク
 nnoremap [Mark]n ]'
 nnoremap [Mark]p ['
