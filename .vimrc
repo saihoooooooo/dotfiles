@@ -415,7 +415,7 @@ set selection=old
 set matchpairs=(:),{:},[:],<:>,=:;
 
 " 対応移動をeにマップ
-map e %
+noremap e %
 
 " カーソルの上または下に表示する最低行数
 set scrolloff=5
@@ -833,8 +833,7 @@ endif
 
 " from Github
 NeoBundle 'git://github.com/akiyan/vim-textobj-php.git'
-NeoBundle 'git://github.com/saihoooooooo/vim-surround.git'
-" NeoBundle 'git://github.com/anyakichi/vim-surround.git'
+NeoBundle 'git://github.com/anyakichi/vim-surround.git'
 NeoBundle 'git://github.com/h1mesuke/unite-outline.git'
 NeoBundle 'git://github.com/h1mesuke/vim-alignta.git'
 NeoBundle 'git://github.com/kana/vim-operator-replace.git'
@@ -854,6 +853,7 @@ NeoBundle 'git://github.com/saihoooooooo/vim-textobj-space.git'
 NeoBundle 'git://github.com/Shougo/unite.vim.git'
 NeoBundle 'git://github.com/Shougo/neobundle.vim.git'
 NeoBundle 'git://github.com/Shougo/neocomplcache.git'
+NeoBundle 'git://github.com/Shougo/neocomplcache-snippets-complete.git'
 NeoBundle 'git://github.com/Shougo/vimfiler.git'
 NeoBundle 'git://github.com/Shougo/vimproc.git'
 NeoBundle 'git://github.com/Shougo/vimshell.git'
@@ -1190,9 +1190,6 @@ let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
-" スニペット補完
-imap <C-k> <Plug>(neocomplcache_snippets_expand)
-
 " 選択中の候補を確定
 imap <expr><C-y> neocomplcache#close_popup()
 
@@ -1201,6 +1198,14 @@ inoremap <expr><CR>  neocomplcache#smart_close_popup() . "\<CR>"
 
 " 補完をキャンセル
 imap <expr><C-e> neocomplcache#cancel_popup()
+
+" }}}
+"=============================================================================
+" neocomplcache-snippets-complete : {{{
+
+" スニペット補完
+imap <C-k> <Plug>(neocomplcache_snippets_expand)
+smap <C-k> <Plug>(neocomplcache_snippets_expand)
 
 " }}}
 "=============================================================================
