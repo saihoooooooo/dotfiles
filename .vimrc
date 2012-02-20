@@ -396,11 +396,11 @@ endfunction
 inoremap <expr><CR> ExCr()
 function! ExCr()
     let l = getline('.')
-    if l =~ '{'
+    if l =~ '{$'
         return "\<CR>}\<Up>\<End>\<CR>"
     elseif l =~ '($'
         return "\<CR>)\<Up>\<End>\<CR>"
-    elseif l =~ '['
+    elseif l =~ '[$'
         return "\<CR>]\<Up>\<End>\<CR>"
     else
         return "\<CR>"
