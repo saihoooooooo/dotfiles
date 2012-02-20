@@ -316,10 +316,10 @@ set backspace=indent,eol,start
 map Y y$
 
 " 空行を挿入
-nnoremap <silent><C-Enter> :<C-u>call append(expand('.'), '')<CR>j
+nnoremap <silent><S-CR> :<C-u>call append('.', '')<CR>j
 
 " ノーマルモードでの改行
-nnoremap <S-CR> i<CR><ESC>
+nnoremap <C-CR> i<CR><ESC>
 
 " コメントを継続しない
 autocmd MyAutoCmd FileType * setlocal formatoptions& formatoptions-=o formatoptions-=r
@@ -385,11 +385,25 @@ endfunction
 " 番号付きリストを作成
 nnoremap <silent>xl :<C-u>call <SID>MakeOrderedList()<CR>
 function! s:MakeOrderedList()
-    let l:count = v:count
-    normal! i1. 
-    if l:count > 1
-        let @l = 'yyp'
-        execute 'normal!' (l:count - 1) . '@l'
+    let current = line('.')
+    for i in range(1, v:count)
+        put =i . '. '
+    endfor
+    execute 'normal!' current + 1 . 'G'
+endfunction
+
+" 改行時に対応する括弧を補完
+inoremap <expr><CR> ExCr()
+function! ExCr()
+    let l = getline('.')
+    if l =~ '{'
+        return "\<CR>}\<Up>\<End>\<CR>"
+    elseif l =~ '($'
+        return "\<CR>)\<Up>\<End>\<CR>"
+    elseif l =~ '['
+        return "\<CR>]\<Up>\<End>\<CR>"
+    else
+        return "\<CR>"
     endif
 endfunction
 
@@ -654,6 +668,21 @@ endfunction
 
 " }}}
 "=============================================================================
+" diff設定 : {{{
+
+" 差分情報を更新
+nnoremap <silent>du :<C-u>call DiffUpdate()<CR>
+function! DiffUpdate()
+    if &diff
+        diffupdate
+    else
+        " dummy E99
+        echohl ErrorMsg | echo 'E99: Current buffer is not in diff mode' | echohl None
+    endif
+endfunction
+
+" }}}
+"=============================================================================
 " タブ設定 : {{{
 
 " タブバーは常に表示
@@ -788,6 +817,7 @@ nnoremap ZZ <Nop>
 nnoremap [Option] <Nop>
 nmap xo [Option]
 nnoremap <silent>[Option]n :<C-u>call <SID>ToggleOption('number')<CR>
+nnoremap <silent>[Option]r :<C-u>call <SID>ToggleOption('readonly')<CR>
 nnoremap <silent>[Option]w :<C-u>call <SID>ToggleOption('wrap')<CR>
 nnoremap <silent>[Option]/ :<C-u>call <SID>ToggleOption('wrapscan')<CR>
 function! s:ToggleOption(option)
@@ -1194,7 +1224,7 @@ inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 imap <expr><C-y> neocomplcache#close_popup()
 
 " <CR>は候補を確定しながら改行
-inoremap <expr><CR>  neocomplcache#smart_close_popup() . "\<CR>"
+" inoremap <expr><CR> neocomplcache#smart_close_popup() . "\<CR>"
 
 " 補完をキャンセル
 imap <expr><C-e> neocomplcache#cancel_popup()

@@ -90,4 +90,4 @@ bashcompinit
 source ~/.git-completion.sh
 
 # node
-nave use 0.7.3
+nave use stable
