@@ -395,6 +395,9 @@ endfunction
 " 改行時に対応する括弧を補完
 inoremap <expr><CR> ExCr()
 function! ExCr()
+    if col('.') != col('$')
+        return "\<CR>"
+    endif
     let l = getline('.')
     if l =~ '{$'
         return "\<CR>}\<Up>\<End>\<CR>"
