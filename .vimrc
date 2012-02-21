@@ -288,13 +288,13 @@ function! s:Eatchar(pattern)
 endfunction
 
 " テキストオブジェクト簡易入力
-vnoremap ia i<
+xnoremap ia i<
 onoremap ia i<
-vnoremap aa a<
+xnoremap aa a<
 onoremap aa a<
-vnoremap ir i[
+xnoremap ir i[
 onoremap ir i[
-vnoremap ar a[
+xnoremap ar a[
 onoremap ar a[
 
 " phpにて$this->を@で入力
@@ -426,7 +426,7 @@ set whichwrap=h,l,[,],<,>
 set selection=old
 
 " 対応移動ペア
-set matchpairs=(:),{:},[:],<:>,=:;
+set matchpairs=(:),{:},[:],<:>
 
 " 対応移動をeにマップ
 noremap e %
@@ -547,6 +547,7 @@ endif
 
 " 拡張子毎のfiletype指定
 autocmd MyAutoCmd BufRead,BufNewFile *.ctp set filetype=php
+autocmd MyAutoCmd BufRead,BufNewFile *.jade set filetype=jade
 
 " ファイルタイプ指定
 nnoremap xof :set filetype=
@@ -864,6 +865,7 @@ endif
 " from Github
 NeoBundle 'git://github.com/akiyan/vim-textobj-php.git'
 NeoBundle 'git://github.com/anyakichi/vim-surround.git'
+NeoBundle 'git://github.com/digitaltoad/vim-jade.git'
 NeoBundle 'git://github.com/h1mesuke/unite-outline.git'
 NeoBundle 'git://github.com/h1mesuke/vim-alignta.git'
 NeoBundle 'git://github.com/kana/vim-operator-replace.git'
@@ -916,6 +918,12 @@ NeoBundle 'nevfn'
 nmap s <Plug>Ysurround
 nmap ss <Plug>Yssurround
 nmap S <Plug>Ysurround$
+
+" }}}
+"=============================================================================
+" vim-jade : {{{
+
+" 設定なし
 
 " }}}
 "=============================================================================
@@ -1224,7 +1232,7 @@ inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 imap <expr><C-y> neocomplcache#close_popup()
 
 " <CR>は候補を確定しながら改行
-" inoremap <expr><CR> neocomplcache#smart_close_popup() . "\<CR>"
+inoremap <expr><CR> neocomplcache#smart_close_popup() . ExCr()
 
 " 補完をキャンセル
 imap <expr><C-e> neocomplcache#cancel_popup()
