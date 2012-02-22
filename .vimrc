@@ -316,8 +316,8 @@ function! s:at()
 endfunction
 
 " 改行時に対応する括弧を補完
-inoremap <expr><CR> ExCr()
-function! ExCr()
+inoremap <expr><CR> <SID>ExCr()
+function! s:ExCr()
     if col('.') != col('$')
         return "\<CR>"
     endif
@@ -357,13 +357,13 @@ inoremap <C-u> <C-g>u<C-u>
 inoremap <C-w> <C-g>u<C-w>
 
 " ^Mを取り除く
-command! -nargs=0 RemoveCr :silent! normal! :%s/<C-v><CR>//g<CR>:nohlsearch<CR>``
+command! RemoveCr :silent! normal! :%s/<C-v><CR>//g<CR>:nohlsearch<CR>``
 
 " 行末のスペースを取り除く
-command! -nargs=0 RemoveEolSpace :silent! normal! :%s/ \+$//g<CR>:nohlsearch<CR>``
+command! RemoveEolSpace :silent! normal! :%s/ \+$//g<CR>:nohlsearch<CR>``
 
 " 空行を取り除く
-command! -nargs=0 RemoveBlankLine :silent! normal! :%s/^\n//g<CR>:nohlsearch<CR>``
+command! RemoveBlankLine :silent! normal! :%s/^\n//g<CR>:nohlsearch<CR>``
 
 " 手動コメントアウト
 noremap [Comment] <Nop>
@@ -531,7 +531,7 @@ function! s:CmdCapture(cmd)
     redir END
     new
     setlocal bufhidden=unload nobuflisted buftype=nofile noswapfile
-    file `='Capture: ' . a:cmd`
+    silent file `='Capture: ' . a:cmd`
     call setline(1, split(substitute(result, '^\n\+', '', ''), '\n'))
 endfunction
 
@@ -698,20 +698,20 @@ nnoremap dt :<C-u>tabclose<CR>
 set diffopt=filler
 
 " 差分表示用タブを作成
-nnoremap <C-d> :<C-u>silent call OpenDiffTab()<CR>
-function! OpenDiffTab()
-    execute "normal \<C-t>"
+command! DiffTab call <SID>DiffTab()
+function! s:DiffTab()
+    silent execute "normal \<C-t>"
     setlocal bufhidden=unload nobuflisted buftype=nofile noswapfile
-    file [Diff Right]
+    silent file [Diff Right]
     vnew
     setlocal bufhidden=unload nobuflisted buftype=nofile noswapfile
-    file [Diff Left]
+    silent file [Diff Left]
     windo diffthis
 endfunction
 
 " 差分情報を更新
-nnoremap <silent>du :<C-u>call DiffUpdate()<CR>
-function! DiffUpdate()
+nnoremap <silent>du :<C-u>call <SID>DiffUpdate()<CR>
+function! s:DiffUpdate()
     if &diff
         diffupdate
     else
@@ -1249,7 +1249,7 @@ inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 imap <expr><C-y> neocomplcache#close_popup()
 
 " <CR>は候補を確定しながら改行
-inoremap <expr><CR> neocomplcache#smart_close_popup() . ExCr()
+inoremap <expr><CR> neocomplcache#smart_close_popup() . <SID>ExCr()
 
 " 補完をキャンセル
 imap <expr><C-e> neocomplcache#cancel_popup()
@@ -1312,7 +1312,7 @@ endfunction
 
 " 実行コマンド設定
 let g:quickrun_config = {}
-let g:quickrun_config.javascript = {'command': $HOME . '/.nave/installed/0.7.3/bin/node'}
+let g:quickrun_config.javascript = {'command': $HOME . '/.nave/installed/0.6.11/bin/node'}
 
 " }}}
 "=============================================================================
