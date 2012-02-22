@@ -297,12 +297,40 @@ onoremap ir i[
 xnoremap ar a[
 onoremap ar a[
 
+" 番号付きリストを作成
+nnoremap <silent>xl :<C-u>call <SID>MakeOrderedList()<CR>
+function! s:MakeOrderedList()
+    let current = line('.')
+    for i in range(1, v:count)
+        put =i . '. '
+    endfor
+    execute 'normal!' current + 1 . 'G'
+endfunction
+
 " phpにて$this->を@で入力
 autocmd MyAutoCmd FileType php inoremap <expr><buffer> @ <SID>at()
 function! s:at()
     let syntax = synstack(line('.'), col('.'))
     let name = empty(syntax) ? '' : synIDattr(syntax[-1], "name")
     return name =~# 'String\|Comment\|None' ? '@' : '$this->'
+endfunction
+
+" 改行時に対応する括弧を補完
+inoremap <expr><CR> ExCr()
+function! ExCr()
+    if col('.') != col('$')
+        return "\<CR>"
+    endif
+    let l = getline('.')
+    if l =~ '{$'
+        return "\<CR>}\<Up>\<End>\<CR>"
+    elseif l =~ '($'
+        return "\<CR>)\<Up>\<End>\<CR>"
+    elseif l =~ '[$'
+        return "\<CR>]\<Up>\<End>\<CR>"
+    else
+        return "\<CR>"
+    endif
 endfunction
 
 " }}}
@@ -380,34 +408,6 @@ function! s:DropUndoInfo()
     execute "normal! aa\<BS>\<ESC>"
     let &modified = 0
     let &undolevels = l:old_undolevels
-endfunction
-
-" 番号付きリストを作成
-nnoremap <silent>xl :<C-u>call <SID>MakeOrderedList()<CR>
-function! s:MakeOrderedList()
-    let current = line('.')
-    for i in range(1, v:count)
-        put =i . '. '
-    endfor
-    execute 'normal!' current + 1 . 'G'
-endfunction
-
-" 改行時に対応する括弧を補完
-inoremap <expr><CR> ExCr()
-function! ExCr()
-    if col('.') != col('$')
-        return "\<CR>"
-    endif
-    let l = getline('.')
-    if l =~ '{$'
-        return "\<CR>}\<Up>\<End>\<CR>"
-    elseif l =~ '($'
-        return "\<CR>)\<Up>\<End>\<CR>"
-    elseif l =~ '[$'
-        return "\<CR>]\<Up>\<End>\<CR>"
-    else
-        return "\<CR>"
-    endif
 endfunction
 
 " }}}
@@ -672,21 +672,6 @@ endfunction
 
 " }}}
 "=============================================================================
-" diff設定 : {{{
-
-" 差分情報を更新
-nnoremap <silent>du :<C-u>call DiffUpdate()<CR>
-function! DiffUpdate()
-    if &diff
-        diffupdate
-    else
-        " dummy E99
-        echohl ErrorMsg | echo 'E99: Current buffer is not in diff mode' | echohl None
-    endif
-endfunction
-
-" }}}
-"=============================================================================
 " タブ設定 : {{{
 
 " タブバーは常に表示
@@ -704,6 +689,35 @@ nnoremap <C-p> gT
 
 " タプを閉じる
 nnoremap dt :<C-u>tabclose<CR>
+
+" }}}
+"=============================================================================
+" 差分設定 : {{{
+
+" 差分モードオプション
+set diffopt=filler
+
+" 差分表示用タブを作成
+nnoremap <C-d> :<C-u>silent call OpenDiffTab()<CR>
+function! OpenDiffTab()
+    execute "normal \<C-t>"
+    setlocal bufhidden=unload nobuflisted buftype=nofile noswapfile
+    file [Diff Right]
+    vnew
+    setlocal bufhidden=unload nobuflisted buftype=nofile noswapfile
+    file [Diff Left]
+    windo diffthis
+endfunction
+
+" 差分情報を更新
+nnoremap <silent>du :<C-u>call DiffUpdate()<CR>
+function! DiffUpdate()
+    if &diff
+        diffupdate
+    else
+        echohl ErrorMsg | echo 'E99: Current buffer is not in diff mode' | echohl None
+    endif
+endfunction
 
 " }}}
 "=============================================================================
