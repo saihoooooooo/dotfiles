@@ -431,9 +431,6 @@ set selection=old
 " 対応移動ペア
 set matchpairs=(:),{:},[:],<:>
 
-" 対応移動をeにマップ
-noremap e %
-
 " カーソルの上または下に表示する最低行数
 set scrolloff=5
 
@@ -524,14 +521,14 @@ autocmd MyAutoCmd GUIEnter * set cmdheight=1
 set showcmd
 
 " コマンドの出力を別ウィンドウで開く
-command! -nargs=+ -complete=command Capture call <SID>CmdCapture(<q-args>)
+command! -nargs=+ -complete=command Capture silent call <SID>CmdCapture(<q-args>)
 function! s:CmdCapture(cmd)
     redir => result
-    silent execute a:cmd
+    execute a:cmd
     redir END
     new
     setlocal bufhidden=unload nobuflisted buftype=nofile noswapfile
-    silent file `='Capture: ' . a:cmd`
+    file `='Capture: ' . a:cmd`
     call setline(1, split(substitute(result, '^\n\+', '', ''), '\n'))
 endfunction
 
@@ -698,14 +695,14 @@ nnoremap dt :<C-u>tabclose<CR>
 set diffopt=filler
 
 " 差分表示用タブを作成
-command! DiffTab call <SID>DiffTab()
-function! s:DiffTab()
-    silent execute "normal \<C-t>"
+command! DiffNew silent call <SID>DiffNew()
+function! s:DiffNew()
+    99tabnew
     setlocal bufhidden=unload nobuflisted buftype=nofile noswapfile
-    silent file [Diff Right]
+    file [Diff Right]
     vnew
     setlocal bufhidden=unload nobuflisted buftype=nofile noswapfile
-    silent file [Diff Left]
+    file [Diff Left]
     windo diffthis
 endfunction
 
@@ -1112,7 +1109,7 @@ endfunction
 " zencoding-vim : {{{
 
 " キーマップ
-let g:user_zen_leader_key = '<C-l>'
+let g:user_zen_leader_key = '<C-z>'
 
 let g:user_zen_settings = {
 \     'indentation' : '    '
