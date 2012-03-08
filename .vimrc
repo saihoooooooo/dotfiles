@@ -884,6 +884,7 @@ NeoBundle 'git://github.com/h1mesuke/unite-outline.git'
 NeoBundle 'git://github.com/h1mesuke/vim-alignta.git'
 NeoBundle 'git://github.com/kana/vim-operator-replace.git'
 NeoBundle 'git://github.com/kana/vim-operator-user.git'
+NeoBundle 'git://github.com/kana/vim-smartinput.git'
 NeoBundle 'git://github.com/kana/vim-submode.git'
 NeoBundle 'git://github.com/kana/vim-textobj-indent.git'
 NeoBundle 'git://github.com/kana/vim-textobj-entire.git'
@@ -1003,6 +1004,12 @@ function! OperatorSearch(motion_wise)
         set hlsearch
     endif
 endfunction
+
+" }}}
+"=============================================================================
+" vim-smartinput : {{{
+
+" 設定なし
 
 " }}}
 "=============================================================================
@@ -1132,7 +1139,7 @@ nmap <SPACE> [Unite]
 xmap <SPACE> [Unite]
 
 " 汎用
-nnoremap [Unite]u :<C-u>Unite buffer_tab file_mru file -buffer-name=files -no-split<CR>
+nnoremap [Unite]u :<C-u>Unite buffer_tab file_mru file file/new -buffer-name=files -no-split<CR>
 
 " バッファ
 nnoremap [Unite]b :<C-u>Unite buffer_tab -no-split<CR>
