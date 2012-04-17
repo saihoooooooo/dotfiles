@@ -145,6 +145,9 @@ if has('gui_running')
     endif
 endif
 
+" ビジュアルベル
+set visualbell
+
 " ステータスラインを常に表示
 set laststatus=2
 
@@ -156,7 +159,9 @@ let &statusline .= ' (%<%{expand("%:p:~:h")}) '
 let &statusline .= '%='
 let &statusline .= '[HEX:%B][R:%l][C:%c]'
 let &statusline .= '%y'
-let &statusline .= '[%{&fileencoding}][%{&fileformat}]'
+let &statusline .= '[%{&fileencoding != "" ? &fileencoding : &encoding}]'
+let &statusline .= '%{&bomb ? "[BOM]" : ""}'
+let &statusline .= '[%{&fileformat}]'
 
 " 現在のモードを表示
 set showmode
