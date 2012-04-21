@@ -586,6 +586,10 @@ endif
 " php構文チェック
 command! -nargs=0 PHPl !php -l %
 
+" 現在のパスを初期表示して:edit
+nnoremap O :edit <C-r>=expand("%:p")<CR>
+nnoremap T :tabedit <C-r>=expand("%:p")<CR>
+
 " }}}
 "=============================================================================
 " バッファ設定 : {{{
@@ -901,6 +905,7 @@ NeoBundle 'git://github.com/mattn/calendar-vim.git'
 NeoBundle 'git://github.com/mattn/mahjong-vim.git'
 NeoBundle 'git://github.com/mattn/webapi-vim.git'
 NeoBundle 'git://github.com/mattn/zencoding-vim.git'
+NeoBundle 'git://github.com/saihoooooooo/vim-auto-colorscheme.git'
 NeoBundle 'git://github.com/saihoooooooo/vim-textobj-space.git'
 NeoBundle 'git://github.com/Shougo/unite.vim.git'
 NeoBundle 'git://github.com/Shougo/neobundle.vim.git'
@@ -1125,6 +1130,16 @@ let g:user_zen_leader_key = '<C-z>'
 
 let g:user_zen_settings = {
 \     'indentation' : '    '
+\ }
+
+" }}}
+"=============================================================================
+" vim-auto-colorscheme : {{{
+
+" colorscheme設定
+let g:auto_colorscheme_default = 'nevfn'
+let g:auto_colorscheme_config = {
+\     '^\.vimperatorrc' : 'murphy',
 \ }
 
 " }}}
