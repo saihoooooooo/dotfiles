@@ -917,10 +917,8 @@ NeoBundle 'git://github.com/Shougo/vimshell.git'
 NeoBundle 'git://github.com/thinca/vim-textobj-between.git'
 NeoBundle 'git://github.com/thinca/vim-quickrun.git'
 NeoBundle 'git://github.com/thinca/vim-ref.git'
-NeoBundle 'git://github.com/thinca/vim-unite-history.git'
 NeoBundle 'git://github.com/tpope/vim-repeat.git'
 NeoBundle 'git://github.com/tsaleh/vim-matchit.git'
-NeoBundle 'git://github.com/tsukkee/unite-help.git'
 NeoBundle 'git://github.com/tyru/open-browser.vim.git'
 NeoBundle 'git://github.com/tyru/operator-camelize.vim.git'
 NeoBundle 'git://github.com/vim-scripts/TwitVim.git'
@@ -1350,12 +1348,6 @@ let g:ref_phpmanual_cmd = 'w3m -dump %s'
 
 " }}}
 "=============================================================================
-" unite-history : {{{
-
-" 設定なし
-
-" }}}
-"=============================================================================
 " vim-repeat : {{{
 
 " 設定なし
@@ -1363,12 +1355,6 @@ let g:ref_phpmanual_cmd = 'w3m -dump %s'
 " }}}
 "=============================================================================
 " vim-matchit : {{{
-
-" 設定なし
-
-" }}}
-"=============================================================================
-" unite-help : {{{
 
 " 設定なし
 
