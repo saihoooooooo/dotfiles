@@ -885,7 +885,7 @@ if has('vim_starting')
     filetype indent on
 endif
 
-" from Github
+" plugin
 NeoBundle 'git://github.com/akiyan/vim-textobj-php.git'
 NeoBundle 'git://github.com/anyakichi/vim-surround.git'
 NeoBundle 'git://github.com/digitaltoad/vim-jade.git'
@@ -914,6 +914,7 @@ NeoBundle 'git://github.com/Shougo/neocomplcache-snippets-complete.git'
 NeoBundle 'git://github.com/Shougo/vimfiler.git'
 NeoBundle 'git://github.com/Shougo/vimproc.git'
 NeoBundle 'git://github.com/Shougo/vimshell.git'
+NeoBundle 'git://github.com/teramako/jscomplete-vim.git'
 NeoBundle 'git://github.com/thinca/vim-textobj-between.git'
 NeoBundle 'git://github.com/thinca/vim-quickrun.git'
 NeoBundle 'git://github.com/thinca/vim-ref.git'
@@ -924,9 +925,13 @@ NeoBundle 'git://github.com/tyru/operator-camelize.vim.git'
 NeoBundle 'git://github.com/vim-scripts/TwitVim.git'
 NeoBundle 'git://github.com/vim-scripts/vcscommand.vim.git'
 
-" from vim-script
-NeoBundle 'BlackSea'
-NeoBundle 'nevfn'
+" colorscheme
+NeoBundle 'git://github.com/vim-scripts/nevfn.git'
+NeoBundle 'git://github.com/vim-scripts/ChocolateLiquor.git'
+NeoBundle 'git://github.com/vim-scripts/newspaper.vim.git'
+NeoBundle 'git://github.com/vim-scripts/oceandeep.git'
+NeoBundle 'git://github.com/vim-scripts/lilac.vim.git'
+NeoBundle 'git://github.com/vim-scripts/dusk.git'
 
 "=============================================================================
 " vim-textobj-php : {{{
@@ -1137,7 +1142,7 @@ let g:user_zen_settings = {
 " colorscheme設定
 let g:auto_colorscheme_default = 'nevfn'
 let g:auto_colorscheme_config = {
-\     '^\.vimperatorrc' : 'murphy',
+\     '^\.vimperatorrc' : 'dusk',
 \ }
 
 " }}}
@@ -1319,6 +1324,12 @@ endfunction
 " }}}
 "=============================================================================
 " vimshell : {{{
+
+" 設定なし
+
+" }}}
+"=============================================================================
+" jscomplete-vim : {{{
 
 " 設定なし
 
