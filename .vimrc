@@ -312,32 +312,6 @@ function! s:MakeOrderedList()
     execute 'normal!' current + 1 . 'G'
 endfunction
 
-" phpにて$this->を@で入力
-autocmd MyAutoCmd FileType php inoremap <expr><buffer> @ <SID>at()
-function! s:at()
-    let syntax = synstack(line('.'), col('.'))
-    let name = empty(syntax) ? '' : synIDattr(syntax[-1], "name")
-    return name =~# 'String\|Comment\|None' ? '@' : '$this->'
-endfunction
-
-" 改行時に対応する括弧を補完
-inoremap <expr><CR> <SID>ExCr()
-function! s:ExCr()
-    if col('.') != col('$')
-        return "\<CR>"
-    endif
-    let l = getline('.')
-    if l =~ '{$'
-        return "\<CR>}\<Up>\<End>\<CR>"
-    elseif l =~ '($'
-        return "\<CR>)\<Up>\<End>\<CR>"
-    elseif l =~ '[$'
-        return "\<CR>]\<Up>\<End>\<CR>"
-    else
-        return "\<CR>"
-    endif
-endfunction
-
 " }}}
 "=============================================================================
 " 編集設定 : {{{
@@ -413,6 +387,16 @@ function! s:DropUndoInfo()
     execute "normal! aa\<BS>\<ESC>"
     let &modified = 0
     let &undolevels = l:old_undolevels
+endfunction
+
+" HTMLインデント
+command! HtmlIndent call <SID>HtmlIndent()
+function! s:HtmlIndent()
+    %s/>\zs\ze</\r/g
+    let old = &filetype
+    set filetype=html
+    normal! ggVG=
+    let &filetype = old
 endfunction
 
 " }}}
@@ -713,6 +697,7 @@ function! s:DiffNew()
     setlocal bufhidden=unload nobuflisted buftype=nofile noswapfile
     file [Diff Left]
     windo diffthis
+    execute "normal! \<C-w>h"
 endfunction
 
 " 差分情報を更新
@@ -1131,6 +1116,7 @@ endfunction
 " キーマップ
 let g:user_zen_leader_key = '<C-z>'
 
+" インデント設定
 let g:user_zen_settings = {
 \     'indentation' : '    '
 \ }
@@ -1143,6 +1129,7 @@ let g:user_zen_settings = {
 let g:auto_colorscheme_default = 'nevfn'
 let g:auto_colorscheme_config = {
 \     '^\.vimperatorrc' : 'dusk',
+\     '\.js$' : 'oceandeep',
 \ }
 
 " }}}
@@ -1177,12 +1164,6 @@ nnoremap [Unite]H :<C-u>UniteWithCursorWord help -no-split<CR>
 
 " アウトライン
 nnoremap [Unite]o :<C-u>Unite outline -no-split<CR>
-
-" ヒストリ
-nnoremap [Unite]: :<C-u>Unite history/command -no-split<CR>
-
-" 検索履歴
-nnoremap [Unite]/ :<C-u>Unite history/search -no-split<CR>
 
 " phpマニュアル
 nnoremap [Unite]p :<C-u>Unite ref/phpmanual -no-split<CR>
@@ -1276,7 +1257,7 @@ inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 imap <expr><C-y> neocomplcache#close_popup()
 
 " <CR>は候補を確定しながら改行
-inoremap <expr><CR> neocomplcache#smart_close_popup() . <SID>ExCr()
+imap <expr><CR> neocomplcache#smart_close_popup() . "\<CR>"
 
 " 補完をキャンセル
 imap <expr><C-e> neocomplcache#cancel_popup()
@@ -1297,7 +1278,7 @@ smap <C-k> <Plug>(neocomplcache_snippets_expand)
 let vimfilerAsDefaultExplorer = 1
 
 " vimfilerを開く
-nnoremap E :<C-u>VimFiler<CR>
+nnoremap xf :<C-u>VimFiler<CR>
 
 " vimfilerファイルタイプ設定
 autocmd MyAutoCmd FileType vimfiler call <SID>VimfilerMySetting()
