@@ -188,9 +188,9 @@ set list
 set listchars=tab:>\ ,trail:-,nbsp:%,precedes:<
 
 " 全角スペースを視覚化
-autocmd MyAutoCmd VimEnter,BufRead,WinEnter,WinLeave * match IdeographicSpace /　/
+autocmd MyAutoCmd BufEnter * match IdeographicSpace /　/
 if (has('gui_running'))
-    autocmd MyAutoCmd GUIEnter * highlight IdeographicSpace term=underline ctermbg=Gray guibg=Gray50
+    autocmd MyAutoCmd GUIEnter,ColorScheme * highlight IdeographicSpace term=underline ctermbg=Gray guibg=Gray50
 else
     highlight IdeographicSpace term=underline ctermbg=Gray guibg=Gray50
 endif
@@ -382,11 +382,11 @@ function! s:DropUndoInfo()
         echoerr "This buffer has been modified!"
         return
     endif
-    let l:old_undolevels = &undolevels
+    let old_undolevels = &undolevels
     set undolevels=-1
     execute "normal! aa\<BS>\<ESC>"
     let &modified = 0
-    let &undolevels = l:old_undolevels
+    let &undolevels = old_undolevels
 endfunction
 
 " HTMLインデント
@@ -547,13 +547,13 @@ command! -nargs=1 -complete=file Rename file <args> | w | call delete(expand('#'
 " ジャンクファイル
 command! -nargs=0 JunkFile call s:OpenJunkFile()
 function! s:OpenJunkFile()
-    let l:junk_dir = $HOME . '/.vim_junk' . strftime('/%Y/%m')
-    if !isdirectory(l:junk_dir)
-        call mkdir(l:junk_dir, 'p')
+    let junk_dir = $HOME . '/.vim_junk' . strftime('/%Y/%m')
+    if !isdirectory(junk_dir)
+        call mkdir(junk_dir, 'p')
     endif
-    let l:filename = input('Junk Code: ', l:junk_dir . strftime('/%Y-%m-%d-%H%M%S.'))
-    if l:filename != ''
-        execute 'edit ' . l:filename
+    let filename = input('Junk Code: ', junk_dir . strftime('/%Y-%m-%d-%H%M%S.'))
+    if filename != ''
+        execute 'edit ' . filename
     endif
 endfunction
 
@@ -571,8 +571,14 @@ endif
 command! -nargs=0 PHPl !php -l %
 
 " 現在のパスを初期表示して:edit
-nnoremap O :edit <C-r>=expand("%:p")<CR>
-nnoremap T :tabedit <C-r>=expand("%:p")<CR>
+nnoremap ee :edit 
+nnoremap en :new 
+nnoremap et :tabedit 
+nnoremap ev :vnew 
+nnoremap xee :edit <C-r>=expand("%:p:h")<CR>
+nnoremap xen :new <C-r>=expand("%:p:h")<CR>
+nnoremap xet :tabedit <C-r>=expand("%:p:h")<CR>
+nnoremap xev :vnew <C-r>=expand("%:p:h")<CR>
 
 " }}}
 "=============================================================================
@@ -585,7 +591,23 @@ set hidden
 set autoread
 
 " バッファを開く度カレントディレクトリを変更
-autocmd MyAutoCmd BufEnter * execute "lcd " . expand("%:p:h")
+" autocmd MyAutoCmd BufEnter * execute "lcd " . expand("%:p:h")
+
+" タブ毎にカレントディレクトリを保持
+autocmd MyAutoCmd TabEnter * if exists('t:cwd') | cd `=fnameescape(t:cwd)` | endif
+autocmd MyAutoCmd TabLeave * let t:cwd = getcwd()
+autocmd MyAutoCmd BufEnter * if !exists('t:cwd') | call InitTabpageCd() | endif
+function! InitTabpageCd()
+    if (!has('vim_starting'))
+        if (@% != '')
+            let curdir = input('Input current directory: ', expand("%:p:h"))
+            silent! cd `=fnameescape(curdir)`
+        else
+            cd ~
+        endif
+    endif
+    let t:cwd = getcwd()
+endfunction
 
 " カレントバッファの情報を表示
 nnoremap <silent><C-g> :<C-u>call <SID>BufInfo()<CR>
@@ -603,18 +625,18 @@ endfunction
 nnoremap <silent><BS> :<C-u>call <SID>BdKeepWin()<CR>
 function! s:BdKeepWin()
     if bufname('%') != ''
-        let l:curbuf = bufnr('%')
-        let l:altbuf = bufnr('#')
-        let l:buflist = filter(range(1, bufnr('$')), 'buflisted(v:val) && l:curbuf != v:val')
-        if len(l:buflist) == 0
+        let curbuf = bufnr('%')
+        let altbuf = bufnr('#')
+        let buflist = filter(range(1, bufnr('$')), 'buflisted(v:val) && curbuf != v:val')
+        if len(buflist) == 0
             enew
-        elseif l:curbuf != l:altbuf
-            execute 'buffer ' . (buflisted(l:altbuf) ? l:altbuf : l:buflist[0])
+        elseif curbuf != altbuf
+            execute 'buffer ' . (buflisted(altbuf) ? altbuf : buflist[0])
         else
-            execute 'buffer ' . l:buflist[0]
+            execute 'buffer ' . buflist[0]
         endif
-        if buflisted(l:curbuf) && bufwinnr(l:curbuf) == -1
-            execute 'bdelete ' . l:curbuf
+        if buflisted(curbuf) && bufwinnr(curbuf) == -1
+            execute 'bdelete ' . curbuf
         endif
     endif
 endfunction
@@ -997,9 +1019,9 @@ call operator#user#define('search', 'OperatorSearch')
 function! OperatorSearch(motion_wise)
     if a:motion_wise == 'char'
         silent normal! `[v`]"zy
-        call search(@z)
         let @/ = @z
         set hlsearch
+        redraw
     endif
 endfunction
 
@@ -1127,10 +1149,10 @@ let g:user_zen_settings = {
 
 " colorscheme設定
 let g:auto_colorscheme_default = 'nevfn'
-let g:auto_colorscheme_config = {
-\     '^\.vimperatorrc' : 'dusk',
-\     '\.js$' : 'oceandeep',
-\ }
+let g:auto_colorscheme_config = [
+\     ['^\.vimperatorrc', 'dusk'],
+\     ['\.js$', 'oceandeep'],
+\ ]
 
 " }}}
 "=============================================================================
