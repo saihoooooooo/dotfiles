@@ -570,15 +570,17 @@ endif
 " php構文チェック
 command! -nargs=0 PHPl !php -l %
 
-" 現在のパスを初期表示して:edit
-nnoremap ee :edit 
-nnoremap en :new 
-nnoremap et :tabedit 
-nnoremap ev :vnew 
-nnoremap xee :edit <C-r>=expand("%:p:h")<CR>
-nnoremap xen :new <C-r>=expand("%:p:h")<CR>
-nnoremap xet :tabedit <C-r>=expand("%:p:h")<CR>
-nnoremap xev :vnew <C-r>=expand("%:p:h")<CR>
+" 各種ファイルオープン
+nnoremap [Edit] <Nop>
+nmap e [Edit]
+nnoremap [Edit]e :edit 
+nnoremap [Edit]n :new 
+nnoremap [Edit]t :tabedit 
+nnoremap [Edit]v :vnew 
+nnoremap [Edit]<SPACE>e :edit <C-r>=expand("%:p:h")<CR>
+nnoremap [Edit]<SPACE>n :new <C-r>=expand("%:p:h")<CR>
+nnoremap [Edit]<SPACE>t :tabedit <C-r>=expand("%:p:h")<CR>
+nnoremap [Edit]<SPACE>v :vnew <C-r>=expand("%:p:h")<CR>
 
 " }}}
 "=============================================================================
