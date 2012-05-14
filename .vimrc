@@ -577,10 +577,10 @@ nnoremap [Edit]e :edit
 nnoremap [Edit]n :new 
 nnoremap [Edit]t :tabedit 
 nnoremap [Edit]v :vnew 
-nnoremap [Edit]<SPACE>e :edit <C-r>=expand("%:p:h")<CR>
-nnoremap [Edit]<SPACE>n :new <C-r>=expand("%:p:h")<CR>
-nnoremap [Edit]<SPACE>t :tabedit <C-r>=expand("%:p:h")<CR>
-nnoremap [Edit]<SPACE>v :vnew <C-r>=expand("%:p:h")<CR>
+nnoremap [Edit]<SPACE>e :edit <C-r>=expand("%:p:h") . '/'<CR>
+nnoremap [Edit]<SPACE>n :new <C-r>=expand("%:p:h") . '/'<CR>
+nnoremap [Edit]<SPACE>t :tabedit <C-r>=expand("%:p:h") . '/'<CR>
+nnoremap [Edit]<SPACE>v :vnew <C-r>=expand("%:p:h") . '/'<CR>
 
 " }}}
 "=============================================================================
@@ -1152,7 +1152,7 @@ let g:user_zen_settings = {
 " colorscheme設定
 let g:auto_colorscheme_default = 'nevfn'
 let g:auto_colorscheme_config = [
-\     ['^\.vimperatorrc', 'dusk'],
+\     ['\~/\.vimperatorrc', 'dusk'],
 \     ['\.js$', 'oceandeep'],
 \ ]
 
