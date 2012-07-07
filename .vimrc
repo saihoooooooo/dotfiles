@@ -537,6 +537,7 @@ endif
 " 拡張子毎のfiletype指定
 autocmd MyAutoCmd BufRead,BufNewFile *.ctp set filetype=php
 autocmd MyAutoCmd BufRead,BufNewFile *.jade set filetype=jade
+autocmd MyAutoCmd BufRead,BufNewFile *.coffee set filetype=coffee
 
 " ファイルタイプ指定
 nnoremap xof :set filetype=
@@ -910,6 +911,7 @@ NeoBundle 'git://github.com/kana/vim-textobj-lastpat.git'
 NeoBundle 'git://github.com/kana/vim-textobj-line.git'
 NeoBundle 'git://github.com/kana/vim-textobj-syntax.git'
 NeoBundle 'git://github.com/kana/vim-textobj-user.git'
+NeoBundle 'git://github.com/kchmck/vim-coffee-script.git'
 NeoBundle 'git://github.com/mattn/calendar-vim.git'
 NeoBundle 'git://github.com/mattn/mahjong-vim.git'
 NeoBundle 'git://github.com/mattn/webapi-vim.git'
@@ -1350,7 +1352,8 @@ endfunction
 
 " 実行コマンド設定
 let g:quickrun_config = {}
-let g:quickrun_config.javascript = {'command': $HOME . '/.nave/installed/0.6.11/bin/node'}
+let g:quickrun_config.javascript = {'command': 'node'}
+let g:quickrun_config.coffee = {'command': 'coffee', 'exec': '%c -cp %s', 'outputter/buffer/filetype': 'javascript'}
 
 " }}}
 "=============================================================================
