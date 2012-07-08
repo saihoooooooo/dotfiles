@@ -16,6 +16,7 @@ bindkey "^N" history-beginning-search-forward-end
 # エイリアス
 alias ls='ls -a'
 alias rm='rm -i'
+alias vim="/Applications/MacVim.app/Contents/MacOS/Vim"
 alias ctags="`brew --prefix`/bin/ctags"
 alias nave=$HOME/.nave/nave/nave.sh
 

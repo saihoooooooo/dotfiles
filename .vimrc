@@ -111,6 +111,9 @@ set synmaxcol=1000
 " シンタックスON/OFF切り替え
 nnoremap <expr><F3> exists('syntax_on') ? ":\<C-u>syntax off\<CR>" : ":\<C-u>syntax enable\<CR>"
 
+" 256色
+set t_Co=256
+
 " 全画面表示
 if s:iswin
     autocmd MyAutoCmd GUIEnter * FullScreen
@@ -132,7 +135,7 @@ else
 endif
 
 " カラースキーム
-if !exists('g:colors_name')
+if has('gui_running') && !exists('g:colors_name')
     autocmd MyAutoCmd GUIEnter * colorscheme nevfn
 endif
 
@@ -150,6 +153,9 @@ set visualbell
 
 " ステータスラインを常に表示
 set laststatus=2
+
+" コマンドラインは1行表示
+set cmdheight=1
 
 " ステータスライン表示内容
 let &statusline = ''
@@ -188,12 +194,11 @@ set list
 set listchars=tab:>\ ,trail:-,nbsp:%,precedes:<
 
 " 全角スペースを視覚化
-autocmd MyAutoCmd BufEnter * match IdeographicSpace /　/
-if (has('gui_running'))
-    autocmd MyAutoCmd GUIEnter,ColorScheme * highlight IdeographicSpace term=underline ctermbg=Gray guibg=Gray50
-else
-    highlight IdeographicSpace term=underline ctermbg=Gray guibg=Gray50
-endif
+autocmd MyAutoCmd ColorScheme * highlight IdeographicSpace term=underline ctermbg=Gray guibg=Gray50
+autocmd MyAutoCmd VimEnter,WinEnter * match IdeographicSpace /　/
+
+" autocmd MyAutoCmd ColorScheme * highlight Cursor term=underline ctermbg=Black guibg=Gray50
+" autocmd MyAutoCmd ColorScheme * highlight CursorLine term=underline ctermbg=LightGray guibg=Gray50
 
 " 全角文字表示幅
 if exists('&ambiwidth')
@@ -201,10 +206,10 @@ if exists('&ambiwidth')
 endif
 
 " 全角入力時のカーソルの色を変更
-autocmd MyAutoCmd ColorScheme * highlight CursorIM guifg=#000000 guibg=#cc9999 gui=NONE
+autocmd MyAutoCmd ColorScheme * highlight CursorIM cterm=NONE ctermfg=White ctermbg=LightRed gui=NONE guifg=#000000 guibg=#cc9999
 
 " インサートモード時のステータスバーの色を変更
-let g:hi_insert = 'hi StatusLine guibg=#1f001f guifg=Tomato cterm=NONE ctermfg=White ctermbg=LightRed'
+let g:hi_insert = 'highlight StatusLine gui=NONE guibg=#1f001f guifg=Tomato cterm=NONE ctermfg=Black ctermbg=DarkRed'
 if has('syntax')
     autocmd MyAutoCmd InsertEnter * call s:StatusLine('Enter')
     autocmd MyAutoCmd InsertLeave * call s:StatusLine('Leave')
@@ -274,10 +279,10 @@ noremap : ;
 command! -nargs=* -complete=mapping AllMaps map <args> | map! <args> | lmap <args>
 
 " IME状態を保存しない
-if has('multi_byte_ime')
+if has('multi_byte_ime') || has('xim')
     set iminsert=0
     set imsearch=0
-    inoremap <silent><ESC> <ESC>
+    inoremap <ESC> <ESC>
 endif
 
 " xを汎用キー化
@@ -485,7 +490,7 @@ function! s:RangeSearch(d)
 endfunction
 
 " <ESC>でハイライト消去
-nnoremap <silent><ESC> :<C-u>nohlsearch<CR>
+nnoremap <silent><ESC><ESC> :<C-u>nohlsearch<CR>
 
 " }}}
 "=============================================================================
@@ -692,18 +697,39 @@ endfunction
 " タブバーは常に表示
 set showtabline=2
 
-" ラベル表示内容
+" GUIラベル表示内容
 autocmd MyAutoCmd GUIEnter * set guitablabel=%t
-
-" タプを作成
-nnoremap <C-t> :<C-u>99tabnew<CR>
 
 " 次/前のタプ
 nnoremap <C-n> gt
 nnoremap <C-p> gT
 
+" 基本マップ
+nnoremap [Tab] <Nop>
+nmap <C-t> [Tab]
+
+" タブを移動
+nnoremap [Tab]H :<C-u>call <SID>MoveTabPosition('left')<CR>
+nnoremap [Tab]L :<C-u>call <SID>MoveTabPosition('right')<CR>
+nnoremap [Tab]K :<C-u>call <SID>MoveTabPosition('top')<CR>
+nnoremap [Tab]J :<C-u>call <SID>MoveTabPosition('bottom')<CR>
+function! s:MoveTabPosition(direction)
+    if a:direction == 'left'
+        execute 'tabmove ' . (tabpagenr() - 2)
+    elseif a:direction == 'right'
+        execute 'tabmove ' . (tabpagenr())
+    elseif a:direction == 'top'
+        execute 'tabmove 0'
+    elseif a:direction == 'bottom'
+        execute 'tabmove 99'
+    endif
+endfunction
+
 " タプを閉じる
-nnoremap dt :<C-u>tabclose<CR>
+nnoremap [Tab]c :<C-u>tabclose<CR>
+
+" 現在以外のタプを閉じる
+nnoremap [Tab]o :<C-u>tabonly<CR>
 
 " }}}
 "=============================================================================
@@ -798,6 +824,9 @@ nnoremap [Mark]p ['
 
 " 一覧表示
 nnoremap [Mark]l :<C-u>marks<CR>
+
+" 前回終了位置に移動
+autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g`\"" | endif
 
 " }}}
 "=============================================================================
