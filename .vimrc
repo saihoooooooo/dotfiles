@@ -282,7 +282,7 @@ command! -nargs=* -complete=mapping AllMaps map <args> | map! <args> | lmap <arg
 if has('multi_byte_ime') || has('xim')
     set iminsert=0
     set imsearch=0
-    inoremap <ESC> <ESC>
+    inoremap <silent><ESC> <ESC>
 endif
 
 " xを汎用キー化
