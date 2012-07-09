@@ -194,11 +194,13 @@ set list
 set listchars=tab:>\ ,trail:-,nbsp:%,precedes:<
 
 " 全角スペースを視覚化
+" if (has('gui_running'))
+"     autocmd MyAutoCmd GUIEnter,ColorScheme * highlight IdeographicSpace term=underline ctermbg=Gray guibg=Gray50
+" else
+"     autocmd MyAutoCmd ColorScheme * highlight IdeographicSpace term=underline ctermbg=Gray guibg=Gray50
+" endif
 autocmd MyAutoCmd ColorScheme * highlight IdeographicSpace term=underline ctermbg=Gray guibg=Gray50
 autocmd MyAutoCmd VimEnter,WinEnter * match IdeographicSpace /　/
-
-" autocmd MyAutoCmd ColorScheme * highlight Cursor term=underline ctermbg=Black guibg=Gray50
-" autocmd MyAutoCmd ColorScheme * highlight CursorLine term=underline ctermbg=LightGray guibg=Gray50
 
 " 全角文字表示幅
 if exists('&ambiwidth')
