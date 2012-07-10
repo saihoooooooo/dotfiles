@@ -652,7 +652,7 @@ function! s:BdKeepWin()
 endfunction
 
 " 現在のバッファを削除
-nnoremap <silent><S-BS> :<C-u>bwipeout!<CR>
+nnoremap <silent><BS> :<C-u>bwipeout!<CR>
 
 " 全バッファを削除
 command! -nargs=0 AllWipeout call <SID>AllWipeout()
@@ -1384,7 +1384,7 @@ endfunction
 " 実行コマンド設定
 let g:quickrun_config = {}
 let g:quickrun_config.javascript = {'command': 'node'}
-let g:quickrun_config.coffee = {'command': 'coffee', 'exec': '%c -cp %s', 'outputter/buffer/filetype': 'javascript'}
+let g:quickrun_config.coffee = {'command': 'coffee', 'exec': '%c -cbp %s', 'outputter/buffer/filetype': 'javascript'}
 
 " }}}
 "=============================================================================
