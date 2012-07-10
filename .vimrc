@@ -111,9 +111,6 @@ set synmaxcol=1000
 " シンタックスON/OFF切り替え
 nnoremap <expr><F3> exists('syntax_on') ? ":\<C-u>syntax off\<CR>" : ":\<C-u>syntax enable\<CR>"
 
-" 256色
-set t_Co=256
-
 " 全画面表示
 if s:iswin
     autocmd MyAutoCmd GUIEnter * FullScreen
@@ -194,13 +191,12 @@ set list
 set listchars=tab:>\ ,trail:-,nbsp:%,precedes:<
 
 " 全角スペースを視覚化
-" if (has('gui_running'))
-"     autocmd MyAutoCmd GUIEnter,ColorScheme * highlight IdeographicSpace term=underline ctermbg=Gray guibg=Gray50
-" else
-"     autocmd MyAutoCmd ColorScheme * highlight IdeographicSpace term=underline ctermbg=Gray guibg=Gray50
-" endif
-autocmd MyAutoCmd ColorScheme * highlight IdeographicSpace term=underline ctermbg=Gray guibg=Gray50
 autocmd MyAutoCmd VimEnter,WinEnter * match IdeographicSpace /　/
+if (has('gui_running'))
+    autocmd MyAutoCmd GUIEnter,ColorScheme * highlight IdeographicSpace term=underline ctermbg=Gray guibg=Gray50
+else
+    autocmd MyAutoCmd ColorScheme * highlight IdeographicSpace term=underline ctermbg=Gray guibg=Gray50
+endif
 
 " 全角文字表示幅
 if exists('&ambiwidth')
@@ -652,7 +648,7 @@ function! s:BdKeepWin()
 endfunction
 
 " 現在のバッファを削除
-nnoremap <silent><BS> :<C-u>bwipeout!<CR>
+nnoremap <silent><S-BS> :<C-u>bwipeout!<CR>
 
 " 全バッファを削除
 command! -nargs=0 AllWipeout call <SID>AllWipeout()
