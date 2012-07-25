@@ -151,8 +151,12 @@ set visualbell
 " ステータスラインを常に表示
 set laststatus=2
 
-" コマンドラインは1行表示
-set cmdheight=1
+" コマンドライン行数
+if has('gui_running')
+    autocmd MyAutoCmd GUIEnter * set cmdheight=1
+else
+    set cmdheight=1
+endif
 
 " ステータスライン表示内容
 let &statusline = ''
@@ -498,9 +502,6 @@ cnoremap <C-p> <Up>
 cnoremap <Up> <C-p>
 cnoremap <C-n> <Down>
 cnoremap <Down> <C-n>
-
-" コマンドライン行数
-autocmd MyAutoCmd GUIEnter * set cmdheight=1
 
 " 入力中コマンドを表示
 set showcmd
@@ -949,7 +950,6 @@ NeoBundle 'git://github.com/teramako/jscomplete-vim.git'
 NeoBundle 'git://github.com/thinca/vim-textobj-between.git'
 NeoBundle 'git://github.com/thinca/vim-quickrun.git'
 NeoBundle 'git://github.com/thinca/vim-ref.git'
-NeoBundle 'git://github.com/tpope/vim-repeat.git'
 NeoBundle 'git://github.com/tsaleh/vim-matchit.git'
 NeoBundle 'git://github.com/tyru/open-browser.vim.git'
 NeoBundle 'git://github.com/tyru/operator-camelize.vim.git'
@@ -1121,6 +1121,12 @@ call textobj#user#plugin('camelcase', {
 
 " }}}
 "=============================================================================
+" vim-coffee-script : {{{
+
+" 設定なし
+
+" }}}
+"=============================================================================
 " calender.vim : {{{
 
 " キーマップ
@@ -1164,7 +1170,15 @@ let g:user_zen_leader_key = '<C-z>'
 
 " インデント設定
 let g:user_zen_settings = {
-\     'indentation' : '    '
+\     'lang' : 'ja',
+\     'indentation' : '    ',
+\     'html' : {
+\         'filters' : 'html',
+\         'snippets' : {
+\             'jq' : "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js\"></script>\n<script>\n\\$(function() {\n\t|\n})();\n</script>",
+\             'cd' : "<![CDATA[|]]>",
+\         },
+\     },
 \ }
 
 " }}}
@@ -1269,6 +1283,12 @@ let g:unite_source_file_mru_ignore_pattern .= '\|AppData/Local/Temp'
 
 " 検索キーワードをハイライトしない
 let g:unite_source_line_enable_highlight = 0
+
+" }}}
+"=============================================================================
+" neobundle.vim : {{{
+
+" 設定なし
 
 " }}}
 "=============================================================================
@@ -1387,19 +1407,13 @@ let g:ref_phpmanual_cmd = 'w3m -dump %s'
 
 " }}}
 "=============================================================================
-" vim-repeat : {{{
-
-" 設定なし
-
-" }}}
-"=============================================================================
 " vim-matchit : {{{
 
 " 設定なし
 
 " }}}
 "=============================================================================
-" openbrowser.vim : {{{
+" open-browser.vim : {{{
 
 " URLなら開き、URLでない場合は検索を実行
 nmap x@ <Plug>(openbrowser-smart-search)
