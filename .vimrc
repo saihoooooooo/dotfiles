@@ -480,8 +480,8 @@ function! s:RangeSearch(d)
     endif
 endfunction
 
-" <ESC>でハイライト消去
-nnoremap <silent><ESC><ESC> :<C-u>nohlsearch<CR>
+" ハイライト消去
+nnoremap <silent># :<C-u>nohlsearch<CR>
 
 " }}}
 "=============================================================================
