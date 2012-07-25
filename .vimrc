@@ -266,9 +266,6 @@ set timeout
 " 入力待ち時間
 set timeoutlen=10000
 
-" <Leader>
-let mapleader = ","
-
 " ;と:を入れ替え
 noremap ; :
 noremap : ;
@@ -405,10 +402,6 @@ endfunction
 " }}}
 "=============================================================================
 " 移動設定 : {{{
-
-" 10行移動
-noremap <C-j> 10j
-noremap <C-k> 10k
 
 " wの動作をeに変更
 noremap w e
