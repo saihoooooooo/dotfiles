@@ -904,7 +904,7 @@ function! s:Scouter(file, ...)
 endfunction
 
 " gene辞書のファイルパスを設定
-if s:iswin && has('kaoriya')
+if has('kaoriya') && s:iswin
     let g:dicwin_dictpath = substitute($DOTVIM, '\', '/', 'g') . '/dict/gene.txt'
 endif
 
