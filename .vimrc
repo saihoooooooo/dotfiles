@@ -594,7 +594,7 @@ set autoread
 " autocmd MyAutoCmd BufEnter * execute "lcd " . expand("%:p:h")
 
 " タブ毎にカレントディレクトリを保持
-autocmd MyAutoCmd TabEnter * if exists('t:cwd') | cd `=fnameescape(t:cwd)` | endif
+autocmd MyAutoCmd TabEnter * if exists('t:cwd') | execute "cd" fnameescape(t:cwd) | endif
 autocmd MyAutoCmd TabLeave * let t:cwd = getcwd()
 autocmd MyAutoCmd BufEnter * if !exists('t:cwd') | call InitTabpageCd() | endif
 function! InitTabpageCd()
@@ -902,6 +902,11 @@ function! s:Scouter(file, ...)
     endif
     return len(filter(lines,'v:val !~ pat'))
 endfunction
+
+" gene辞書のファイルパスを設定
+if s:iswin && has('kaoriya')
+    let g:dicwin_dictpath = substitute($DOTVIM, '\', '/', 'g') . '/dict/gene.txt'
+endif
 
 " }}}
 "=============================================================================
