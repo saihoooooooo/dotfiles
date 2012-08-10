@@ -701,10 +701,10 @@ nnoremap [Tab] <Nop>
 nmap <C-t> [Tab]
 
 " タブを移動
-nnoremap [Tab]H :<C-u>call <SID>MoveTabPosition('left')<CR>
-nnoremap [Tab]L :<C-u>call <SID>MoveTabPosition('right')<CR>
-nnoremap [Tab]K :<C-u>call <SID>MoveTabPosition('top')<CR>
-nnoremap [Tab]J :<C-u>call <SID>MoveTabPosition('bottom')<CR>
+nnoremap <silent>[Tab]H :<C-u>call <SID>MoveTabPosition('left')<CR>
+nnoremap <silent>[Tab]L :<C-u>call <SID>MoveTabPosition('right')<CR>
+nnoremap <silent>[Tab]K :<C-u>call <SID>MoveTabPosition('top')<CR>
+nnoremap <silent>[Tab]J :<C-u>call <SID>MoveTabPosition('bottom')<CR>
 function! s:MoveTabPosition(direction)
     if a:direction == 'left'
         execute 'tabmove ' . (tabpagenr() - 2)
@@ -1407,8 +1407,12 @@ let g:quickrun_config.coffee = {'command': 'coffee', 'exec': '%c -cbp %s', 'outp
 " phpマニュアルパス
 let g:ref_phpmanual_path = '/Applications/XAMPP/xamppfiles/lib/php/php-chunked-xhtml/'
 
-" html表示はw3m
-let g:ref_phpmanual_cmd = 'w3m -dump %s'
+" html表示コマンド
+if s:iswin
+    let g:ref_phpmanual_cmd = 'lynx -dump %s -cfg=C:/lynx.cfg'
+else
+    let g:ref_phpmanual_cmd = 'w3m -dump %s'
+endif
 
 " }}}
 "=============================================================================
