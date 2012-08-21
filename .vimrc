@@ -464,7 +464,7 @@ set smartcase
 set wrapscan
 
 " *による検索時に初回は移動しない
-nnoremap * g*N
+nnoremap <silent>* :let @/ = expand('<cword>')<CR>:set hlsearch<CR>
 
 " ビジュアルモード時の*検索
 vnoremap <silent>* "zy:let @/ = @z<CR>:set hlsearch<CR>
