@@ -1231,7 +1231,7 @@ nnoremap [Unite]H :<C-u>UniteWithCursorWord help -no-split<CR>
 nnoremap [Unite]o :<C-u>Unite outline -no-split<CR>
 
 " phpマニュアル
-nnoremap [Unite]p :<C-u>Unite ref/phpmanual -no-split<CR>
+nnoremap [Unite]p :<C-u>new<CR>:<C-u>Unite ref/phpmanual -no-split<CR>
 
 " バッファ内検索
 nnoremap [Unite]l :<C-u>Unite line -no-quit<CR>
