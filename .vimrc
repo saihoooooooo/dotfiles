@@ -693,8 +693,8 @@ set showtabline=2
 autocmd MyAutoCmd GUIEnter * set guitablabel=%t
 
 " 次/前のタプ
-nnoremap <C-n> gt
-nnoremap <C-p> gT
+nnoremap <C-TAB> gt
+nnoremap <C-S-TAB> gT
 
 " 基本マップ
 nnoremap [Tab] <Nop>
