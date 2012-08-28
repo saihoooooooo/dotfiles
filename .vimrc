@@ -464,10 +464,10 @@ set smartcase
 set wrapscan
 
 " *による検索時に初回は移動しない
-nnoremap <silent>* :let @/ = expand('<cword>')<CR>:set hlsearch<CR>
+nnoremap <silent>* viw"zy:let @/ = <SID>Escape4Regexp(@z)<CR>:set hlsearch<CR>`<
 
 " ビジュアルモード時の*検索
-vnoremap <silent>* "zy:let @/ = @z<CR>:set hlsearch<CR>
+vnoremap <silent>* "zy:let @/ = <SID>Escape4Regexp(@z)<CR>:set hlsearch<CR>
 
 " '/'と'?'を自動エスケープ
 cnoremap <expr>/  getcmdtype() == '/' ? '\/' : '/'
@@ -907,6 +907,11 @@ endfunction
 if has('kaoriya') && s:iswin
     let g:dicwin_dictpath = substitute($DOTVIM, '\', '/', 'g') . '/dict/gene.txt'
 endif
+
+" 正規表現用文字をエスケープ
+function! s:Escape4Regexp(str)
+    return escape(a:str, '^$.*\~[]')
+endfunction
 
 " }}}
 "=============================================================================
