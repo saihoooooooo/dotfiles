@@ -26,7 +26,7 @@ else
 endif
 
 " vimrcを開く
-nnoremap <silent>vv :<C-u>e $MYVIMRC<CR>
+nnoremap <silent>vv :<C-u>edit $MYVIMRC<CR>
 
 " vimrc変更時は自動で再読み込み
 autocmd MyAutoCmd BufWritePost $MYVIMRC source $MYVIMRC
@@ -725,6 +725,28 @@ nnoremap [Tab]o :<C-u>tabonly<CR>
 
 " }}}
 "=============================================================================
+" QuickFix設定 : {{{
+
+" 基本マップ
+nnoremap [QuickFix] <Nop>
+nmap <C-c> [QuickFix]
+
+" 開く/閉じる
+nnoremap [QuickFix]w :<C-u>cwindow<CR>
+nnoremap [QuickFix]o :<C-u>copen<CR>
+nnoremap [QuickFix]c :<C-u>cclose<CR>
+
+" 進む/戻る/先頭/最後
+nnoremap [QuickFix]n :<C-u>cnext<CR>
+nnoremap [QuickFix]p :<C-u>cprevious<CR>
+nnoremap [QuickFix]r :<C-u>crewind<CR>
+nnoremap [QuickFix]l :<C-u>clast<CR>
+
+" QuickFixリストが生成されたら自動で開く
+autocmd QuickfixCmdPost make,grep,grepadd,vimgrep if len(getqflist()) != 0 | copen | endif
+
+" }}}
+"=============================================================================
 " 差分設定 : {{{
 
 " 差分モードオプション
@@ -1349,7 +1371,7 @@ smap <C-k> <Plug>(neocomplcache_snippets_expand)
 let vimfilerAsDefaultExplorer = 1
 
 " vimfilerを開く
-nnoremap xf :<C-u>VimFiler<CR>
+nnoremap xf :<C-u>VimFiler -simple -winwidth=45 -no-quit -split<CR>
 
 " vimfilerファイルタイプ設定
 autocmd MyAutoCmd FileType vimfiler call <SID>VimfilerMySetting()
@@ -1405,7 +1427,7 @@ let g:quickrun_config.coffee = {'command': 'coffee', 'exec': '%c -cbp %s', 'outp
 " vim-ref : {{{
 
 " phpマニュアルパス
-let g:ref_phpmanual_path = '/Applications/XAMPP/xamppfiles/lib/php/php-chunked-xhtml/'
+let g:ref_phpmanual_path = $DOTVIM . '/ref/php/php-chunked-xhtml/'
 
 " html表示コマンド
 if s:iswin
