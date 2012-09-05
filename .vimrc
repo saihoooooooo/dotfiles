@@ -566,7 +566,9 @@ if s:iswin
 endif
 
 " php構文チェック
-command! -nargs=0 PHPl !php -l %
+autocmd MyAutoCmd FileType php setlocal makeprg=php\ -l\ %
+autocmd MyAutoCmd FileType php setlocal errorformat=%-E,%m\ in\ %f\ on\ line\ %l,%ZErrors\ parsing\ %f
+autocmd MyAutoCmd BufWritePost *.php silent make
 
 " 各種ファイルオープン
 nnoremap [Edit] <Nop>
@@ -589,9 +591,6 @@ set hidden
 
 " 他のプログラムで書き換えられたら自動で再読み込み
 set autoread
-
-" バッファを開く度カレントディレクトリを変更
-" autocmd MyAutoCmd BufEnter * execute "lcd " . expand("%:p:h")
 
 " タブ毎にカレントディレクトリを保持
 autocmd MyAutoCmd TabEnter * if exists('t:cwd') | execute "cd" fnameescape(t:cwd) | endif
@@ -743,7 +742,16 @@ nnoremap [QuickFix]r :<C-u>crewind<CR>
 nnoremap [QuickFix]l :<C-u>clast<CR>
 
 " QuickFixリストが生成されたら自動で開く
-autocmd QuickfixCmdPost make,grep,grepadd,vimgrep if len(getqflist()) != 0 | copen | endif
+autocmd MyAutoCmd QuickfixCmdPost make,grep,grepadd,vimgrep call <SID>Qfswitch()
+function! s:Qfswitch()
+    for i in getqflist()
+        if i['valid'] == 1
+            copen
+            return
+        endif
+    endfor
+    cclose
+endfunction
 
 " }}}
 "=============================================================================
