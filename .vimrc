@@ -545,7 +545,18 @@ autocmd MyAutoCmd BufRead,BufNewFile *.coffee set filetype=coffee
 nnoremap xof :set filetype=
 
 " 編集中ファイルのリネーム
-command! -nargs=1 -complete=file Rename file <args> | w | call delete(expand('#'))
+command! -nargs=0 Rename call s:Rename()
+function! s:Rename()
+    let filename = input('Input new filename', expand('%:p:h') . '/')
+    if filename != ''
+        execute 'file' filename
+        if !isdirectory(expand('%:p:h'))
+            call mkdir(expand('%:p:h'), 'p')
+        endif
+        write
+        call delete(expand('#'))
+    endif
+endfunction
 
 " ジャンクファイル
 command! -nargs=0 JunkFile call s:OpenJunkFile()
