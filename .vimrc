@@ -572,7 +572,7 @@ endif
 
 " php構文チェック
 autocmd MyAutoCmd FileType php setlocal makeprg=php\ -l\ %
-autocmd MyAutoCmd FileType php setlocal errorformat=%-E,%m\ in\ %f\ on\ line\ %l,%ZErrors\ parsing\ %f
+autocmd MyAutoCmd FileType php setlocal errorformat=%m\ in\ %f\ on\ line\ %l,%-GErrors\ parsing\ %f,%-G
 autocmd MyAutoCmd BufWritePost *.php silent make
 
 " 各種ファイルオープン
