@@ -570,11 +570,6 @@ if s:iswin
     set isfname-=:
 endif
 
-" php構文チェック
-autocmd MyAutoCmd FileType php setlocal makeprg=php\ -l\ %
-autocmd MyAutoCmd FileType php setlocal errorformat=%m\ in\ %f\ on\ line\ %l,%-GErrors\ parsing\ %f,%-G
-autocmd MyAutoCmd BufWritePost *.php silent make
-
 " 各種ファイルオープン
 nnoremap [Edit] <Nop>
 nmap e [Edit]
@@ -757,6 +752,14 @@ function! s:Qfswitch()
     endfor
     cclose
 endfunction
+
+" php構文チェック
+autocmd MyAutoCmd FileType php setlocal makeprg=php\ -l\ %
+autocmd MyAutoCmd FileType php setlocal errorformat=%m\ in\ %f\ on\ line\ %l,%-GErrors\ parsing\ %f,%-G
+autocmd MyAutoCmd BufWritePost *.php silent make
+
+" grep
+set grepprg=grep\ -iHn
 
 " }}}
 "=============================================================================
