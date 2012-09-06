@@ -146,7 +146,12 @@ if has('gui_running')
 endif
 
 " ビジュアルベル
-set visualbell
+if has('gui_running')
+    autocmd MyAutoCmd GUIEnter * set visualbell t_vb=
+else
+    set visualbell
+    set t_vb=
+endif
 
 " ステータスラインを常に表示
 set laststatus=2
@@ -742,7 +747,7 @@ nnoremap [QuickFix]r :<C-u>crewind<CR>
 nnoremap [QuickFix]l :<C-u>clast<CR>
 
 " QuickFixリストが生成されたら自動で開く
-autocmd MyAutoCmd QuickfixCmdPost make,grep,grepadd,vimgrep call <SID>Qfswitch()
+autocmd MyAutoCmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd call <SID>Qfswitch()
 function! s:Qfswitch()
     for i in getqflist()
         if i['valid'] == 1
