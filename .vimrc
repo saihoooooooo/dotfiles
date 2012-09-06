@@ -145,7 +145,7 @@ if has('gui_running')
     endif
 endif
 
-" ビジュアルベル
+" ビープ音を消去
 if has('gui_running')
     autocmd MyAutoCmd GUIEnter * set visualbell t_vb=
 else
@@ -345,13 +345,13 @@ inoremap <C-u> <C-g>u<C-u>
 inoremap <C-w> <C-g>u<C-w>
 
 " ^Mを取り除く
-command! RemoveCr :silent! normal! :%s/<C-v><CR>//g<CR>:nohlsearch<CR>``
+command! RemoveCr :silent! normal! :%substitute/<C-v><CR>//g<CR>:nohlsearch<CR>``
 
 " 行末のスペースを取り除く
-command! RemoveEolSpace :silent! normal! :%s/ \+$//g<CR>:nohlsearch<CR>``
+command! RemoveEolSpace :silent! normal! :%substitute/ \+$//g<CR>:nohlsearch<CR>``
 
 " 空行を取り除く
-command! RemoveBlankLine :silent! normal! :%s/^\n//g<CR>:nohlsearch<CR>``
+command! RemoveBlankLine :silent! normal! :%substitute/^\n//g<CR>:nohlsearch<CR>``
 
 " 手動コメントアウト
 noremap [Comment] <Nop>
@@ -541,13 +541,13 @@ autocmd MyAutoCmd BufRead,BufNewFile *.ctp set filetype=php
 autocmd MyAutoCmd BufRead,BufNewFile *.jade set filetype=jade
 autocmd MyAutoCmd BufRead,BufNewFile *.coffee set filetype=coffee
 
-" ファイルタイプ指定
+" 手動ファイルタイプ設定
 nnoremap xof :set filetype=
 
 " 編集中ファイルのリネーム
 command! -nargs=0 Rename call s:Rename()
 function! s:Rename()
-    let filename = input('Input new filename', expand('%:p:h') . '/')
+    let filename = input('New filename: ', expand('%:p:h') . '/')
     if filename != ''
         execute 'file' filename
         if !isdirectory(expand('%:p:h'))
@@ -565,7 +565,7 @@ function! s:OpenJunkFile()
     if !isdirectory(junk_dir)
         call mkdir(junk_dir, 'p')
     endif
-    let filename = input('Junk Code: ', junk_dir . strftime('/%Y-%m-%d-%H%M%S.'))
+    let filename = input('Junk name: ', junk_dir . strftime('/%Y-%m-%d-%H%M%S.'))
     if filename != ''
         execute 'edit ' . filename
     endif
@@ -610,7 +610,7 @@ autocmd MyAutoCmd BufEnter * if !exists('t:cwd') | call InitTabpageCd() | endif
 function! InitTabpageCd()
     if (!has('vim_starting'))
         if (@% != '')
-            let curdir = input('Input current directory: ', expand("%:p:h"))
+            let curdir = input('Current directory: ', expand("%:p:h"))
             silent! cd `=fnameescape(curdir)`
         else
             cd ~
@@ -771,6 +771,7 @@ autocmd MyAutoCmd BufWritePost *.php silent make
 
 " grep
 set grepprg=grep\ -iHn
+set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m
 
 " }}}
 "=============================================================================
