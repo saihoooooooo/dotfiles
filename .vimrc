@@ -265,6 +265,9 @@ set autoindent
 " 新しい行を作成したときに高度な自動インデントを行う
 set smartindent
 
+" tabstopの段階調整
+nnoremap <silent> <F4> :let &tabstop = (&tabstop * 2 > 16) ? 2 : &tabstop * 2<CR>:echo 'tabstop:' &tabstop<CR>
+
 " }}}
 "=============================================================================
 " 入力設定 : {{{
