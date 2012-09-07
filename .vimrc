@@ -1381,7 +1381,8 @@ inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 imap <expr><C-y> neocomplcache#close_popup()
 
 " <CR>は候補を確定しながら改行
-imap <expr><CR> neocomplcache#smart_close_popup() . "\<CR>"
+" imap <expr><CR> neocomplcache#smart_close_popup() . "\<CR>"
+" autocmd MyAutoCmd InsertCharPre * if v:char == "\<CR>" | echoerr '1' | endif
 
 " 補完をキャンセル
 imap <expr><C-e> neocomplcache#cancel_popup()
