@@ -105,7 +105,7 @@ if !exists('syntax_on')
     syntax enable
 endif
 
-" シンタックス有効桁数
+" シンタックス有効列数
 set synmaxcol=1000
 
 " シンタックスON/OFF切り替え
@@ -132,8 +132,12 @@ else
 endif
 
 " カラースキーム
-if has('gui_running') && !exists('g:colors_name')
-    autocmd MyAutoCmd GUIEnter * colorscheme nevfn
+if !exists('g:colors_name')
+    if has('gui_running')
+        autocmd MyAutoCmd GUIEnter * colorscheme desert
+    else
+        colorscheme desert
+    endif
 endif
 
 " 半透明
@@ -166,13 +170,17 @@ endif
 " ステータスライン表示内容
 let &statusline = ''
 let &statusline .= '%{expand("%:t")}'
-let &statusline .= '%h%w%m%r'
+let &statusline .= '%h'
+let &statusline .= '%w'
+let &statusline .= '%m'
+let &statusline .= '%r'
 let &statusline .= ' (%<%{expand("%:p:~:h")}) '
 let &statusline .= '%='
-let &statusline .= '[HEX:%B][R:%l][C:%c]'
+let &statusline .= '[HEX:%B]'
+let &statusline .= '[R:%l]'
+let &statusline .= '[C:%c]'
 let &statusline .= '%y'
-let &statusline .= '[%{&fileencoding != "" ? &fileencoding : &encoding}]'
-let &statusline .= '%{&bomb ? "[BOM]" : ""}'
+let &statusline .= '[%{&fileencoding != "" ? &fileencoding : &encoding}%{&bomb ? "(BOM)" : ""}]'
 let &statusline .= '[%{&fileformat}]'
 
 " 現在のモードを表示
@@ -503,7 +511,7 @@ nnoremap <silent># :<C-u>nohlsearch<CR>
 set wildmenu
 
 " 補完モード
-set wildmode=full
+set wildmode=list:full
 
 " zsh風履歴検索
 cnoremap <C-p> <Up>
@@ -550,7 +558,7 @@ nnoremap xof :set filetype=
 " 編集中ファイルのリネーム
 command! -nargs=0 Rename call s:Rename()
 function! s:Rename()
-    let filename = input('New filename: ', expand('%:p:h') . '/')
+    let filename = input('New filename: ', expand('%:p:h') . '/', 'file')
     if filename != ''
         execute 'file' filename
         if !isdirectory(expand('%:p:h'))
@@ -613,7 +621,7 @@ autocmd MyAutoCmd BufEnter * if !exists('t:cwd') | call InitTabpageCd() | endif
 function! InitTabpageCd()
     if (!has('vim_starting'))
         if (@% != '')
-            let curdir = input('Current directory: ', expand("%:p:h"))
+            let curdir = input('Current directory: ', expand("%:p:h"), 'file')
             silent! cd `=fnameescape(curdir)`
         else
             cd ~
@@ -767,7 +775,7 @@ function! s:Qfswitch()
     cclose
 endfunction
 
-" php構文チェック
+" php自動構文チェック
 autocmd MyAutoCmd FileType php setlocal makeprg=php\ -l\ %
 autocmd MyAutoCmd FileType php setlocal errorformat=%m\ in\ %f\ on\ line\ %l,%-GErrors\ parsing\ %f,%-G
 autocmd MyAutoCmd BufWritePost *.php silent make
@@ -965,545 +973,551 @@ endif
 "=============================================================================
 " プラグイン設定 : {{{
 
-" 初期化
-if has('vim_starting')
-    filetype off
-    set runtimepath+=$DOTVIM/bundle/neobundle.vim
-    call neobundle#rc(expand($DOTVIM . '/bundle'))
-    filetype plugin on
-    filetype indent on
-endif
+" neobundle.vimが存在する場合のみ以下を実行
+if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
-" plugin
-NeoBundle 'git://github.com/akiyan/vim-textobj-php.git'
-NeoBundle 'git://github.com/anyakichi/vim-surround.git'
-NeoBundle 'git://github.com/digitaltoad/vim-jade.git'
-NeoBundle 'git://github.com/h1mesuke/unite-outline.git'
-NeoBundle 'git://github.com/h1mesuke/vim-alignta.git'
-NeoBundle 'git://github.com/kana/vim-operator-replace.git'
-NeoBundle 'git://github.com/kana/vim-operator-user.git'
-NeoBundle 'git://github.com/kana/vim-smartinput.git'
-NeoBundle 'git://github.com/kana/vim-submode.git'
-NeoBundle 'git://github.com/kana/vim-textobj-indent.git'
-NeoBundle 'git://github.com/kana/vim-textobj-entire.git'
-NeoBundle 'git://github.com/kana/vim-textobj-lastpat.git'
-NeoBundle 'git://github.com/kana/vim-textobj-line.git'
-NeoBundle 'git://github.com/kana/vim-textobj-syntax.git'
-NeoBundle 'git://github.com/kana/vim-textobj-user.git'
-NeoBundle 'git://github.com/kchmck/vim-coffee-script.git'
-NeoBundle 'git://github.com/mattn/calendar-vim.git'
-NeoBundle 'git://github.com/mattn/mahjong-vim.git'
-NeoBundle 'git://github.com/mattn/webapi-vim.git'
-NeoBundle 'git://github.com/mattn/zencoding-vim.git'
-NeoBundle 'git://github.com/saihoooooooo/vim-auto-colorscheme.git'
-NeoBundle 'git://github.com/saihoooooooo/vim-textobj-space.git'
-NeoBundle 'git://github.com/Shougo/unite.vim.git'
-NeoBundle 'git://github.com/Shougo/neobundle.vim.git'
-NeoBundle 'git://github.com/Shougo/neocomplcache.git'
-NeoBundle 'git://github.com/Shougo/neocomplcache-snippets-complete.git'
-NeoBundle 'git://github.com/Shougo/vimfiler.git'
-NeoBundle 'git://github.com/Shougo/vimproc.git'
-NeoBundle 'git://github.com/Shougo/vimshell.git'
-NeoBundle 'git://github.com/teramako/jscomplete-vim.git'
-NeoBundle 'git://github.com/thinca/vim-textobj-between.git'
-NeoBundle 'git://github.com/thinca/vim-quickrun.git'
-NeoBundle 'git://github.com/thinca/vim-ref.git'
-NeoBundle 'git://github.com/tsaleh/vim-matchit.git'
-NeoBundle 'git://github.com/tyru/open-browser.vim.git'
-NeoBundle 'git://github.com/tyru/operator-camelize.vim.git'
-NeoBundle 'git://github.com/vim-scripts/TwitVim.git'
-NeoBundle 'git://github.com/vim-scripts/vcscommand.vim.git'
+    " 初期化
+    if has('vim_starting')
+        filetype off
+        set runtimepath+=$DOTVIM/bundle/neobundle.vim
+        call neobundle#rc(expand($DOTVIM . '/bundle'))
+        filetype plugin on
+        filetype indent on
+    endif
 
-" colorscheme
-NeoBundle 'git://github.com/vim-scripts/nevfn.git'
-NeoBundle 'git://github.com/vim-scripts/ChocolateLiquor.git'
-NeoBundle 'git://github.com/vim-scripts/newspaper.vim.git'
-NeoBundle 'git://github.com/vim-scripts/oceandeep.git'
-NeoBundle 'git://github.com/vim-scripts/lilac.vim.git'
-NeoBundle 'git://github.com/vim-scripts/dusk.git'
+    " plugin
+    NeoBundle 'git://github.com/akiyan/vim-textobj-php.git'
+    NeoBundle 'git://github.com/anyakichi/vim-surround.git'
+    NeoBundle 'git://github.com/digitaltoad/vim-jade.git'
+    NeoBundle 'git://github.com/h1mesuke/unite-outline.git'
+    NeoBundle 'git://github.com/h1mesuke/vim-alignta.git'
+    NeoBundle 'git://github.com/kana/vim-operator-replace.git'
+    NeoBundle 'git://github.com/kana/vim-operator-user.git'
+    NeoBundle 'git://github.com/kana/vim-smartinput.git'
+    NeoBundle 'git://github.com/kana/vim-submode.git'
+    NeoBundle 'git://github.com/kana/vim-textobj-indent.git'
+    NeoBundle 'git://github.com/kana/vim-textobj-entire.git'
+    NeoBundle 'git://github.com/kana/vim-textobj-lastpat.git'
+    NeoBundle 'git://github.com/kana/vim-textobj-line.git'
+    NeoBundle 'git://github.com/kana/vim-textobj-syntax.git'
+    NeoBundle 'git://github.com/kana/vim-textobj-user.git'
+    NeoBundle 'git://github.com/kchmck/vim-coffee-script.git'
+    NeoBundle 'git://github.com/mattn/calendar-vim.git'
+    NeoBundle 'git://github.com/mattn/mahjong-vim.git'
+    NeoBundle 'git://github.com/mattn/webapi-vim.git'
+    NeoBundle 'git://github.com/mattn/zencoding-vim.git'
+    NeoBundle 'git://github.com/saihoooooooo/vim-auto-colorscheme.git'
+    NeoBundle 'git://github.com/saihoooooooo/vim-textobj-space.git'
+    NeoBundle 'git://github.com/Shougo/unite.vim.git'
+    NeoBundle 'git://github.com/Shougo/neobundle.vim.git'
+    NeoBundle 'git://github.com/Shougo/neocomplcache.git'
+    NeoBundle 'git://github.com/Shougo/neocomplcache-snippets-complete.git'
+    NeoBundle 'git://github.com/Shougo/vimfiler.git'
+    NeoBundle 'git://github.com/Shougo/vimproc.git'
+    NeoBundle 'git://github.com/Shougo/vimshell.git'
+    NeoBundle 'git://github.com/teramako/jscomplete-vim.git'
+    NeoBundle 'git://github.com/thinca/vim-textobj-between.git'
+    NeoBundle 'git://github.com/thinca/vim-quickrun.git'
+    NeoBundle 'git://github.com/thinca/vim-ref.git'
+    NeoBundle 'git://github.com/tsaleh/vim-matchit.git'
+    NeoBundle 'git://github.com/tyru/open-browser.vim.git'
+    NeoBundle 'git://github.com/tyru/operator-camelize.vim.git'
+    NeoBundle 'git://github.com/vim-scripts/TwitVim.git'
+    NeoBundle 'git://github.com/vim-scripts/vcscommand.vim.git'
+
+    " colorscheme
+    NeoBundle 'git://github.com/vim-scripts/nevfn.git'
+    NeoBundle 'git://github.com/vim-scripts/ChocolateLiquor.git'
+    NeoBundle 'git://github.com/vim-scripts/newspaper.vim.git'
+    NeoBundle 'git://github.com/vim-scripts/oceandeep.git'
+    NeoBundle 'git://github.com/vim-scripts/lilac.vim.git'
+    NeoBundle 'git://github.com/vim-scripts/dusk.git'
 
 "=============================================================================
 " vim-textobj-php : {{{
 
-" 設定なし
+    " 設定なし
 
 " }}}
 "=============================================================================
 " vim-surround : {{{
 
-" キーマップ
-nmap s <Plug>Ysurround
-nmap ss <Plug>Yssurround
-nmap S <Plug>Ysurround$
+    " キーマップ
+    nmap s <Plug>Ysurround
+    nmap ss <Plug>Yssurround
+    nmap S <Plug>Ysurround$
 
 " }}}
 "=============================================================================
 " vim-jade : {{{
 
-" 設定なし
+    " 設定なし
 
 " }}}
 "=============================================================================
 " unite-outline : {{{
 
-" 設定なし
+    " 設定なし
 
 " }}}
 "=============================================================================
 " vim-alignta : {{{
 
-" テキスト整形
-xnoremap <silent>[Unite]a :<C-u>Unite alignta:arguments<CR>
-let g:unite_source_alignta_preset_arguments = [
-\     ["Align at '='", '=>\='],
-\     ["Align at ':'", '01 :'],
-\     ["Align at '|'", '|'   ],
-\     ["Align at '/'", '/\//' ],
-\     ["Align at ','", ','   ],
-\ ]
+    " テキスト整形
+    xnoremap <silent>[Unite]a :<C-u>Unite alignta:arguments<CR>
+    let g:unite_source_alignta_preset_arguments = [
+    \     ["Align at '='", '=>\='],
+    \     ["Align at ':'", '01 :'],
+    \     ["Align at '|'", '|'   ],
+    \     ["Align at '/'", '/\//' ],
+    \     ["Align at ','", ','   ],
+    \ ]
 
-" オプション設定
-nnoremap <silent>[Unite]a :<C-u>Unite alignta:options<CR>
-let s:comment_leadings = '^\s*\("\|#\|/\*\|//\|<!--\)'
-let g:unite_source_alignta_preset_options = [
-\     ["Justify Left",      '<<' ],
-\     ["Justify Center",    '||' ],
-\     ["Justify Right",     '>>' ],
-\     ["Justify None",      '==' ],
-\     ["Shift Left",        '<-' ],
-\     ["Shift Right",       '->' ],
-\     ["Shift Left  [Tab]", '<--'],
-\     ["Shift Right [Tab]", '-->'],
-\     ["Margin 0:0",        '0'  ],
-\     ["Margin 0:1",        '01' ],
-\     ["Margin 1:0",        '10' ],
-\     ["Margin 1:1",        '1'  ],
-\     'v/' . s:comment_leadings,
-\     'g/' . s:comment_leadings,
-\ ]
-unlet s:comment_leadings
+    " オプション設定
+    nnoremap <silent>[Unite]a :<C-u>Unite alignta:options<CR>
+    let s:comment_leadings = '^\s*\("\|#\|/\*\|//\|<!--\)'
+    let g:unite_source_alignta_preset_options = [
+    \     ["Justify Left",      '<<' ],
+    \     ["Justify Center",    '||' ],
+    \     ["Justify Right",     '>>' ],
+    \     ["Justify None",      '==' ],
+    \     ["Shift Left",        '<-' ],
+    \     ["Shift Right",       '->' ],
+    \     ["Shift Left  [Tab]", '<--'],
+    \     ["Shift Right [Tab]", '-->'],
+    \     ["Margin 0:0",        '0'  ],
+    \     ["Margin 0:1",        '01' ],
+    \     ["Margin 1:0",        '10' ],
+    \     ["Margin 1:1",        '1'  ],
+    \     'v/' . s:comment_leadings,
+    \     'g/' . s:comment_leadings,
+    \ ]
+    unlet s:comment_leadings
 
 " }}}
 "=============================================================================
 " vim-operator-replace : {{{
 
-" xpを置換用キーに設定
-map xp "*<Plug>(operator-replace)
-map xP xp$
+    " xpを置換用キーに設定
+    map xp "*<Plug>(operator-replace)
+    map xP xp$
 
 " }}}
 "=============================================================================
 " vim-operator-user : {{{
 
-" 検索オペレータ
-map x/ <Plug>(operator-search)
-call operator#user#define('search', 'OperatorSearch')
-function! OperatorSearch(motion_wise)
-    if a:motion_wise == 'char'
-        silent normal! `[v`]"zy
-        let @/ = @z
-        set hlsearch
-        redraw
-    endif
-endfunction
+    " 検索オペレータ
+    map x/ <Plug>(operator-search)
+    call operator#user#define('search', 'OperatorSearch')
+    function! OperatorSearch(motion_wise)
+        if a:motion_wise == 'char'
+            silent normal! `[v`]"zy
+            let @/ = @z
+            set hlsearch
+            redraw
+        endif
+    endfunction
 
 " }}}
 "=============================================================================
 " vim-smartinput : {{{
 
-" 設定なし
+    " 設定なし
 
 " }}}
 "=============================================================================
-" submode.vim : {{{
+" vim-submode : {{{
 
-" タイムアウトあり
-let g:submode_timeout = 1
+    " タイムアウトあり
+    let g:submode_timeout = 1
 
-" 入力待ち時間
-let g:submode_timeoutlen = 800
+    " 入力待ち時間
+    let g:submode_timeoutlen = 800
 
-" ウィンドウサイズ制御
-call submode#enter_with('winsize', 'n', '', '<C-w>+', '<C-w>5+')
-call submode#enter_with('winsize', 'n', '', '<C-w>-', '<C-w>5-')
-call submode#enter_with('winsize', 'n', '', '<C-w>>', '<C-w>5>')
-call submode#enter_with('winsize', 'n', '', '<C-w><', '<C-w>5<')
-call submode#map('winsize', 'n', '', '+', '<C-w>5+')
-call submode#map('winsize', 'n', '', '-', '<C-w>5-')
-call submode#map('winsize', 'n', '', '<', '<C-w>5<')
-call submode#map('winsize', 'n', '', '>', '<C-w>5>')
+    " ウィンドウサイズ制御
+    call submode#enter_with('winsize', 'n', '', '<C-w>+', '<C-w>5+')
+    call submode#enter_with('winsize', 'n', '', '<C-w>-', '<C-w>5-')
+    call submode#enter_with('winsize', 'n', '', '<C-w>>', '<C-w>5>')
+    call submode#enter_with('winsize', 'n', '', '<C-w><', '<C-w>5<')
+    call submode#map('winsize', 'n', '', '+', '<C-w>5+')
+    call submode#map('winsize', 'n', '', '-', '<C-w>5-')
+    call submode#map('winsize', 'n', '', '<', '<C-w>5<')
+    call submode#map('winsize', 'n', '', '>', '<C-w>5>')
 
 " }}}
 "=============================================================================
 " vim-textobj-indent : {{{
 
-" 設定なし
+    " 設定なし
 
 " }}}
 "=============================================================================
 " vim-textobj-entire : {{{
 
-" 全行コピー
-nmap yie yie`'
-nmap yae yae`'
+    " 全行コピー
+    nmap yie yie`'
+    nmap yae yae`'
 
 " }}}
 "=============================================================================
 " vim-textobj-lastpat : {{{
 
-" 設定なし
+    " 設定なし
 
 " }}}
 "=============================================================================
 " vim-textobj-line : {{{
 
-" 設定なし
+    " 設定なし
 
 " }}}
 "=============================================================================
 " vim-textobj-syntax : {{{
 
-" 設定なし
+    " 設定なし
 
 " }}}
 "=============================================================================
 " vim-textobj-user : {{{
 
-" キャメルケース、スネークケース
-call textobj#user#plugin('camelcase', {
-\     '-': {
-\         '*pattern*': '[A-Za-z][a-z0-9]\+\|[A-Z]\+',
-\         'select': ['ac', 'ic'],
-\     },
-\ })
+    " キャメルケース、スネークケース
+    call textobj#user#plugin('camelcase', {
+    \     '-': {
+    \         '*pattern*': '[A-Za-z][a-z0-9]\+\|[A-Z]\+',
+    \         'select': ['ac', 'ic'],
+    \     },
+    \ })
 
 " }}}
 "=============================================================================
 " vim-coffee-script : {{{
 
-" 設定なし
+    " 設定なし
 
 " }}}
 "=============================================================================
-" calender.vim : {{{
+" calendar-vim : {{{
 
-" キーマップ
-nnoremap <silent><F7> :<C-u>CalendarH<CR>
-autocmd MyAutoCmd FileType calendar nmap <buffer><F7> q<CR>
+    " キーマップ
+    nnoremap <silent><F7> :<C-u>CalendarH<CR>
+    autocmd MyAutoCmd FileType calendar nmap <buffer><F7> q<CR>
 
-" ステータスラインに現在日時を表示
-let g:calendar_datetime='statusline'
+    " ステータスラインに現在日時を表示
+    let g:calendar_datetime='statusline'
 
 " }}}
 "=============================================================================
 " mahjong-vim : {{{
 
-" 設定なし
+    " 設定なし
 
 " }}}
 "=============================================================================
 " webapi-vim : {{{
 
-" Google電卓
-command! -bang -nargs=+ GCalc call GCalc(<q-args>, <bang>0)
-function! GCalc(expr, banged)
-    let res = http#get('http://www.google.co.jp/complete/search?output=toolbar&q='.http#escape(a:expr)).content
-    if match(res, 'calculator_suggestion') == -1
-        echohl ErrorMsg | echo 'Bad response' |  echohl None
-        return
-    endif
-    let result = xml#parse(res).find('calculator_suggestion').attr['data']
-    if !a:banged
-        let @* = result
-    endif
-    echo result
-endfunction
+    " Google電卓
+    command! -bang -nargs=+ GCalc call GCalc(<q-args>, <bang>0)
+    function! GCalc(expr, banged)
+        let response = webapi#http#get('http://www.google.co.jp/ig/calculator?q=' . webapi#http#encodeURI(a:expr))
+        let lhs = matchstr(response.content, 'lhs: "\zs.\+\ze",rhs')
+        let rhs = matchstr(response.content, 'rhs: "\zs.\+\ze",error')
+        if lhs == '' || rhs == ''
+            echohl ErrorMsg | echo 'Bad request' |  echohl None
+            return
+        endif
+        if !a:banged
+            let @* = rhs
+        endif
+        echo lhs . ' = ' . rhs
+    endfunction
 
 " }}}
 "=============================================================================
 " zencoding-vim : {{{
 
-" キーマップ
-let g:user_zen_leader_key = '<C-z>'
+    " キーマップ
+    let g:user_zen_leader_key = '<C-z>'
 
-" インデント設定
-let g:user_zen_settings = {
-\     'lang' : 'ja',
-\     'indentation' : '    ',
-\     'html' : {
-\         'filters' : 'html',
-\         'snippets' : {
-\             'jq' : "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js\"></script>\n<script>\n\\$(function() {\n\t|\n})();\n</script>",
-\             'cd' : "<![CDATA[|]]>",
-\         },
-\     },
-\ }
+    " インデント設定
+    let g:user_zen_settings = {
+    \     'lang' : 'ja',
+    \     'indentation' : '    ',
+    \     'html' : {
+    \         'filters' : 'html',
+    \         'snippets' : {
+    \             'jq' : "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js\"></script>\n<script>\n\\$(function() {\n\t|\n})();\n</script>",
+    \             'cd' : "<![CDATA[|]]>",
+    \         },
+    \     },
+    \ }
 
 " }}}
 "=============================================================================
 " vim-auto-colorscheme : {{{
 
-" colorscheme設定
-let g:auto_colorscheme_default = 'nevfn'
-let g:auto_colorscheme_config = [
-\     ['\~/\.vimperatorrc', 'dusk'],
-\     ['\.js$', 'oceandeep'],
-\ ]
+    " colorscheme設定
+    let g:auto_colorscheme_default = 'nevfn'
+    let g:auto_colorscheme_config = [
+    \     ['\~/\.vimperatorrc', 'dusk'],
+    \     ['\.js$', 'oceandeep'],
+    \ ]
 
 " }}}
 "=============================================================================
 " vim-textobj-space : {{{
 
-" 設定なし
+    " 設定なし
 
 " }}}
 "=============================================================================
 " unite.vim : {{{
 
-" 基本マップ
-nnoremap [Unite] <Nop>
-xnoremap [Unite] <Nop>
-nmap <SPACE> [Unite]
-xmap <SPACE> [Unite]
+    " 基本マップ
+    nnoremap [Unite] <Nop>
+    xnoremap [Unite] <Nop>
+    nmap <SPACE> [Unite]
+    xmap <SPACE> [Unite]
 
-" 汎用
-nnoremap [Unite]u :<C-u>Unite buffer_tab file_mru file file/new -buffer-name=files -no-split<CR>
+    " 汎用
+    nnoremap [Unite]u :<C-u>Unite buffer_tab file_mru file file/new -buffer-name=files -no-split<CR>
 
-" バッファ
-nnoremap [Unite]b :<C-u>Unite buffer_tab -no-split<CR>
+    " バッファ
+    nnoremap [Unite]b :<C-u>Unite buffer_tab -no-split<CR>
 
-" grep
-nnoremap [Unite]g :<C-u>Unite grep -no-quit<CR>
-let g:unite_source_grep_default_opts = '-iRHn'
+    " grep
+    nnoremap [Unite]g :<C-u>Unite grep -no-quit<CR>
+    let g:unite_source_grep_default_opts = '-iRHn'
 
-" ヘルプ
-nnoremap [Unite]h :<C-u>Unite help -no-split<CR>
-nnoremap [Unite]H :<C-u>UniteWithCursorWord help -no-split<CR>
+    " ヘルプ
+    nnoremap [Unite]h :<C-u>Unite help -no-split<CR>
+    nnoremap [Unite]H :<C-u>UniteWithCursorWord help -no-split<CR>
 
-" アウトライン
-nnoremap [Unite]o :<C-u>Unite outline -no-split<CR>
+    " アウトライン
+    nnoremap [Unite]o :<C-u>Unite outline -no-split<CR>
 
-" phpマニュアル
-nnoremap [Unite]p :<C-u>new<CR>:<C-u>Unite ref/phpmanual -no-split<CR>
+    " phpマニュアル
+    nnoremap [Unite]p :<C-u>new<CR>:<C-u>Unite ref/phpmanual -no-split<CR>
 
-" バッファ内検索
-nnoremap [Unite]l :<C-u>Unite line -no-quit<CR>
+    " バッファ内検索
+    nnoremap [Unite]l :<C-u>Unite line -no-quit<CR>
 
-" ジャンクファイル
-nnoremap [Unite]j :<C-u>Unite junk -no-split<CR>
-let g:unite_source_alias_aliases = {'junk': {'source': 'file_rec', 'args': $HOME . '/.vim_junk/', }, }
+    " ジャンクファイル
+    nnoremap [Unite]j :<C-u>Unite junk -no-split<CR>
+    let g:unite_source_alias_aliases = {'junk': {'source': 'file_rec', 'args': $HOME . '/.vim_junk/', }, }
 
-" unite source
-nnoremap [Unite]<SPACE> :<C-u>Unite source -no-split<CR>
+    " unite source
+    nnoremap [Unite]<SPACE> :<C-u>Unite source -no-split<CR>
 
-" uniteファイルタイプ設定
-autocmd MyAutoCmd FileType unite call <SID>UniteMySetting()
-function! s:UniteMySetting()
-    " 入力欄にフォーカス
-    imap <buffer><expr>i unite#smart_map("i", "\<Plug>(unite_insert_leave)\<Plug>(unite_insert_enter)")
+    " uniteファイルタイプ設定
+    autocmd MyAutoCmd FileType unite call <SID>UniteMySetting()
+    function! s:UniteMySetting()
+        " 入力欄にフォーカス
+        imap <buffer><expr>i unite#smart_map("i", "\<Plug>(unite_insert_leave)\<Plug>(unite_insert_enter)")
 
-    " uniteを終了
-    imap <buffer><ESC> <Plug>(unite_exit)
-    nmap <buffer><ESC> <Plug>(unite_exit)
+        " uniteを終了
+        imap <buffer><ESC> <Plug>(unite_exit)
+        nmap <buffer><ESC> <Plug>(unite_exit)
 
-    " 編集
-    inoremap <silent><buffer><expr><C-e> unite#do_action('edit')
+        " 編集
+        inoremap <silent><buffer><expr><C-e> unite#do_action('edit')
 
-    " ノーマルモードでの上下移動
-    nmap <buffer><C-n> <Plug>(unite_loop_cursor_down)
-    nmap <buffer><C-p> <Plug>(unite_loop_cursor_up)
-endfunction
+        " ノーマルモードでの上下移動
+        nmap <buffer><C-n> <Plug>(unite_loop_cursor_down)
+        nmap <buffer><C-p> <Plug>(unite_loop_cursor_up)
+    endfunction
 
-" 入力モードで開始
-let g:unite_enable_start_insert = 1
+    " 入力モードで開始
+    let g:unite_enable_start_insert = 1
 
-" ¥を/に変換
-if s:iswin && &shellslash == 0
-    call unite#set_substitute_pattern('files', '\', '/')
-endif
+    " ¥を/に変換
+    if s:iswin && &shellslash == 0
+        call unite#set_substitute_pattern('files', '\', '/')
+    endif
 
-" カレントディレクトリ以下を探す
-call unite#set_substitute_pattern('files', '^@/', '\=getcwd()', 1)
+    " カレントディレクトリ以下を探す
+    call unite#set_substitute_pattern('files', '^@/', '\=getcwd()', 1)
 
-" 親ディレクトリを探す
-call unite#set_substitute_pattern('files', ';', '../')
+    " 親ディレクトリを探す
+    call unite#set_substitute_pattern('files', ';', '../')
 
-" file_mruの保存数
-let g:unite_source_file_mru_limit = 1000
+    " file_mruの保存数
+    let g:unite_source_file_mru_limit = 1000
 
-" file_mruの無視パターン
-let g:unite_source_file_mru_ignore_pattern = ''
-let g:unite_source_file_mru_ignore_pattern .= '\~$'
-let g:unite_source_file_mru_ignore_pattern .= '\|\.\%(o\|exe\|dll\|bak\|sw[po]\)$'
-let g:unite_source_file_mru_ignore_pattern .= '\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'
-let g:unite_source_file_mru_ignore_pattern .= '\|^\%(\\\\\|/mnt/\|/media/\|/Volumes/\)'
-let g:unite_source_file_mru_ignore_pattern .= '\|AppData/Local/Temp'
+    " file_mruの無視パターン
+    let g:unite_source_file_mru_ignore_pattern = ''
+    let g:unite_source_file_mru_ignore_pattern .= '\~$'
+    let g:unite_source_file_mru_ignore_pattern .= '\|\.\%(o\|exe\|dll\|bak\|sw[po]\)$'
+    let g:unite_source_file_mru_ignore_pattern .= '\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'
+    let g:unite_source_file_mru_ignore_pattern .= '\|^\%(\\\\\|/mnt/\|/media/\|/Volumes/\)'
+    let g:unite_source_file_mru_ignore_pattern .= '\|AppData/Local/Temp'
 
-" 検索キーワードをハイライトしない
-let g:unite_source_line_enable_highlight = 0
+    " 検索キーワードをハイライトしない
+    let g:unite_source_line_enable_highlight = 0
 
 " }}}
 "=============================================================================
 " neobundle.vim : {{{
 
-" 設定なし
+    " 設定なし
 
 " }}}
 "=============================================================================
 " neocomplcache : {{{
 
-" neocomplcache有効
-let g:neocomplcache_enable_at_startup = 1
+    " neocomplcache有効
+    let g:neocomplcache_enable_at_startup = 1
 
-" 大文字小文字を区別しない
-let g:neocomplcache_enable_ignore_case = 1
+    " 大文字小文字を区別しない
+    let g:neocomplcache_enable_ignore_case = 1
 
-" 大文字が含まれている場合は区別して補完
-let g:neocomplcache_enable_smart_case = 1
+    " 大文字が含まれている場合は区別して補完
+    let g:neocomplcache_enable_smart_case = 1
 
-" キャメルケース補完
-let g:neocomplcache_enable_camel_case_completion = 1
+    " キャメルケース補完
+    let g:neocomplcache_enable_camel_case_completion = 1
 
-" スネークケース補完
-let g:neocomplcache_enable_underbar_completion = 1
+    " スネークケース補完
+    let g:neocomplcache_enable_underbar_completion = 1
 
-" 日本語は収集しない
-if !exists('g:neocomplcache_keyword_patterns')
-    let g:neocomplcache_keyword_patterns = {}
-endif
-let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
+    " 日本語は収集しない
+    if !exists('g:neocomplcache_keyword_patterns')
+        let g:neocomplcache_keyword_patterns = {}
+    endif
+    let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 
-" <TAB>で補完
-inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+    " <TAB>で補完
+    inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
-" 選択中の候補を確定
-imap <expr><C-y> neocomplcache#close_popup()
+    " 選択中の候補を確定
+    imap <expr><C-y> neocomplcache#close_popup()
 
-" <CR>は候補を確定しながら改行
-" imap <expr><CR> neocomplcache#smart_close_popup() . "\<CR>"
-" autocmd MyAutoCmd InsertCharPre * if v:char == "\<CR>" | echoerr '1' | endif
+    " <CR>は候補を確定しながら改行
+    " imap <expr><CR> neocomplcache#smart_close_popup() . "\<CR>"
+    " autocmd MyAutoCmd InsertCharPre * if v:char == "\<CR>" | echoerr '1' | endif
 
-" 補完をキャンセル
-imap <expr><C-e> neocomplcache#cancel_popup()
+    " 補完をキャンセル
+    imap <expr><C-e> neocomplcache#cancel_popup()
 
 " }}}
 "=============================================================================
 " neocomplcache-snippets-complete : {{{
 
-" スニペット補完
-imap <C-k> <Plug>(neocomplcache_snippets_expand)
-smap <C-k> <Plug>(neocomplcache_snippets_expand)
+    " スニペット補完
+    imap <C-k> <Plug>(neocomplcache_snippets_expand)
+    smap <C-k> <Plug>(neocomplcache_snippets_expand)
 
 " }}}
 "=============================================================================
 " vimfiler : {{{
 
-" デフォルトのファイラに設定
-let vimfilerAsDefaultExplorer = 1
+    " デフォルトのファイラに設定
+    let vimfilerAsDefaultExplorer = 1
 
-" vimfilerを開く
-nnoremap xf :<C-u>VimFiler -simple -winwidth=45 -no-quit -split<CR>
+    " vimfilerを開く
+    nnoremap xf :<C-u>VimFiler -simple -winwidth=45 -no-quit -split<CR>
 
-" vimfilerファイルタイプ設定
-autocmd MyAutoCmd FileType vimfiler call <SID>VimfilerMySetting()
-function! s:VimfilerMySetting()
-    " ドットファイルを表示
-    normal .
+    " vimfilerファイルタイプ設定
+    autocmd MyAutoCmd FileType vimfiler call <SID>VimfilerMySetting()
+    function! s:VimfilerMySetting()
+        " ドットファイルを表示
+        normal .
 
-    " リネーム
-    nmap <buffer><silent> R <Plug>(vimfiler_rename_file)
+        " リネーム
+        nmap <buffer><silent> R <Plug>(vimfiler_rename_file)
 
-    " ディレクトリをリロード
-    nmap <buffer><silent> r <Plug>(vimfiler_redraw_screen)
+        " ディレクトリをリロード
+        nmap <buffer><silent> r <Plug>(vimfiler_redraw_screen)
 
-    " トグル選択
-    nmap <buffer><silent> <SPACE> <Plug>(vimfiler_toggle_mark_current_line)
-endfunction
+        " トグル選択
+        nmap <buffer><silent> <SPACE> <Plug>(vimfiler_toggle_mark_current_line)
+    endfunction
 
 " }}}
 "=============================================================================
 " vimproc : {{{
 
-" 設定なし
+    " 設定なし
 
 " }}}
 "=============================================================================
 " vimshell : {{{
 
-" 設定なし
+    " 設定なし
 
 " }}}
 "=============================================================================
 " jscomplete-vim : {{{
 
-" 設定なし
+    " 設定なし
 
 " }}}
 "=============================================================================
 " vim-textobj-between : {{{
 
-" 設定なし
+    " 設定なし
 
 " }}}
 "=============================================================================
 " vim-quickrun : {{{
 
-" 実行コマンド設定
-let g:quickrun_config = {}
-let g:quickrun_config.javascript = {'command': 'node'}
-let g:quickrun_config.coffee = {'command': 'coffee', 'exec': '%c -cbp %s', 'outputter/buffer/filetype': 'javascript'}
+    " 実行コマンド設定
+    let g:quickrun_config = {}
+    let g:quickrun_config.javascript = {'command': 'node'}
+    let g:quickrun_config.coffee = {'command': 'coffee', 'exec': '%c -cbp %s', 'outputter/buffer/filetype': 'javascript'}
 
 " }}}
 "=============================================================================
 " vim-ref : {{{
 
-" phpマニュアルパス
-let g:ref_phpmanual_path = $DOTVIM . '/ref/php/php-chunked-xhtml/'
+    " phpマニュアルパス
+    let g:ref_phpmanual_path = $DOTVIM . '/ref/php/php-chunked-xhtml/'
 
-" html表示コマンド
-if s:iswin
-    let g:ref_phpmanual_cmd = 'lynx -dump %s -cfg=C:/lynx.cfg'
-else
-    let g:ref_phpmanual_cmd = 'w3m -dump %s'
-endif
+    " html表示コマンド
+    if s:iswin
+        let g:ref_phpmanual_cmd = 'lynx -dump %s -cfg=C:/lynx.cfg'
+    else
+        let g:ref_phpmanual_cmd = 'w3m -dump %s'
+    endif
 
 " }}}
 "=============================================================================
 " vim-matchit : {{{
 
-" 設定なし
+    " 設定なし
 
 " }}}
 "=============================================================================
 " open-browser.vim : {{{
 
-" URLなら開き、URLでない場合は検索を実行
-nmap x@ <Plug>(openbrowser-smart-search)
-xmap x@ <Plug>(openbrowser-smart-search)
+    " URLなら開き、URLでない場合は検索を実行
+    nmap x@ <Plug>(openbrowser-smart-search)
+    xmap x@ <Plug>(openbrowser-smart-search)
 
 " }}}
 "=============================================================================
 " operator-camelize.vim : {{{
 
-" カーソル位置の単語をキャメルケース化/解除のトグル
-map _ <Plug>(operator-camelize-toggle)iwbvu
+    " カーソル位置の単語をキャメルケース化/解除のトグル
+    map _ <Plug>(operator-camelize-toggle)iwbvu
 
 " }}}
 "=============================================================================
 " TwitVim : {{{
 
-" 取得数
-let twitvim_count = 100
+    " 取得数
+    let twitvim_count = 100
 
 " }}}
 "=============================================================================
 " vcscommand.vim : {{{
 
-" 設定なし
+    " 設定なし
 
 " }}}
 "=============================================================================
+
+endif
 
 " }}}
 "=============================================================================
