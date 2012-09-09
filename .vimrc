@@ -15,15 +15,15 @@ augroup END
 " windows環境用変数
 let s:iswin = has('win32') || has('win64')
 
-" mac環境用変数
-let s:ismac = has('mac')
-
 " .vimとvimfilesの違いを吸収する
 if s:iswin
     let $DOTVIM = $HOME."/vimfiles"
 else
     let $DOTVIM = $HOME."/.vim"
 endif
+
+" ~/.vimrc以外でも$MYVIMRCに設定
+let $MYVIMRC = expand('<sfile>')
 
 " vimrcを開く
 nnoremap <silent>vv :<C-u>edit $MYVIMRC<CR>
@@ -810,7 +810,7 @@ function! s:DiffUpdate()
     if &diff
         diffupdate
     else
-        echohl ErrorMsg | echo 'E99: Current buffer is not in diff mode' | echohl None
+        echohl ErrorMsg | echo 'ERROR: Current buffer is not in diff mode' | echohl None
     endif
 endfunction
 
@@ -1218,17 +1218,19 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     " Google電卓
     command! -bang -nargs=+ GCalc call GCalc(<q-args>, <bang>0)
     function! GCalc(expr, banged)
-        let response = webapi#http#get('http://www.google.co.jp/ig/calculator?q=' . webapi#http#encodeURI(a:expr))
-        let lhs = matchstr(response.content, 'lhs: "\zs.\+\ze",rhs')
-        let rhs = matchstr(response.content, 'rhs: "\zs.\+\ze",error')
-        if lhs == '' || rhs == ''
-            echohl ErrorMsg | echo 'Bad request' |  echohl None
+        let url = 'http://www.google.co.jp/ig/calculator?q=' .  webapi#http#encodeURI(a:expr)
+        let response = webapi#http#get(url).content
+        let response = substitute(response, '\([a-z]\+\)\ze:', '"\1"', 'g')
+        let response = substitute(response, '\\', '\\\\', 'g')
+        let decoded_response = webapi#json#decode(response)
+        if decoded_response.error != ''
+            echohl ErrorMsg | echo 'ERROR:' decoded_response.error |  echohl None
             return
         endif
         if !a:banged
-            let @* = rhs
+            let @* = decoded_response.rhs
         endif
-        echo lhs . ' = ' . rhs
+        echo decoded_response.lhs . ' = ' . decoded_response.rhs
     endfunction
 
 " }}}
