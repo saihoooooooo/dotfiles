@@ -1,6 +1,9 @@
 "=============================================================================
 " 基本設定 : {{{
 
+" vi互換をOFF
+set nocompatible
+
 " ファイルタイププラグイン
 filetype plugin on
 
@@ -15,15 +18,16 @@ augroup END
 " windows環境用変数
 let s:iswin = has('win32') || has('win64')
 
+" このファイルを基準として$MYVIMRC、$HOMEを設定
+let $MYVIMRC = expand('<sfile>')
+let $HOME = expand('<sfile>:h')
+
 " .vimとvimfilesの違いを吸収する
 if s:iswin
     let $DOTVIM = $HOME."/vimfiles"
 else
     let $DOTVIM = $HOME."/.vim"
 endif
-
-" ~/.vimrc以外でも$MYVIMRCに設定
-let $MYVIMRC = expand('<sfile>')
 
 " vimrcを開く
 nnoremap <silent>vv :<C-u>edit $MYVIMRC<CR>
@@ -212,6 +216,7 @@ autocmd MyAutoCmd VimEnter,WinEnter * match IdeographicSpace /　/
 if (has('gui_running'))
     autocmd MyAutoCmd GUIEnter,ColorScheme * highlight IdeographicSpace term=underline ctermbg=Gray guibg=Gray50
 else
+    highlight IdeographicSpace term=underline ctermbg=Gray guibg=Gray50
     autocmd MyAutoCmd ColorScheme * highlight IdeographicSpace term=underline ctermbg=Gray guibg=Gray50
 endif
 
