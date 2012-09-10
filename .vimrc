@@ -516,7 +516,7 @@ nnoremap <silent># :<C-u>nohlsearch<CR>
 set wildmenu
 
 " 補完モード
-set wildmode=list:full
+set wildmode=longest,list,full
 
 " zsh風履歴検索
 cnoremap <C-p> <Up>
