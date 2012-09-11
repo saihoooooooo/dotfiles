@@ -564,7 +564,7 @@ nnoremap xof :set filetype=
 command! -nargs=0 Rename call s:Rename()
 function! s:Rename()
     let filename = input('New filename: ', expand('%:p:h') . '/', 'file')
-    if filename != ''
+    if filename != '' && filename !=# 'file'
         execute 'file' filename
         if !isdirectory(expand('%:p:h'))
             call mkdir(expand('%:p:h'), 'p')
