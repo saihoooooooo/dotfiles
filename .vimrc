@@ -18,7 +18,7 @@ augroup END
 " windows環境用変数
 let s:iswin = has('win32') || has('win64')
 
-" このファイルを基準として$MYVIMRC、$HOMEを設定
+" 現在のファイルを基準として$MYVIMRC、$HOMEを設定
 let $MYVIMRC = expand('<sfile>')
 let $HOME = expand('<sfile>:h')
 
@@ -337,6 +337,9 @@ function! s:MakeOrderedList()
     execute 'normal!' current + 1 . 'G'
 endfunction
 
+vnoremap <silent><C-a> :ContinuousNumber<CR>
+command! -count -nargs=0 ContinuousNumber let c = col('.')|for n in range(1, <count>?<count>-line('.'):1)|exec 'normal! j' . n . "\<C-a>"|call cursor('.', c)|endfor
+
 " }}}
 "=============================================================================
 " 編集設定 : {{{
@@ -415,7 +418,7 @@ function! s:DropUndoInfo()
 endfunction
 
 " HTMLインデント
-command! HtmlIndent call <SID>HtmlIndent()
+command! HtmlIndent call s:HtmlIndent()
 function! s:HtmlIndent()
     %s/>\zs\ze</\r/g
     let old = &filetype
@@ -453,7 +456,7 @@ vnoremap gm :<C-u>normal gm<CR>
 onoremap gm :<C-u>normal gm<CR>
 
 " phpにてlast_patternを変更しない関数移動
-autocmd MyAutoCmd FileType php call <SID>RemapPHPSectionJump()
+autocmd MyAutoCmd FileType php call s:RemapPHPSectionJump()
 function! s:RemapPHPSectionJump()
     let function = '\(abstract\s\+\|final\s\+\|private\s\+\|protected\s\+\|public\s\+\|static\s\+\)*function'
     let class = '\(abstract\s\+\|final\s\+\)*class'
@@ -518,6 +521,14 @@ set wildmenu
 " 補完モード
 set wildmode=longest,list,full
 
+" Emacs風キーバインド
+:cnoremap <C-a> <Home>
+:cnoremap <C-e> <End>
+:cnoremap <C-b> <Left>
+:cnoremap <C-f> <Right>
+:cnoremap <C-d> <Del>
+:cnoremap <C-h> <BS>
+
 " zsh風履歴検索
 cnoremap <C-p> <Up>
 cnoremap <Up> <C-p>
@@ -528,7 +539,7 @@ cnoremap <Down> <C-n>
 set showcmd
 
 " コマンドの出力を別ウィンドウで開く
-command! -nargs=+ -complete=command Capture silent call <SID>CmdCapture(<q-args>)
+command! -nargs=+ -complete=command Capture silent call s:CmdCapture(<q-args>)
 function! s:CmdCapture(cmd)
     redir => result
     execute a:cmd
@@ -609,6 +620,22 @@ nnoremap [Edit]<SPACE>n :new <C-r>=expand("%:p:h") . '/'<CR>
 nnoremap [Edit]<SPACE>t :tabedit <C-r>=expand("%:p:h") . '/'<CR>
 nnoremap [Edit]<SPACE>v :vnew <C-r>=expand("%:p:h") . '/'<CR>
 
+" mkdirコマンド
+command! -nargs=1 Mkdir call s:Mkdir('<args>')
+function! s:Mkdir(dir)
+    if !isdirectory(a:dir)
+        call mkdir(a:dir, 'p')
+    endif
+endfunction
+
+" 保存時に存在しないディレクトリを自動で作成
+autocmd MyAutoCmd BufWritePre * call s:AutoMkdir(expand('<afile>:p:h'), v:cmdbang)
+function! s:AutoMkdir(dir, force)
+    if !isdirectory(a:dir) && (a:force || s:Confirm('"' . a:dir . '" does not exist. Create?'))
+        call mkdir(a:dir, 'p')
+    endif
+endfunction
+
 " }}}
 "=============================================================================
 " バッファ設定 : {{{
@@ -671,7 +698,7 @@ endfunction
 nnoremap <silent><S-BS> :<C-u>bwipeout!<CR>
 
 " 全バッファを削除
-command! -nargs=0 AllWipeout call <SID>AllWipeout()
+command! -nargs=0 AllWipeout call s:AllWipeout()
 function! s:AllWipeout()
     for i in range(1, bufnr('$'))
         if bufexists(i)
@@ -769,7 +796,7 @@ nnoremap [QuickFix]r :<C-u>crewind<CR>
 nnoremap [QuickFix]l :<C-u>clast<CR>
 
 " QuickFixリストが生成されたら自動で開く
-autocmd MyAutoCmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd call <SID>Qfswitch()
+autocmd MyAutoCmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd call s:Qfswitch()
 function! s:Qfswitch()
     for i in getqflist()
         if i['valid'] == 1
@@ -797,7 +824,7 @@ set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m
 set diffopt=filler
 
 " 差分表示用タブを作成
-command! DiffNew silent call <SID>DiffNew()
+command! DiffNew silent call s:DiffNew()
 function! s:DiffNew()
     99tabnew
     setlocal bufhidden=unload nobuflisted buftype=nofile noswapfile
@@ -867,18 +894,18 @@ if !exists('g:marks_pos')
     \ ]
 endif
 function! s:AutoMark()
-    if !exists('b:marks_current_pos') || (b:marks_current_pos == len(g:marks_char) - 1)
+    if !exists('b:marks_current_pos')
         let b:marks_current_pos = 0
     else
-        let b:marks_current_pos = b:marks_current_pos + 1
+        let b:marks_current_pos = (b:marks_current_pos + 1) % len(g:marks_char)
     endif
     execute 'mark' g:marks_char[b:marks_current_pos]
     echo 'marked' g:marks_char[b:marks_current_pos]
 endfunction
 
 " 次/前のマーク
-nnoremap [Mark]n ]'
-nnoremap [Mark]p ['
+nnoremap [Mark]n ]`
+nnoremap [Mark]p [`
 
 " 一覧表示
 nnoremap [Mark]l :<C-u>marks<CR>
@@ -973,6 +1000,11 @@ endfunction
 if has('kaoriya') && s:iswin
     let g:dicwin_dictpath = substitute($DOTVIM, '\', '/', 'g') . '/dict/gene.txt'
 endif
+
+" 確認入力
+function! s:Confirm(msg)
+    return input(printf('%s [y/N]', a:msg)) =~? '^y\%[es]$'
+endfunction
 
 " }}}
 "=============================================================================
@@ -1316,7 +1348,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     nnoremap [Unite]<SPACE> :<C-u>Unite source -no-split<CR>
 
     " uniteファイルタイプ設定
-    autocmd MyAutoCmd FileType unite call <SID>UniteMySetting()
+    autocmd MyAutoCmd FileType unite call s:UniteMySetting()
     function! s:UniteMySetting()
         " 入力欄にフォーカス
         imap <buffer><expr>i unite#smart_map("i", "\<Plug>(unite_insert_leave)\<Plug>(unite_insert_enter)")
@@ -1425,7 +1457,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     nnoremap xf :<C-u>VimFiler -simple -winwidth=45 -no-quit -split<CR>
 
     " vimfilerファイルタイプ設定
-    autocmd MyAutoCmd FileType vimfiler call <SID>VimfilerMySetting()
+    autocmd MyAutoCmd FileType vimfiler call s:VimfilerMySetting()
     function! s:VimfilerMySetting()
         " ドットファイルを表示
         normal .
