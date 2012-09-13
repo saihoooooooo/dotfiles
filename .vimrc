@@ -40,6 +40,22 @@ autocmd MyAutoCmd VimEnter * nested if @% == '' | edit $MYVIMRC | endif
 
 " }}}
 "=============================================================================
+" 共通関数設定 : {{{
+
+" 存在確認＆ディレクトリ作成
+function! s:Mkdir(dir)
+    if !isdirectory(a:dir)
+        call mkdir(a:dir, 'p')
+    endif
+endfunction
+
+" 確認メッセージ
+function! s:Confirm(msg)
+    return input(printf('%s [y/N]', a:msg)) =~? '^y\%[es]$'
+endfunction
+
+" }}}
+"=============================================================================
 " 文字コード設定 : {{{
 
 " 内部文字コード
@@ -337,9 +353,6 @@ function! s:MakeOrderedList()
     execute 'normal!' current + 1 . 'G'
 endfunction
 
-vnoremap <silent><C-a> :ContinuousNumber<CR>
-command! -count -nargs=0 ContinuousNumber let c = col('.')|for n in range(1, <count>?<count>-line('.'):1)|exec 'normal! j' . n . "\<C-a>"|call cursor('.', c)|endfor
-
 " }}}
 "=============================================================================
 " 編集設定 : {{{
@@ -427,6 +440,25 @@ function! s:HtmlIndent()
     let &filetype = old
 endfunction
 
+" 数値を連番に置換
+vnoremap <silent><C-a> :call <SID>Sequence()<CR>
+function! s:Sequence() range
+    normal! jk
+    let c = col('.')
+    for n in range(1, a:lastline - a:firstline)
+        execute 'normal! j' . n . "\<C-a>"
+        call cursor('.', c)
+    endfor
+endfunction
+
+" 保存時に存在しないディレクトリを自動で作成
+autocmd MyAutoCmd BufWritePre * call s:AutoMkdir(expand('<afile>:p:h'), v:cmdbang)
+function! s:AutoMkdir(dir, force)
+    if !isdirectory(a:dir) && (a:force || s:Confirm('"' . a:dir . '" does not exist. Create?'))
+        call s:Mkdir(a:dir)
+    endif
+endfunction
+
 " }}}
 "=============================================================================
 " 移動設定 : {{{
@@ -436,7 +468,9 @@ noremap w e
 noremap W E
 
 " カーソルを行頭、行末で止まらないようにする
-set whichwrap=h,l,[,],<,>
+set whichwrap=b,s,[,],<,>
+nnoremap h <Left>
+nnoremap l <Right>
 
 " ビジュアルモード時の$は改行まで移動しない
 set selection=old
@@ -577,9 +611,7 @@ function! s:Rename()
     let filename = input('New filename: ', expand('%:p:h') . '/', 'file')
     if filename != '' && filename !=# 'file'
         execute 'file' filename
-        if !isdirectory(expand('%:p:h'))
-            call mkdir(expand('%:p:h'), 'p')
-        endif
+        s:Mkdir(expand('%:p:h'))
         write
         call delete(expand('#'))
     endif
@@ -589,9 +621,7 @@ endfunction
 command! -nargs=0 JunkFile call s:OpenJunkFile()
 function! s:OpenJunkFile()
     let junk_dir = $HOME . '/.vim_junk' . strftime('/%Y/%m')
-    if !isdirectory(junk_dir)
-        call mkdir(junk_dir, 'p')
-    endif
+    s:Mkdir(junk_dir)
     let filename = input('Junk name: ', junk_dir . strftime('/%Y-%m-%d-%H%M%S.'))
     if filename != ''
         execute 'edit ' . filename
@@ -622,19 +652,6 @@ nnoremap [Edit]<SPACE>v :vnew <C-r>=expand("%:p:h") . '/'<CR>
 
 " mkdirコマンド
 command! -nargs=1 Mkdir call s:Mkdir('<args>')
-function! s:Mkdir(dir)
-    if !isdirectory(a:dir)
-        call mkdir(a:dir, 'p')
-    endif
-endfunction
-
-" 保存時に存在しないディレクトリを自動で作成
-autocmd MyAutoCmd BufWritePre * call s:AutoMkdir(expand('<afile>:p:h'), v:cmdbang)
-function! s:AutoMkdir(dir, force)
-    if !isdirectory(a:dir) && (a:force || s:Confirm('"' . a:dir . '" does not exist. Create?'))
-        call mkdir(a:dir, 'p')
-    endif
-endfunction
 
 " }}}
 "=============================================================================
@@ -706,6 +723,9 @@ function! s:AllWipeout()
         endif
     endfor
 endfunction
+
+" 現在のバッファ名をヤンク
+nnoremap y% :<C-u>let @* = expand('%:p')<CR>
 
 " }}}
 "=============================================================================
@@ -860,8 +880,8 @@ set foldmethod=marker
 set foldcolumn=1
 
 " l/hで開閉
-nnoremap <expr> h col('.') == 1 && foldlevel(line('.')) > 0 ? 'zc' : 'h'
-nnoremap <expr> l foldclosed(line('.')) != -1 ? 'zo' : 'l'
+nnoremap <expr> h col('.') == 1 && foldlevel(line('.')) > 0 ? 'zc' : '<Left>'
+nnoremap <expr> l foldclosed(line('.')) != -1 ? 'zo' : '<Right>'
 
 " }}}
 "=============================================================================
@@ -949,10 +969,12 @@ nmap [Tag]z <C-w>z
 " バックアップファイル作成
 set backup
 set backupdir=$DOTVIM/tmp/backup
+call s:Mkdir(&backupdir)
 
 " スワップファイル作成
 set swapfile
 set directory=$DOTVIM/tmp/swap
+call s:Mkdir(&directory)
 
 " }}}
 "=============================================================================
@@ -1000,11 +1022,6 @@ endfunction
 if has('kaoriya') && s:iswin
     let g:dicwin_dictpath = substitute($DOTVIM, '\', '/', 'g') . '/dict/gene.txt'
 endif
-
-" 確認入力
-function! s:Confirm(msg)
-    return input(printf('%s [y/N]', a:msg)) =~? '^y\%[es]$'
-endfunction
 
 " }}}
 "=============================================================================
