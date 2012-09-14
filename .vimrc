@@ -54,6 +54,22 @@ function! s:Confirm(msg)
     return input(printf('%s [y/N]', a:msg)) =~? '^y\%[es]$'
 endfunction
 
+" バッファ名からパスを除いた名称を取得
+function! GetBufBasename(bufnr)
+    let bufname = bufname(a:bufnr)
+    if bufname == ''
+        let buftype = getbufvar(a:bufnr, '&buftype')
+        if buftype == ''
+            return '*No Name*'
+        elseif buftype ==# 'quickfix'
+            return '*Quickfix List*'
+        elseif buftype ==# 'nofile' || buftype ==# 'acwrite'
+            return '*Scratch*'
+        endif
+    endif
+    return fnamemodify(bufname, ':t')
+endfunction
+
 " }}}
 "=============================================================================
 " 文字コード設定 : {{{
@@ -142,7 +158,9 @@ endif
 set guioptions&
 set guioptions-=m
 set guioptions-=T
-set guioptions+=b
+set guioptions-=r
+set guioptions-=L
+set guioptions-=e
 
 " GUIフォント
 if s:iswin
@@ -189,7 +207,7 @@ endif
 
 " ステータスライン表示内容
 let &statusline = ''
-let &statusline .= '%{expand("%:t")}'
+let &statusline .= '%{GetBufBasename("")}'
 let &statusline .= '%h'
 let &statusline .= '%w'
 let &statusline .= '%m'
@@ -725,7 +743,7 @@ function! s:AllWipeout()
 endfunction
 
 " 現在のバッファ名をヤンク
-nnoremap y% :<C-u>let @* = expand('%:p')<CR>
+nnoremap <silent>y% :<C-u>let @* = expand('%:p')<CR>
 
 " }}}
 "=============================================================================
@@ -762,8 +780,27 @@ endfunction
 " タブバーは常に表示
 set showtabline=2
 
-" GUIラベル表示内容
-autocmd MyAutoCmd GUIEnter * set guitablabel=%t
+" タブライン表示内容
+set tabline=%!MyTabLine()
+function! MyTabLine()
+    let labels = map(range(1, tabpagenr('$')), 's:MyTabLabel(v:val)')
+    let tabs = join(labels, '') . '%#TabLineFill#%T'
+    let info = fnamemodify(getcwd(), ":~")
+    return tabs . '%=' . info
+endfunction
+function! s:MyTabLabel(n)
+    let curbufnr = tabpagebuflist(a:n)[tabpagewinnr(a:n) - 1]
+    let label = ''
+    let label .= '%' . a:n . 'T'
+    let label .= '%#' . (a:n == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
+    let label .= '[ '
+    let label .= getbufvar(curbufnr, '&modified') ? '+ ' : ''
+    let label .= GetBufBasename(curbufnr)
+    let label .= ' ]'
+    let label .= '%T'
+    let label .= '%#TabLineFill#'
+    return label
+endfunction
 
 " 次/前のタプ
 nnoremap <C-TAB> gt
@@ -826,6 +863,9 @@ function! s:Qfswitch()
     endfor
     cclose
 endfunction
+
+" QuickFixウィンドウのステータスラインをグローバルと同一に設定
+autocmd MyAutoCmd QuickfixCmdPost * set statusline<
 
 " php自動構文チェック
 autocmd MyAutoCmd FileType php setlocal makeprg=php\ -l\ %
