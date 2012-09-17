@@ -54,7 +54,7 @@ function! s:Confirm(msg)
     return input(printf('%s [y/N]', a:msg)) =~? '^y\%[es]$'
 endfunction
 
-" バッファ名からパスを除いた名称を取得
+" バッファ番号からbasenameを取得
 function! GetBufBasename(bufnr)
     let bufname = bufname(a:bufnr)
     if bufname == ''
@@ -195,31 +195,12 @@ else
     set t_vb=
 endif
 
-" ステータスラインを常に表示
-set laststatus=2
-
 " コマンドライン行数
 if has('gui_running')
     autocmd MyAutoCmd GUIEnter * set cmdheight=1
 else
     set cmdheight=1
 endif
-
-" ステータスライン表示内容
-let &statusline = ''
-let &statusline .= '%{GetBufBasename("")}'
-let &statusline .= '%h'
-let &statusline .= '%w'
-let &statusline .= '%m'
-let &statusline .= '%r'
-let &statusline .= ' (%<%{expand("%:p:~:h")}) '
-let &statusline .= '%='
-let &statusline .= '[HEX:%B]'
-let &statusline .= '[R:%l]'
-let &statusline .= '[C:%c]'
-let &statusline .= '%y'
-let &statusline .= '[%{&fileencoding != "" ? &fileencoding : &encoding}%{&bomb ? "(BOM)" : ""}]'
-let &statusline .= '[%{&fileformat}]'
 
 " 現在のモードを表示
 set showmode
@@ -261,31 +242,6 @@ endif
 
 " 全角入力時のカーソルの色を変更
 autocmd MyAutoCmd ColorScheme * highlight CursorIM cterm=NONE ctermfg=White ctermbg=LightRed gui=NONE guifg=#000000 guibg=#cc9999
-
-" インサートモード時のステータスバーの色を変更
-let g:hi_insert = 'highlight StatusLine gui=NONE guibg=#1f001f guifg=Tomato cterm=NONE ctermfg=Black ctermbg=DarkRed'
-if has('syntax')
-    autocmd MyAutoCmd InsertEnter * call s:StatusLine('Enter')
-    autocmd MyAutoCmd InsertLeave * call s:StatusLine('Leave')
-endif
-let s:slhlcmd = ''
-function! s:StatusLine(mode)
-    if a:mode == 'Enter'
-        silent! let s:slhlcmd = 'highlight ' . s:GetHighlight('StatusLine')
-        silent execute g:hi_insert
-    else
-        highlight clear StatusLine
-        silent execute s:slhlcmd
-    endif
-endfunction
-function! s:GetHighlight(hi)
-    redir => hl
-    execute 'highlight ' . a:hi
-    redir END
-    let hl = substitute(hl, '[\r\n]', '', 'g')
-    let hl = substitute(hl, 'xxx', '', '')
-    return hl
-endfunction
 
 " }}}
 "=============================================================================
@@ -487,8 +443,8 @@ noremap W E
 
 " カーソルを行頭、行末で止まらないようにする
 set whichwrap=b,s,[,],<,>
-nnoremap h <Left>
-nnoremap l <Right>
+noremap h <Left>
+noremap l <Right>
 
 " ビジュアルモード時の$は改行まで移動しない
 set selection=old
@@ -629,7 +585,6 @@ function! s:Rename()
     let filename = input('New filename: ', expand('%:p:h') . '/', 'file')
     if filename != '' && filename !=# 'file'
         execute 'file' filename
-        s:Mkdir(expand('%:p:h'))
         write
         call delete(expand('#'))
     endif
@@ -775,6 +730,54 @@ endfunction
 
 " }}}
 "=============================================================================
+" ステータスライン設定 : {{{
+
+" ステータスラインを常に表示
+set laststatus=2
+
+" ステータスライン表示内容
+let &statusline = ''
+let &statusline .= '%{GetBufBasename("")}'
+let &statusline .= '%h'
+let &statusline .= '%w'
+let &statusline .= '%m'
+let &statusline .= '%r'
+let &statusline .= ' (%<%{expand("%:p:~:h")}) '
+let &statusline .= '%='
+let &statusline .= '[HEX:%B]'
+let &statusline .= '[R:%l]'
+let &statusline .= '[C:%c]'
+let &statusline .= '%y'
+let &statusline .= '[%{&fileencoding != "" ? &fileencoding : &encoding}%{&bomb ? "(BOM)" : ""}]'
+let &statusline .= '[%{&fileformat}]'
+
+" インサートモード時のステータスラインの色を変更
+let g:hi_insert = 'highlight StatusLine gui=NONE guibg=#1f001f guifg=Tomato cterm=NONE ctermfg=Black ctermbg=DarkRed'
+if has('syntax')
+    autocmd MyAutoCmd InsertEnter * call s:StatusLine('Enter')
+    autocmd MyAutoCmd InsertLeave * call s:StatusLine('Leave')
+endif
+let s:slhlcmd = ''
+function! s:StatusLine(mode)
+    if a:mode == 'Enter'
+        silent! let s:slhlcmd = 'highlight ' . s:GetHighlight('StatusLine')
+        silent execute g:hi_insert
+    else
+        highlight clear StatusLine
+        silent execute s:slhlcmd
+    endif
+endfunction
+function! s:GetHighlight(hi)
+    redir => hl
+    execute 'highlight ' . a:hi
+    redir END
+    let hl = substitute(hl, '[\r\n]', '', 'g')
+    let hl = substitute(hl, 'xxx', '', '')
+    return hl
+endfunction
+
+" }}}
+"=============================================================================
 " タブ設定 : {{{
 
 " タブバーは常に表示
@@ -794,6 +797,7 @@ function! s:MyTabLabel(n)
     let label .= '%' . a:n . 'T'
     let label .= '%#' . (a:n == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
     let label .= '[ '
+    let label .= '#' . a:n . ' '
     let label .= getbufvar(curbufnr, '&modified') ? '+ ' : ''
     let label .= GetBufBasename(curbufnr)
     let label .= ' ]'
@@ -1315,6 +1319,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
         let url = 'http://www.google.co.jp/ig/calculator?q=' .  webapi#http#encodeURI(a:expr)
         let response = webapi#http#get(url).content
         let response = substitute(response, '\([a-z]\+\)\ze:', '"\1"', 'g')
+        let response = substitute(response, '\d\zs&#160;\ze\d', '', 'g')
         let response = substitute(response, '\\', '\\\\', 'g')
         let decoded_response = webapi#json#decode(response)
         if decoded_response.error != ''
