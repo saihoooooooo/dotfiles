@@ -793,9 +793,9 @@ set showtabline=2
 let &tabline = '%!'. s:SID() . 'MyTabLine()'
 function! MyTabLine()
     let labels = map(range(1, tabpagenr('$')), 's:MyTabLabel(v:val)')
-    let tabs = join(labels, '') . '%T'
-    let info = fnamemodify(getcwd(), ':~')
-    return tabs . '%=' . info
+    let info = ''
+    let info .= fnamemodify(getcwd(), ':~')
+    return join(labels, '') . '%T%=' . info
 endfunction
 function! s:MyTabLabel(n)
     let curbufnr = tabpagebuflist(a:n)[tabpagewinnr(a:n) - 1]
