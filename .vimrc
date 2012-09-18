@@ -193,14 +193,6 @@ if has('gui_running')
     endif
 endif
 
-" ビープ音を消去
-if has('gui_running')
-    autocmd MyAutoCmd GUIEnter * set visualbell t_vb=
-else
-    set visualbell
-    set t_vb=
-endif
-
 " コマンドライン行数
 if has('gui_running')
     autocmd MyAutoCmd GUIEnter * set cmdheight=1
@@ -299,6 +291,14 @@ if has('multi_byte_ime') || has('xim')
     set iminsert=0
     set imsearch=0
     inoremap <silent><ESC> <ESC>
+endif
+
+" ビープ音を消去
+if has('gui_running')
+    autocmd MyAutoCmd GUIEnter * set visualbell t_vb=
+else
+    set visualbell
+    set t_vb=
 endif
 
 " xを汎用キー化
