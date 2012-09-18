@@ -76,6 +76,14 @@ function! s:GetBufBasename(...)
     return fnamemodify(bufname, ':t')
 endfunction
 
+" ハイライトグループを取得
+function! s:GetHighlight(group_name)
+    redir => hl
+    execute 'highlight ' . a:group_name
+    redir END
+    return substitute(substitute(hl, '[\r\n]', '', 'g'), 'xxx', '', '')
+endfunction
+
 " }}}
 "=============================================================================
 " 文字コード設定 : {{{
@@ -758,28 +766,17 @@ let &statusline .= '[%{&fileencoding != "" ? &fileencoding : &encoding}%{&bomb ?
 let &statusline .= '[%{&fileformat}]'
 
 " インサートモード時のステータスラインの色を変更
-let g:hi_insert = 'highlight StatusLine gui=NONE guibg=#1f001f guifg=Tomato cterm=NONE ctermfg=Black ctermbg=DarkRed'
-if has('syntax')
-    autocmd MyAutoCmd InsertEnter * call s:StatusLine('Enter')
-    autocmd MyAutoCmd InsertLeave * call s:StatusLine('Leave')
-endif
-let s:slhlcmd = ''
-function! s:StatusLine(mode)
-    if a:mode == 'Enter'
-        silent! let s:slhlcmd = 'highlight ' . s:GetHighlight('StatusLine')
-        silent execute g:hi_insert
+autocmd MyAutoCmd InsertEnter * call s:SwitchStatusLine(1)
+autocmd MyAutoCmd InsertLeave * call s:SwitchStatusLine(0)
+let s:hl_statusline = ''
+function! s:SwitchStatusLine(insert)
+    if a:insert
+        silent! let s:hl_statusline = s:GetHighlight('StatusLine')
+        execute 'highlight StatusLine guibg=#aa4400 guifg=#000000 ctermfg=DarkRed ctermbg=Black'
     else
         highlight clear StatusLine
-        silent execute s:slhlcmd
+        execute 'highlight ' . s:hl_statusline
     endif
-endfunction
-function! s:GetHighlight(hi)
-    redir => hl
-    execute 'highlight ' . a:hi
-    redir END
-    let hl = substitute(hl, '[\r\n]', '', 'g')
-    let hl = substitute(hl, 'xxx', '', '')
-    return hl
 endfunction
 
 " }}}
@@ -791,7 +788,7 @@ set showtabline=2
 
 " タブライン表示内容
 let &tabline = '%!'. s:SID() . 'MyTabLine()'
-function! MyTabLine()
+function! s:MyTabLine()
     let labels = map(range(1, tabpagenr('$')), 's:MyTabLabel(v:val)')
     let info = ''
     let info .= fnamemodify(getcwd(), ':~')
@@ -863,8 +860,8 @@ nnoremap [QuickFix]r :<C-u>crewind<CR>
 nnoremap [QuickFix]l :<C-u>clast<CR>
 
 " QuickFixリストが生成されたら自動で開く
-autocmd MyAutoCmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd call s:Qfswitch()
-function! s:Qfswitch()
+autocmd MyAutoCmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd call s:AutoQf()
+function! s:AutoQf()
     for i in getqflist()
         if i['valid'] == 1
             copen
