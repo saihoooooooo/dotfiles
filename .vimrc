@@ -787,7 +787,8 @@ set showtabline=2
 set tabline=%!MyTabLine()
 function! MyTabLine()
     let labels = map(range(1, tabpagenr('$')), 's:MyTabLabel(v:val)')
-    let tabs = join(labels, '') . '%#TabLineFill#%T'
+    let tabs = join(labels, '') . '%T'
+    echo tabs
     let info = fnamemodify(getcwd(), ":~")
     return tabs . '%=' . info
 endfunction
@@ -797,11 +798,11 @@ function! s:MyTabLabel(n)
     let label .= '%' . a:n . 'T'
     let label .= '%#' . (a:n == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
     let label .= ' '
-    let label .= '#' . a:n . ' '
+    let label .= '#' . a:n
+    let label .= ' '
     let label .= getbufvar(curbufnr, '&modified') ? '+' : ''
     let label .= GetBufBasename(curbufnr)
     let label .= ' '
-    let label .= '%T'
     let label .= '%#TabLineFill#'
     return label
 endfunction
