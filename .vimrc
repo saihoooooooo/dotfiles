@@ -44,7 +44,7 @@ autocmd MyAutoCmd VimEnter * nested if @% == '' | edit $MYVIMRC | endif
 
 " SID取得
 function! s:SID()
-  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
+    return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID$')
 endfunction
 
 " 存在確認＆ディレクトリ作成
@@ -60,10 +60,11 @@ function! s:Confirm(msg)
 endfunction
 
 " バッファ番号からbasenameを取得
-function! s:GetBufBasename(bufnr)
-    let bufname = bufname(a:bufnr)
+function! s:GetBufBasename(...)
+    let bufnr = a:0 ? a:1 : ''
+    let bufname = bufname(bufnr)
     if bufname == ''
-        let buftype = getbufvar(a:bufnr, '&buftype')
+        let buftype = getbufvar(bufnr, '&buftype')
         if buftype == ''
             return '[No Name]'
         elseif buftype ==# 'quickfix'
@@ -742,7 +743,7 @@ set laststatus=2
 
 " ステータスライン表示内容
 let &statusline = ''
-let &statusline .= '%{' . s:SID() . 'GetBufBasename("")}'
+let &statusline .= '%{' . s:SID() . 'GetBufBasename()}'
 let &statusline .= '%h'
 let &statusline .= '%w'
 let &statusline .= '%m'
