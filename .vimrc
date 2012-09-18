@@ -60,11 +60,11 @@ function! GetBufBasename(bufnr)
     if bufname == ''
         let buftype = getbufvar(a:bufnr, '&buftype')
         if buftype == ''
-            return '*No Name*'
+            return '[No Name]'
         elseif buftype ==# 'quickfix'
-            return '*Quickfix List*'
+            return '[Quickfix List]'
         elseif buftype ==# 'nofile' || buftype ==# 'acwrite'
-            return '*Scratch*'
+            return '[Scratch]'
         endif
     endif
     return fnamemodify(bufname, ':t')
