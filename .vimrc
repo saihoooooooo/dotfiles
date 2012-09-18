@@ -798,7 +798,7 @@ function! s:MyTabLabel(n)
     let label .= '%#' . (a:n == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
     let label .= ' '
     let label .= '#' . a:n . ' '
-    let label .= getbufvar(curbufnr, '&modified') ? '+ ' : ''
+    let label .= getbufvar(curbufnr, '&modified') ? '+' : ''
     let label .= GetBufBasename(curbufnr)
     let label .= ' '
     let label .= '%T'
