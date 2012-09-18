@@ -788,7 +788,6 @@ set tabline=%!MyTabLine()
 function! MyTabLine()
     let labels = map(range(1, tabpagenr('$')), 's:MyTabLabel(v:val)')
     let tabs = join(labels, '') . '%T'
-    echo tabs
     let info = fnamemodify(getcwd(), ":~")
     return tabs . '%=' . info
 endfunction
