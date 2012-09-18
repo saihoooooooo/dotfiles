@@ -42,6 +42,11 @@ autocmd MyAutoCmd VimEnter * nested if @% == '' | edit $MYVIMRC | endif
 "=============================================================================
 " 共通関数設定 : {{{
 
+" SID取得
+function! s:SID()
+  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
+endfunction
+
 " 存在確認＆ディレクトリ作成
 function! s:Mkdir(dir)
     if !isdirectory(a:dir)
@@ -55,7 +60,7 @@ function! s:Confirm(msg)
 endfunction
 
 " バッファ番号からbasenameを取得
-function! GetBufBasename(bufnr)
+function! s:GetBufBasename(bufnr)
     let bufname = bufname(a:bufnr)
     if bufname == ''
         let buftype = getbufvar(a:bufnr, '&buftype')
@@ -737,7 +742,7 @@ set laststatus=2
 
 " ステータスライン表示内容
 let &statusline = ''
-let &statusline .= '%{GetBufBasename("")}'
+let &statusline .= '%{' . s:SID() . 'GetBufBasename("")}'
 let &statusline .= '%h'
 let &statusline .= '%w'
 let &statusline .= '%m'
@@ -784,11 +789,11 @@ endfunction
 set showtabline=2
 
 " タブライン表示内容
-set tabline=%!MyTabLine()
+let &tabline = '%!'. s:SID() . 'MyTabLine()'
 function! MyTabLine()
     let labels = map(range(1, tabpagenr('$')), 's:MyTabLabel(v:val)')
     let tabs = join(labels, '') . '%T'
-    let info = fnamemodify(getcwd(), ":~")
+    let info = fnamemodify(getcwd(), ':~')
     return tabs . '%=' . info
 endfunction
 function! s:MyTabLabel(n)
@@ -800,7 +805,7 @@ function! s:MyTabLabel(n)
     let label .= '#' . a:n
     let label .= ' '
     let label .= getbufvar(curbufnr, '&modified') ? '+' : ''
-    let label .= GetBufBasename(curbufnr)
+    let label .= s:GetBufBasename(curbufnr)
     let label .= ' '
     let label .= '%#TabLineFill#'
     return label
