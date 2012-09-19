@@ -608,7 +608,7 @@ endfunction
 command! -nargs=0 JunkFile call s:OpenJunkFile()
 function! s:OpenJunkFile()
     let junk_dir = $HOME . '/.vim_junk' . strftime('/%Y/%m')
-    s:Mkdir(junk_dir)
+    call s:Mkdir(junk_dir)
     let filename = input('Junk name: ', junk_dir . strftime('/%Y-%m-%d-%H%M%S.'))
     if filename != ''
         execute 'edit ' . filename
