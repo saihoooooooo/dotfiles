@@ -234,7 +234,7 @@ set listchars=tab:>\ ,trail:-,nbsp:%,precedes:<
 
 " 全角スペースを視覚化
 autocmd MyAutoCmd VimEnter,WinEnter * match IdeographicSpace /　/
-if (has('gui_running'))
+if has('gui_running')
     autocmd MyAutoCmd GUIEnter,ColorScheme * highlight IdeographicSpace term=underline ctermbg=Gray guibg=Gray50
 else
     highlight IdeographicSpace term=underline ctermbg=Gray guibg=Gray50
@@ -655,8 +655,8 @@ autocmd MyAutoCmd TabEnter * if exists('t:cwd') | execute "cd" fnameescape(t:cwd
 autocmd MyAutoCmd TabLeave * let t:cwd = getcwd()
 autocmd MyAutoCmd BufEnter * if !exists('t:cwd') | call InitTabpageCd() | endif
 function! InitTabpageCd()
-    if (!has('vim_starting'))
-        if (@% != '')
+    if !has('vim_starting')
+        if @% != ''
             let curdir = input('Current directory: ', expand("%:p:h"), 'file')
             silent! cd `=fnameescape(curdir)`
         else
@@ -665,6 +665,9 @@ function! InitTabpageCd()
     endif
     let t:cwd = getcwd()
 endfunction
+
+" 現在のバッファ名をヤンク
+nnoremap <silent>y% :<C-u>let @* = expand('%:p')<CR>
 
 " カレントバッファの情報を表示
 nnoremap <silent><C-g> :<C-u>call <SID>BufInfo()<CR>
@@ -678,8 +681,21 @@ function! s:BufInfo()
     echo '[ fsize ] ' . (line2byte(line('$') + 1) - 1) . ' bytes'
 endfunction
 
+" 現在のバッファを削除
+nnoremap <silent><S-BS> :<C-u>bwipeout!<CR>
+
+" 全バッファを削除
+command! -nargs=0 AllWipeout call s:AllWipeout()
+function! s:AllWipeout()
+    for i in range(1, bufnr('$'))
+        if bufexists(i)
+            execute 'bwipeout ' . i
+        endif
+    endfor
+endfunction
+
 " ウィンドウのレイアウトを崩さずにバッファを閉じる
-nnoremap <silent><BS> :<C-u>call <SID>BdKeepWin()<CR>
+command! -nargs=0 BdKeepWin call s:BdKeepWin()
 function! s:BdKeepWin()
     if bufname('%') != ''
         let curbuf = bufnr('%')
@@ -698,22 +714,6 @@ function! s:BdKeepWin()
     endif
 endfunction
 
-" 現在のバッファを削除
-nnoremap <silent><S-BS> :<C-u>bwipeout!<CR>
-
-" 全バッファを削除
-command! -nargs=0 AllWipeout call s:AllWipeout()
-function! s:AllWipeout()
-    for i in range(1, bufnr('$'))
-        if bufexists(i)
-            execute 'bwipeout ' . i
-        endif
-    endfor
-endfunction
-
-" 現在のバッファ名をヤンク
-nnoremap <silent>y% :<C-u>let @* = expand('%:p')<CR>
-
 " }}}
 "=============================================================================
 " ウィンドウ設定 : {{{
@@ -723,6 +723,9 @@ set equalalways
 
 " サイズ調整は幅と高さ
 set eadirection=both
+
+" ウィンドウを閉じる
+nnoremap <BS> <C-w>c
 
 " ウィンドウを最大化
 nnoremap <C-w>o <C-w>_<C-w>\|
@@ -880,7 +883,7 @@ autocmd MyAutoCmd FileType php setlocal errorformat=%m\ in\ %f\ on\ line\ %l,%-G
 autocmd MyAutoCmd BufWritePost *.php silent make
 
 " grep
-set grepprg=grep\ -iHn
+set grepprg=grep\ -Hnd\ skip
 set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m
 
 " }}}
@@ -927,8 +930,8 @@ set foldmethod=marker
 set foldcolumn=1
 
 " l/hで開閉
-nnoremap <expr> h col('.') == 1 && foldlevel(line('.')) > 0 ? 'zc' : '<Left>'
-nnoremap <expr> l foldclosed(line('.')) != -1 ? 'zo' : '<Right>'
+nnoremap <expr>h col('.') == 1 && foldlevel(line('.')) > 0 ? 'zc' : '<Left>'
+nnoremap <expr>l foldclosed(line('.')) != -1 ? 'zo' : '<Right>'
 
 " }}}
 "=============================================================================
