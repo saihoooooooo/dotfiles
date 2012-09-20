@@ -4,7 +4,7 @@
 " vi互換をOFF
 set nocompatible
 
-" ファイルタイププラグイン
+" filettypeプラグイン
 filetype plugin on
 
 " ファイルタイプインデント
