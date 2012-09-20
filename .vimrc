@@ -516,8 +516,8 @@ nnoremap <silent>* viw"zy:<C-u>let @/ = '\V' . escape(@z, '/\')<CR>:set hlsearch
 vnoremap <silent>* "zy:<C-u>let @/ = '\V' . escape(@z, '/\')<CR>:set hlsearch<CR>
 
 " '/'と'?'を自動エスケープ
-cnoremap <expr>/  getcmdtype() == '/' ? '\/' : '/'
-cnoremap <expr>?  getcmdtype() == '?' ? '\?' : '?'
+cnoremap <expr>/ getcmdtype() == '/' ? '\/' : '/'
+cnoremap <expr>? getcmdtype() == '?' ? '\?' : '?'
 
 " 選択範囲内の検索
 vnoremap <silent>/ :<C-u>call <SID>RangeSearch('/')<CR>
@@ -1172,27 +1172,27 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     let g:unite_source_alignta_preset_arguments = [
     \     ["Align at '='", '=>\='],
     \     ["Align at ':'", '01 :'],
-    \     ["Align at '|'", '|'   ],
-    \     ["Align at '/'", '/\//' ],
-    \     ["Align at ','", ','   ],
+    \     ["Align at '|'", '|'],
+    \     ["Align at '/'", '/\//'],
+    \     ["Align at ','", ','],
     \ ]
 
     " オプション設定
     nnoremap <silent>[Unite]a :<C-u>Unite alignta:options<CR>
     let s:comment_leadings = '^\s*\("\|#\|/\*\|//\|<!--\)'
     let g:unite_source_alignta_preset_options = [
-    \     ["Justify Left",      '<<' ],
-    \     ["Justify Center",    '||' ],
-    \     ["Justify Right",     '>>' ],
-    \     ["Justify None",      '==' ],
-    \     ["Shift Left",        '<-' ],
-    \     ["Shift Right",       '->' ],
-    \     ["Shift Left  [Tab]", '<--'],
+    \     ["Justify Left", '<<'],
+    \     ["Justify Center", '||'],
+    \     ["Justify Right", '>>'],
+    \     ["Justify None", '=='],
+    \     ["Shift Left", '<-'],
+    \     ["Shift Right", '->'],
+    \     ["Shift Left [Tab]", '<--'],
     \     ["Shift Right [Tab]", '-->'],
-    \     ["Margin 0:0",        '0'  ],
-    \     ["Margin 0:1",        '01' ],
-    \     ["Margin 1:0",        '10' ],
-    \     ["Margin 1:1",        '1'  ],
+    \     ["Margin 0:0", '0'],
+    \     ["Margin 0:1", '01'],
+    \     ["Margin 1:0", '10'],
+    \     ["Margin 1:1", '1'],
     \     'v/' . s:comment_leadings,
     \     'g/' . s:comment_leadings,
     \ ]
@@ -1322,14 +1322,14 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     " Google電卓
     command! -bang -nargs=+ GCalc call GCalc(<q-args>, <bang>0)
     function! GCalc(expr, banged)
-        let url = 'http://www.google.co.jp/ig/calculator?q=' .  webapi#http#encodeURI(a:expr)
+        let url = 'http://www.google.co.jp/ig/calculator?q=' . webapi#http#encodeURI(a:expr)
         let response = webapi#http#get(url).content
         let response = substitute(response, '\([a-z]\+\)\ze:', '"\1"', 'g')
         let response = substitute(response, '\d\zs&#160;\ze\d', '', 'g')
         let response = substitute(response, '\\', '\\\\', 'g')
         let decoded_response = webapi#json#decode(response)
         if decoded_response.error != ''
-            echohl ErrorMsg | echo 'ERROR:' decoded_response.error |  echohl None
+            echohl ErrorMsg | echo 'ERROR:' decoded_response.error | echohl None
             return
         endif
         if !a:banged
