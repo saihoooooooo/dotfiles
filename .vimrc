@@ -4,10 +4,10 @@
 " vi互換をOFF
 set nocompatible
 
-" ファイルタイププラグイン
+" filetypeプラグイン
 filetype plugin on
 
-" ファイルタイプインデント
+" filetypeインデント
 filetype indent on
 
 " augroup設定
@@ -585,12 +585,12 @@ if s:iswin
     " set shellslash
 endif
 
-" 拡張子毎のファイルタイプ指定
+" 拡張子毎のfiletype指定
 autocmd MyAutoCmd BufRead,BufNewFile *.ctp set filetype=php
 autocmd MyAutoCmd BufRead,BufNewFile *.jade set filetype=jade
 autocmd MyAutoCmd BufRead,BufNewFile *.coffee set filetype=coffee
 
-" 手動ファイルタイプ設定
+" 手動filetype設定
 nnoremap xof :set filetype=
 
 " 編集中ファイルのリネーム
@@ -1415,7 +1415,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     " unite source
     nnoremap [Unite]<SPACE> :<C-u>Unite source -no-split<CR>
 
-    " uniteファイルタイプ設定
+    " filetype設定
     autocmd MyAutoCmd FileType unite call s:UniteMySetting()
     function! s:UniteMySetting()
         " 入力欄にフォーカス
@@ -1524,7 +1524,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     " vimfilerを開く
     nnoremap xf :<C-u>VimFiler -simple -winwidth=45 -no-quit -split<CR>
 
-    " vimfilerファイルタイプ設定
+    " filetype設定
     autocmd MyAutoCmd FileType vimfiler call s:VimfilerMySetting()
     function! s:VimfilerMySetting()
         " ドットファイルを表示
@@ -1577,7 +1577,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     \     'runner/vimproc/updatetime' : 50,
     \ }
 
-    " 各ファイルタイプ設定
+    " 各filetype設定
     let g:quickrun_config.javascript = {
     \     'command' : 'node',
     \ }
