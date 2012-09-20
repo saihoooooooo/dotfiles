@@ -585,7 +585,7 @@ if s:iswin
     " set shellslash
 endif
 
-" 拡張子毎のfiletype指定
+" 拡張子毎のファイルタイプ指定
 autocmd MyAutoCmd BufRead,BufNewFile *.ctp set filetype=php
 autocmd MyAutoCmd BufRead,BufNewFile *.jade set filetype=jade
 autocmd MyAutoCmd BufRead,BufNewFile *.coffee set filetype=coffee
@@ -803,7 +803,7 @@ function! s:MyTabLabel(n)
     let label .= '%' . a:n . 'T'
     let label .= '%#' . (a:n == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
     let label .= ' '
-    let label .= '#' . a:n
+    let label .= a:n . ':'
     let label .= ' '
     let label .= getbufvar(curbufnr, '&modified') ? '+' : ''
     let label .= s:GetBufBasename(curbufnr)
@@ -1568,10 +1568,24 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 "=============================================================================
 " vim-quickrun : {{{
 
-    " 実行コマンド設定
+    " 初期化
     let g:quickrun_config = {}
-    let g:quickrun_config.javascript = {'command': 'node'}
-    let g:quickrun_config.coffee = {'command': 'coffee', 'exec': '%c -cbp %s', 'outputter/buffer/filetype': 'javascript'}
+
+    " vimprocにて非同期実行を行う
+    let g:quickrun_config._ = {
+    \     'runner' : 'vimproc',
+    \     'runner/vimproc/updatetime' : 50,
+    \ }
+
+    " 各ファイルタイプ設定
+    let g:quickrun_config.javascript = {
+    \     'command' : 'node',
+    \ }
+    let g:quickrun_config.coffee = {
+    \     'command' : 'coffee',
+    \     'exec' : '%c -cbp %s',
+    \     'outputter/buffer/filetype' : 'javascript',
+    \ }
 
 " }}}
 "=============================================================================
