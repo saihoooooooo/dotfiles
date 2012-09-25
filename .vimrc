@@ -178,7 +178,7 @@ set guioptions-=e
 
 " GUIフォント
 if s:iswin
-    autocmd MyAutoCmd GUIEnter * set guifont=MS_Gothic:h10:cSHIFTJIS
+    autocmd MyAutoCmd GUIEnter * set guifont=Source_Code_Pro:h10:w6:cDEFAULT
 else
     autocmd MyAutoCmd GUIEnter * set guifont=Osaka-Mono:h14
 endif
@@ -243,7 +243,7 @@ endif
 
 " 全角文字表示幅
 if exists('&ambiwidth')
-    set ambiwidth=double
+    autocmd MyAutoCmd GUIEnter * set ambiwidth=double
 endif
 
 " 全角入力時のカーソルの色を変更
