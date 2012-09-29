@@ -1040,6 +1040,7 @@ nnoremap <silent>[Option]n :<C-u>call <SID>ToggleOption('number')<CR>
 nnoremap <silent>[Option]r :<C-u>call <SID>ToggleOption('readonly')<CR>
 nnoremap <silent>[Option]w :<C-u>call <SID>ToggleOption('wrap')<CR>
 nnoremap <silent>[Option]/ :<C-u>call <SID>ToggleOption('wrapscan')<CR>
+nnoremap <silent>[Option]p :<C-u>call <SID>ToggleOption('paste')<CR>
 function! s:ToggleOption(option)
     if has_key(g:toggle_option_extra, a:option)
         for e in g:toggle_option_extra[a:option]
