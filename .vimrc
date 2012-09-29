@@ -1345,16 +1345,21 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     " キーマップ
     let g:user_zen_leader_key = '<C-z>'
 
+    " 初期化
+    let g:user_zen_settings = {}
+
+    " 言語設定
+    let g:user_zen_settings.lang = 'ja'
+
     " インデント設定
-    let g:user_zen_settings = {
-    \     'lang' : 'ja',
-    \     'indentation' : '    ',
-    \     'html' : {
-    \         'filters' : 'html',
-    \         'snippets' : {
-    \             'jq' : "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js\"></script>\n<script>\n\\$(function() {\n\t|\n})();\n</script>",
-    \             'cd' : "<![CDATA[|]]>",
-    \         },
+    let g:user_zen_settings.indentation = '    '
+
+    " 各filetype設定
+    let g:user_zen_settings.html = {
+    \     'filters' : 'html',
+    \     'snippets' : {
+    \         'jq' : "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js\"></script>\n<script>\n\\$(function() {\n\t|\n})();\n</script>",
+    \         'cd' : "<![CDATA[|]]>",
     \     },
     \ }
 
@@ -1362,8 +1367,10 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 "=============================================================================
 " vim-auto-colorscheme : {{{
 
-    " colorscheme設定
+    " デフォルトカラースキーム
     let g:auto_colorscheme_default = 'nevfn'
+
+    " 自動colorscheme設定
     let g:auto_colorscheme_config = [
     \     ['\~/\.vimperatorrc', 'dusk'],
     \     ['\.js$', 'oceandeep'],
@@ -1591,15 +1598,15 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 "=============================================================================
 " vim-ref : {{{
 
-    " phpマニュアルパス
-    let g:ref_phpmanual_path = $DOTVIM . '/ref/php/php-chunked-xhtml/'
-
-    " html表示コマンド
+    " 表示コマンド
     if s:iswin
         let g:ref_phpmanual_cmd = 'lynx -dump %s -cfg=C:/lynx.cfg'
     else
         let g:ref_phpmanual_cmd = 'w3m -dump %s'
     endif
+
+    " phpマニュアルパス
+    let g:ref_phpmanual_path = $DOTVIM . '/ref/php/php-chunked-xhtml/'
 
 " }}}
 "=============================================================================
@@ -1627,7 +1634,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 " TwitVim : {{{
 
     " 取得数
-    let twitvim_count = 100
+    let twitvim_count = 256
 
 " }}}
 "=============================================================================
