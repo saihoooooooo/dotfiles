@@ -242,7 +242,7 @@ else
 endif
 
 " 全角文字表示幅
-if exists('&ambiwidth')
+if exists('+ambiwidth')
     autocmd MyAutoCmd GUIEnter * set ambiwidth=double
 endif
 
@@ -628,10 +628,10 @@ endif
 " 各種ファイルオープン
 nnoremap [Edit] <Nop>
 nmap e [Edit]
-nnoremap [Edit]e :edit 
-nnoremap [Edit]n :new 
-nnoremap [Edit]t :tabedit 
-nnoremap [Edit]v :vnew 
+nnoremap [Edit]e :edit<SPACE>
+nnoremap [Edit]n :new<SPACE>
+nnoremap [Edit]t :tabedit<SPACE>
+nnoremap [Edit]v :vnew<SPACE>
 nnoremap [Edit]<SPACE>e :edit <C-r>=expand("%:p:h") . '/'<CR>
 nnoremap [Edit]<SPACE>n :new <C-r>=expand("%:p:h") . '/'<CR>
 nnoremap [Edit]<SPACE>t :tabedit <C-r>=expand("%:p:h") . '/'<CR>
