@@ -638,7 +638,7 @@ nnoremap [Edit]<SPACE>t :tabedit <C-r>=expand("%:p:h") . '/'<CR>
 nnoremap [Edit]<SPACE>v :vnew <C-r>=expand("%:p:h") . '/'<CR>
 
 " mkdirコマンド
-command! -nargs=1 Mkdir call s:Mkdir('<args>')
+command! -nargs=1 -complete=file Mkdir call s:Mkdir('<args>')
 
 " }}}
 "=============================================================================
