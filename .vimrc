@@ -56,7 +56,7 @@ endfunction
 
 " 確認メッセージ
 function! s:Confirm(msg)
-    return input(printf('%s [y/N]', a:msg)) =~? '^y\%[es]$'
+    return input(printf('%s [y/N]: ', a:msg)) =~? '^y\%[es]$'
 endfunction
 
 " バッファ番号からbasenameを取得
@@ -230,7 +230,7 @@ set showmatch
 
 " <TAB>、行末スペース、スクロール中の行頭文字の可視化
 set list
-set listchars=tab:>\ ,trail:-,nbsp:%,precedes:<
+set listchars=tab:>\ ,trail:-,nbsp:%,extends:>,precedes:<
 
 " 全角スペースを視覚化
 autocmd MyAutoCmd VimEnter,WinEnter * match IdeographicSpace /　/
@@ -638,7 +638,7 @@ nnoremap [Edit]<SPACE>t :tabedit <C-r>=expand("%:p:h") . '/'<CR>
 nnoremap [Edit]<SPACE>v :vnew <C-r>=expand("%:p:h") . '/'<CR>
 
 " mkdirコマンド
-command! -nargs=1 -complete=file Mkdir call s:Mkdir('<args>')
+command! -nargs=1 -complete=file Mkdir call s:Mkdir(<q-args>)
 
 " }}}
 "=============================================================================
