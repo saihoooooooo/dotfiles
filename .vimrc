@@ -29,13 +29,13 @@ else
     let $DOTVIM = $HOME."/.vim"
 endif
 
-" vimrcを開く
+" .vimrcを開く
 nnoremap <silent>vv :<C-u>edit $MYVIMRC<CR>
 
-" vimrc変更時は自動で再読み込み
+" .vimrc保存時は自動で再読み込み
 autocmd MyAutoCmd BufWritePost $MYVIMRC source $MYVIMRC
 
-" 起動時にvimrcを開く
+" 起動時に.vimrcを開く
 autocmd MyAutoCmd VimEnter * nested if @% == '' | edit $MYVIMRC | endif
 
 " }}}
@@ -82,6 +82,13 @@ function! s:GetHighlight(group_name)
     execute 'highlight ' . a:group_name
     redir END
     return substitute(substitute(hl, '[\r\n]', '', 'g'), 'xxx', '', '')
+endfunction
+
+" コマンド実行後の表示状態を維持する
+function! s:ExecuteKeepView(expr)
+    let wininfo = winsaveview()
+    execute a:expr
+    call winrestview(wininfo)
 endfunction
 
 " }}}
@@ -322,14 +329,14 @@ function! s:Eatchar(pattern)
 endfunction
 
 " テキストオブジェクト簡易入力
-xnoremap ia i<
-onoremap ia i<
-xnoremap aa a<
 onoremap aa a<
-xnoremap ir i[
-onoremap ir i[
-xnoremap ar a[
+xnoremap aa a<
+onoremap ia i<
+xnoremap ia i<
 onoremap ar a[
+xnoremap ar a[
+onoremap ir i[
+xnoremap ir i[
 
 " 番号付きリストを作成
 nnoremap <silent>xl :<C-u>call <SID>MakeOrderedList()<CR>
@@ -358,23 +365,20 @@ nnoremap <silent><S-CR> :<C-u>call append('.', '')<CR>j
 nnoremap <C-CR> i<CR><ESC>
 
 " コメントを継続しない
-autocmd MyAutoCmd FileType * setlocal formatoptions-=o formatoptions-=r
-
-" 自動折返しを行わない
-autocmd MyAutoCmd FileType * setlocal formatoptions-=t
+autocmd MyAutoCmd FileType * setlocal formatoptions& formatoptions-=o formatoptions-=r
 
 " インサートモード中の履歴保存
 inoremap <C-u> <C-g>u<C-u>
 inoremap <C-w> <C-g>u<C-w>
 
 " ^Mを取り除く
-command! RemoveCr :silent! normal! :%substitute/<C-v><CR>//g<CR>:nohlsearch<CR>``
+command! RemoveCr call s:ExecuteKeepView('silent! %substitute/\r$//g | nohlsearch')
 
 " 行末のスペースを取り除く
-command! RemoveEolSpace :silent! normal! :%substitute/ \+$//g<CR>:nohlsearch<CR>``
+command! RemoveEolSpace call s:ExecuteKeepView('silent! %substitute/ \+$//g | nohlsearch')
 
 " 空行を取り除く
-command! RemoveBlankLine :silent! normal! :%substitute/^\n//g<CR>:nohlsearch<CR>``
+command! RemoveBlankLine silent! %global/^$/delete | nohlsearch | normal! ``
 
 " 手動コメントアウト
 noremap [Comment] <Nop>
@@ -547,6 +551,12 @@ set wildmenu
 " 補完モード
 set wildmode=longest,list,full
 
+" 入力中コマンドを表示
+set showcmd
+
+" 履歴保存数
+set history=1000
+
 " Emacs風キーバインド
 :cnoremap <C-a> <Home>
 :cnoremap <C-e> <End>
@@ -560,9 +570,6 @@ cnoremap <C-p> <Up>
 cnoremap <Up> <C-p>
 cnoremap <C-n> <Down>
 cnoremap <Down> <C-n>
-
-" 入力中コマンドを表示
-set showcmd
 
 " コマンドの出力を別ウィンドウで開く
 command! -nargs=+ -complete=command Capture silent call s:CmdCapture(<q-args>)
@@ -621,10 +628,6 @@ function! s:OpenJunkFile()
         execute 'edit ' . filename
     endif
 endfunction
-
-" gfは別ウィンドウで開く
-nnoremap gf <C-w>F
-xnoremap gf <C-w>F
 
 " ファイル/パス名判定文字
 if s:iswin
@@ -1219,16 +1222,16 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 " vim-operator-user : {{{
 
     " 検索オペレータ
-    map x/ <Plug>(operator-search)
-    call operator#user#define('search', 'OperatorSearch')
-    function! OperatorSearch(motion_wise)
-        if a:motion_wise == 'char'
-            silent normal! `[v`]"zy
-            let @/ = @z
-            set hlsearch
-            redraw
-        endif
-    endfunction
+    " map x/ <Plug>(operator-search)
+    " call operator#user#define('search', 'OperatorSearch')
+    " function! OperatorSearch(motion_wise)
+        " if a:motion_wise == 'char'
+            " silent normal! `[v`]"zy
+            " let @/ = @z
+            " set hlsearch
+            " redraw
+        " endif
+    " endfunction
 
 " }}}
 "=============================================================================
@@ -1266,9 +1269,9 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 "=============================================================================
 " vim-textobj-entire : {{{
 
-    " 全行コピー
-    nmap yie yie`'
-    nmap yae yae`'
+    " カーソル行を保持したまま全行コピーする
+    nnoremap <silent>yie :<C-u>call <SID>ExecuteKeepView("normal y\<Plug>(textobj-entire-i)")<CR>
+    nnoremap <silent>yae :<C-u>call <SID>ExecuteKeepView("normal y\<Plug>(textobj-entire-a)")<CR>
 
 " }}}
 "=============================================================================
