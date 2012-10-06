@@ -852,15 +852,15 @@ nnoremap [QuickFix] <Nop>
 nmap <C-c> [QuickFix]
 
 " 開く/閉じる
-nnoremap [QuickFix]w :<C-u>cwindow<CR>
-nnoremap [QuickFix]o :<C-u>copen<CR>
-nnoremap [QuickFix]c :<C-u>cclose<CR>
+nnoremap <silent>[QuickFix]w :<C-u>cwindow<CR>
+nnoremap <silent>[QuickFix]o :<C-u>copen<CR>
+nnoremap <silent>[QuickFix]c :<C-u>cclose<CR>
 
 " 進む/戻る/先頭/最後
-nnoremap [QuickFix]n :<C-u>cnext<CR>
-nnoremap [QuickFix]p :<C-u>cprevious<CR>
-nnoremap [QuickFix]r :<C-u>crewind<CR>
-nnoremap [QuickFix]l :<C-u>clast<CR>
+nnoremap <silent>[QuickFix]n :<C-u>cnext<CR>
+nnoremap <silent>[QuickFix]p :<C-u>cprevious<CR>
+nnoremap <silent>[QuickFix]r :<C-u>crewind<CR>
+nnoremap <silent>[QuickFix]l :<C-u>clast<CR>
 
 " QuickFixリストが生成されたら自動で開く
 autocmd MyAutoCmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd call s:AutoQf()
@@ -1091,11 +1091,11 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     endif
 
     " plugin
-    NeoBundle 'git://github.com/akiyan/vim-textobj-php.git'
     NeoBundle 'git://github.com/anyakichi/vim-surround.git'
     NeoBundle 'git://github.com/digitaltoad/vim-jade.git'
     NeoBundle 'git://github.com/h1mesuke/unite-outline.git'
     NeoBundle 'git://github.com/h1mesuke/vim-alignta.git'
+    NeoBundle 'git://github.com/kana/vim-niceblock.git'
     NeoBundle 'git://github.com/kana/vim-operator-replace.git'
     NeoBundle 'git://github.com/kana/vim-operator-user.git'
     NeoBundle 'git://github.com/kana/vim-smartinput.git'
@@ -1201,6 +1201,12 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
 " }}}
 "=============================================================================
+" vim-vim-niceblock : {{{
+
+    " 設定なし
+
+" }}}
+"=============================================================================
 " vim-operator-replace : {{{
 
     " xpを置換用キーに設定
@@ -1290,6 +1296,15 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     \     '-': {
     \         '*pattern*': '[A-Za-z][a-z0-9]\+\|[A-Z]\+',
     \         'select': ['ac', 'ic'],
+    \     },
+    \ })
+
+    " PHPタグ
+    call textobj#user#plugin('phptag', {
+    \     '-': {
+    \         '*pattern*': ['<?\(=\|php\)\?[[:blank:][:return:]\n]*','[[:blank:][:return:]\n]*?>'],
+    \         'select-a': 'aP',
+    \         'select-i': 'iP',
     \     },
     \ })
 
