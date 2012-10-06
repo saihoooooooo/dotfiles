@@ -247,7 +247,7 @@ if exists('+ambiwidth')
 endif
 
 " 全角入力時のカーソルの色を変更
-autocmd MyAutoCmd ColorScheme * highlight CursorIM cterm=NONE ctermfg=White ctermbg=LightRed gui=NONE guifg=#000000 guibg=#cc9999
+autocmd MyAutoCmd ColorScheme * highlight CursorIM ctermfg=White ctermbg=LightRed guifg=#000000 guibg=#cc9999
 
 " }}}
 "=============================================================================
@@ -358,7 +358,10 @@ nnoremap <silent><S-CR> :<C-u>call append('.', '')<CR>j
 nnoremap <C-CR> i<CR><ESC>
 
 " コメントを継続しない
-autocmd MyAutoCmd FileType * setlocal formatoptions& formatoptions-=o formatoptions-=r
+autocmd MyAutoCmd FileType * setlocal formatoptions-=o formatoptions-=r
+
+" 自動折返しを行わない
+autocmd MyAutoCmd FileType * setlocal formatoptions-=t
 
 " インサートモード中の履歴保存
 inoremap <C-u> <C-g>u<C-u>
@@ -386,13 +389,13 @@ function! s:ToggleComment(cs, ce) range
     let current = a:firstline
     while (current <= a:lastline)
         let line = getline(current)
-        if strpart(line, match(line, "[^ \t]"), strlen(a:cs)) == a:cs
-            execute 'normal! ^' . strlen(a:cs) . 'x'
+        if strpart(line, match(line, "[^[:blank:]]"), strlen(a:cs)) ==# a:cs
+            execute 'normal! ^d' . strlen(a:cs) . 'l'
         else
             execute 'normal! I' . a:cs
         endif
         if !empty(a:ce)
-            if strlen(line) == strridx(line, a:ce) + strlen(a:ce)
+            if strpart(line, strlen(line) - strlen(a:ce)) ==# a:ce
                 execute 'normal! $v' . (strlen(a:ce) - 1) . 'hd'
             else
                 execute 'normal! A' . a:ce
@@ -401,7 +404,8 @@ function! s:ToggleComment(cs, ce) range
         normal! j
         let current = current + 1
     endwhile
-    normal! k
+    execute a:firstline
+    normal! ^
 endfunction
 
 " undo情報を破棄
@@ -589,6 +593,9 @@ endif
 autocmd MyAutoCmd BufRead,BufNewFile *.ctp set filetype=php
 autocmd MyAutoCmd BufRead,BufNewFile *.jade set filetype=jade
 autocmd MyAutoCmd BufRead,BufNewFile *.coffee set filetype=coffee
+
+" filetypeのエイリアス
+autocmd MyAutoCmd FileType js set filetype=javascript
 
 " 手動filetype設定
 nnoremap xof :set filetype=
@@ -874,8 +881,8 @@ function! s:AutoQf()
     cclose
 endfunction
 
-" QuickFixウィンドウのステータスラインをグローバルと同一に設定
-autocmd MyAutoCmd QuickfixCmdPost * set statusline<
+" QuickFixウィンドウでのステータスラインのローカル設定を削除
+autocmd MyAutoCmd filetype qf set statusline<
 
 " php自動構文チェック
 autocmd MyAutoCmd FileType php setlocal makeprg=php\ -l\ %
@@ -1036,11 +1043,12 @@ nnoremap ZZ <Nop>
 " オプションのトグル
 nnoremap [Option] <Nop>
 nmap xo [Option]
+nnoremap <silent>[Option]e :<C-u>call <SID>ToggleOption('expandtab')<CR>
 nnoremap <silent>[Option]n :<C-u>call <SID>ToggleOption('number')<CR>
+nnoremap <silent>[Option]p :<C-u>call <SID>ToggleOption('paste')<CR>
 nnoremap <silent>[Option]r :<C-u>call <SID>ToggleOption('readonly')<CR>
 nnoremap <silent>[Option]w :<C-u>call <SID>ToggleOption('wrap')<CR>
 nnoremap <silent>[Option]/ :<C-u>call <SID>ToggleOption('wrapscan')<CR>
-nnoremap <silent>[Option]p :<C-u>call <SID>ToggleOption('paste')<CR>
 function! s:ToggleOption(option)
     if has_key(g:toggle_option_extra, a:option)
         for e in g:toggle_option_extra[a:option]
@@ -1095,7 +1103,6 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'git://github.com/digitaltoad/vim-jade.git'
     NeoBundle 'git://github.com/h1mesuke/unite-outline.git'
     NeoBundle 'git://github.com/h1mesuke/vim-alignta.git'
-    NeoBundle 'git://github.com/kana/vim-niceblock.git'
     NeoBundle 'git://github.com/kana/vim-operator-replace.git'
     NeoBundle 'git://github.com/kana/vim-operator-user.git'
     NeoBundle 'git://github.com/kana/vim-smartinput.git'
@@ -1198,12 +1205,6 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     \     'g/' . s:comment_leadings,
     \ ]
     unlet s:comment_leadings
-
-" }}}
-"=============================================================================
-" vim-vim-niceblock : {{{
-
-    " 設定なし
 
 " }}}
 "=============================================================================
