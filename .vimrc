@@ -212,7 +212,7 @@ endif
 if has('gui_running')
     autocmd MyAutoCmd GUIEnter * set cmdheight=1
 else
-    set cmdheight=1
+    set cmdheight=2
 endif
 
 " 現在のモードを表示
@@ -823,8 +823,8 @@ function! s:MyTabLabel(n)
 endfunction
 
 " 次/前のタプ
-nnoremap <C-TAB> gt
-nnoremap <C-S-TAB> gT
+nnoremap <C-n> gt
+nnoremap <C-p> gT
 
 " 基本マップ
 nnoremap [Tab] <Nop>
