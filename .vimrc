@@ -1126,7 +1126,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'git://github.com/Shougo/unite.vim.git'
     NeoBundle 'git://github.com/Shougo/neobundle.vim.git'
     NeoBundle 'git://github.com/Shougo/neocomplcache.git'
-    NeoBundle 'git://github.com/Shougo/neocomplcache-snippets-complete.git'
+    NeoBundle 'git://github.com/Shougo/neosnippet.git'
     NeoBundle 'git://github.com/Shougo/vimfiler.git'
     NeoBundle 'git://github.com/Shougo/vimproc.git'
     NeoBundle 'git://github.com/Shougo/vimshell.git'
@@ -1535,11 +1535,11 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
 " }}}
 "=============================================================================
-" neocomplcache-snippets-complete : {{{
+" neosnippet : {{{
 
     " スニペット補完
-    imap <C-k> <Plug>(neocomplcache_snippets_expand)
-    smap <C-k> <Plug>(neocomplcache_snippets_expand)
+    imap <C-k> <Plug>(neosnippet_expand_or_jump)
+    smap <C-k> <Plug>(neosnippet_expand_or_jump)
 
 " }}}
 "=============================================================================
