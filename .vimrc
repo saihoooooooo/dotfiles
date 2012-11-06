@@ -1340,9 +1340,16 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 " webapi-vim : {{{
 
     " Google電卓
-    command! -bang -nargs=+ GCalc call GCalc(<q-args>, <bang>0)
-    function! GCalc(expr, banged)
-        let url = 'http://www.google.co.jp/ig/calculator?q=' . webapi#http#encodeURI(a:expr)
+    nnoremap <F8> :<C-u>GCalc<CR>
+    nnoremap <S-F8> :<C-u>GCalc!<CR>
+    command! -bang -nargs=0 GCalc call GCalc(<bang>0)
+    function! GCalc(banged)
+        let expr = input('Expr: ')
+        redraw
+        if strlen(expr) == 0
+            return
+        endif
+        let url = 'http://www.google.co.jp/ig/calculator?q=' . webapi#http#encodeURI(expr)
         let response = webapi#http#get(url).content
         let response = substitute(response, '\([a-z]\+\)\ze:', '"\1"', 'g')
         let response = substitute(response, '\d\zs&#160;\ze\d', '', 'g')
