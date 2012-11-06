@@ -1351,6 +1351,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
         endif
         let url = 'http://www.google.co.jp/ig/calculator?q=' . webapi#http#encodeURI(expr)
         let response = webapi#http#get(url).content
+        let response = iconv(response, 'cp932', 'utf-8')
         let response = substitute(response, '\([a-z]\+\)\ze:', '"\1"', 'g')
         let response = substitute(response, '\d\zs&#160;\ze\d', '', 'g')
         let response = substitute(response, '\\', '\\\\', 'g')
