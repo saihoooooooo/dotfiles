@@ -1120,7 +1120,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'git://github.com/mattn/calendar-vim.git'
     NeoBundle 'git://github.com/mattn/mahjong-vim.git'
     NeoBundle 'git://github.com/mattn/webapi-vim.git'
-    NeoBundle 'git://github.com/mattn/zencoding-vim.git'
+    NeoBundle 'git://github.com/mattn/zencoding-vim.git' " , { 'rev' : 'emmet' }
     NeoBundle 'git://github.com/saihoooooooo/vim-auto-colorscheme.git'
     NeoBundle 'git://github.com/saihoooooooo/vim-textobj-space.git'
     NeoBundle 'git://github.com/Shougo/unite.vim.git'
