@@ -1344,7 +1344,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     nnoremap <S-F8> :<C-u>GCalc!<CR>
     command! -bang -nargs=0 GCalc call GCalc(<bang>0)
     function! GCalc(banged)
-        let expr = input('Expr: ')
+        let expr = input('GCalc Expr: ')
         redraw
         if strlen(expr) == 0
             return
