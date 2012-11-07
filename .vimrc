@@ -16,7 +16,7 @@ augroup MyAutoCmd
 augroup END
 
 " windows環境用変数
-let s:iswin = has('win32') || has('win64')
+let s:iswin = has('win32') || has('win64') || has('win32unix')
 
 " 現在のファイルを基準として$MYVIMRC、$HOMEを設定
 let $MYVIMRC = expand('<sfile>')
