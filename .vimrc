@@ -252,7 +252,11 @@ endif
 
 " 全角文字表示幅
 if exists('+ambiwidth')
-    autocmd MyAutoCmd GUIEnter * set ambiwidth=double
+    if has('gui_running')
+        autocmd MyAutoCmd GUIEnter * set ambiwidth=double
+    else
+        set ambiwidth=double
+    endif
 endif
 
 " 全角入力時のカーソルの色を変更
