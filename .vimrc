@@ -228,9 +228,11 @@ set wrap
 let &showbreak = '+++ '
 
 " 現在行のハイライト
-set cursorline
-autocmd MyAutoCmd WinLeave * set nocursorline
-autocmd MyAutoCmd WinEnter,BufRead * set cursorline
+if has('gui_running')
+    set cursorline
+    autocmd MyAutoCmd WinLeave * set nocursorline
+    autocmd MyAutoCmd WinEnter,BufRead * set cursorline
+endif
 
 " 括弧の対応表示を行う
 set showmatch
