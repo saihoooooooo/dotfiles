@@ -294,11 +294,17 @@ nnoremap <silent> <F4> :let &tabstop = (&tabstop * 2 > 16) ? 2 : &tabstop * 2<CR
 "=============================================================================
 " 入力設定 : {{{
 
-" タイムアウトあり
+" タイムアウト
 set timeout
 
 " 入力待ち時間
 set timeoutlen=10000
+
+" キーコードタイムアウト
+set ttimeout
+
+" キーコード入力待ち時間
+set ttimeoutlen=50
 
 " ;と:を入れ替え
 noremap ; :
