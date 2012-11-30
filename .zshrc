@@ -5,8 +5,8 @@ export NODE_PATH=~/.npm/libraries:$NODE_PATH
 # 文字コードの設定
 export LANG=ja_JP.UTF-8
 
-# viキーバインド
-bindkey -v
+# デフォルトキーバインド
+bindkey -d
 autoload history-search-end
 zle -N history-beginning-search-backward-end history-search-end
 zle -N history-beginning-search-forward-end history-search-end
@@ -92,3 +92,6 @@ source ~/.git-completion.sh
 
 # node
 nave use 0.8.0
+
+# Ctrl-D でログアウトさせない。ただし、10回連続で Ctrl-D すると ログアウトする
+setopt IGNOREEOF
