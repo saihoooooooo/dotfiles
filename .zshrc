@@ -93,5 +93,5 @@ source ~/.git-completion.sh
 # node
 nave use 0.8.0
 
-# Ctrl-D でログアウトさせない。ただし、10回連続で Ctrl-D すると ログアウトする
+# Ctrl-D でログアウトさせない
 setopt IGNOREEOF
