@@ -524,6 +524,7 @@ endfunction
 " f/F強化版
 " TODO omap/vmap
 " TODO hintchars以上のヒット
+" TODO tにも対応
 noremap <silent>f :<C-u>call <SID>FHint(0)<CR>
 noremap <silent>F :<C-u>call <SID>FHint(1)<CR>
 let g:fhint_hintchars = [
@@ -541,7 +542,7 @@ function! s:FHint(direction)
         if len(pos_list) == 0
             return 0
         elseif len(pos_list) == 1
-            call cursor(pos_list[0][0], pos_list[0][1])
+            let move = pos_list[0]
         else
             let match_id = s:DrawHint(pos_list, a:direction)
             redraw
@@ -557,17 +558,16 @@ function! s:FHint(direction)
             call matchdelete(match_id)
         endif
         for i in range(undotree().seq_cur - initial_seq_cur)
-            silent normal g-
+            silent normal! g-
         endfor
-        if exists('move')
-            call cursor(move[0], move[1])
+        if 0
+            normal! v
         endif
-        if mode(1) == 'no'
-            if a:direction == 0
-                normal l
-            else
-                normal h
+        if exists('move')
+            if mode(1) == 'no' && a:direction == 0
+                let move[1] += 1
             endif
+            call cursor(move[0], move[1])
         endif
     endtry
 endfunction
@@ -603,7 +603,7 @@ function! s:DrawHint(pos_list, direction)
     endif
     for pos in a:pos_list
         call cursor(pos[0], pos[1])
-        execute 'normal r' . g:fhint_hintchars[hintchars_index]
+        execute 'normal! r' . g:fhint_hintchars[hintchars_index]
         let hintchars_index = (hintchars_index + 1) % len(g:fhint_hintchars)
         call add(matchadd_list, '\%' . pos[0] . 'l\%' . pos[1] . 'c')
     endfor
