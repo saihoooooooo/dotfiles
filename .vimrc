@@ -91,6 +91,13 @@ function! s:ExecuteKeepView(expr)
     call winrestview(wininfo)
 endfunction
 
+" エラーメッセージ
+function! s:ErrorMsg(msg)
+    echohl ErrorMsg
+    echo 'ERROR: ' . a:msg
+    echohl None
+endfunction
+
 " }}}
 "=============================================================================
 " 文字コード設定 : {{{
@@ -244,10 +251,10 @@ set listchars=tab:>\ ,trail:-,nbsp:%,extends:>,precedes:<
 " 全角スペースを視覚化
 autocmd MyAutoCmd VimEnter,WinEnter * match IdeographicSpace /　/
 if has('gui_running')
-    autocmd MyAutoCmd GUIEnter,ColorScheme * highlight IdeographicSpace term=underline ctermbg=Gray guibg=Gray50
+    autocmd MyAutoCmd GUIEnter,ColorScheme * highlight IdeographicSpace guibg=Gray50
 else
-    highlight IdeographicSpace term=underline ctermbg=Gray guibg=Gray50
-    autocmd MyAutoCmd ColorScheme * highlight IdeographicSpace term=underline ctermbg=Gray guibg=Gray50
+    highlight IdeographicSpace ctermbg=Gray
+    autocmd MyAutoCmd ColorScheme * highlight IdeographicSpace ctermbg=Gray
 endif
 
 " 全角文字表示幅
@@ -432,7 +439,7 @@ endfunction
 nnoremap <silent>xU :<C-u>call <SID>DropUndoInfo()<CR>
 function! s:DropUndoInfo()
     if &modified
-        echoerr "This buffer has been modified!"
+        call s:ErrorMsg('This buffer has been modified!')
         return
     endif
     let old_undolevels = &undolevels
@@ -515,10 +522,6 @@ function! s:RemapPHPSectionJump()
 endfunction
 
 " f/F強化版
-" TODO 他の箇所のdictの「 : 」を「: 」に直す
-" TODO 他の箇所の色の16進表記を統一
-" TODO 他の箇所のhighlightコマンドのterm/fg/bgの順番を統一
-" TODO dropundoinfoのエラー表示方法を修正（エラー表示を関数化）
 noremap <silent>f :<C-u>call <SID>FHint(0)<CR>
 noremap <silent>F :<C-u>call <SID>FHint(1)<CR>
 let g:fhint_hintchars = [
@@ -885,7 +888,7 @@ let s:hl_statusline = ''
 function! s:SwitchStatusLine(insert)
     if a:insert
         silent! let s:hl_statusline = s:GetHighlight('StatusLine')
-        execute 'highlight StatusLine guibg=#aa4400 guifg=#000000 ctermfg=DarkRed ctermbg=Black'
+        execute 'highlight StatusLine ctermfg=DarkRed ctermbg=Black guifg=#000000 guibg=#aa4400'
     else
         highlight clear StatusLine
         execute 'highlight ' . s:hl_statusline
@@ -1022,7 +1025,7 @@ function! s:DiffUpdate()
     if &diff
         diffupdate
     else
-        echohl ErrorMsg | echo 'ERROR: Current buffer is not in diff mode' | echohl None
+        call s:ErrorMsg('Current buffer is not in diff mode.')
     endif
 endfunction
 
@@ -1221,7 +1224,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'git://github.com/mattn/mahjong-vim.git'
     NeoBundle 'git://github.com/mattn/sonictemplate-vim.git'
     NeoBundle 'git://github.com/mattn/webapi-vim.git'
-    NeoBundle 'git://github.com/mattn/zencoding-vim.git' " , { 'rev' : 'emmet' }
+    NeoBundle 'git://github.com/mattn/zencoding-vim.git' " , { 'rev': 'emmet' }
     NeoBundle 'git://github.com/saihoooooooo/vim-auto-colorscheme.git'
     NeoBundle 'git://github.com/saihoooooooo/vim-textobj-space.git'
     NeoBundle 'git://github.com/Shougo/unite.vim.git'
@@ -1464,7 +1467,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
         let response = substitute(response, '\\', '\\\\', 'g')
         let decoded_response = webapi#json#decode(response)
         if decoded_response.error != ''
-            echohl ErrorMsg | echo 'ERROR:' decoded_response.error | echohl None
+            call s:ErrorMsg(decoded_response.error)
             return
         endif
         if !a:banged
@@ -1491,10 +1494,10 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
     " 各filetype設定
     let g:user_zen_settings.html = {
-    \     'filters' : 'html',
-    \     'snippets' : {
-    \         'jq' : "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js\"></script>\n<script>\n\\$(function() {\n\t|\n})();\n</script>",
-    \         'cd' : "<![CDATA[|]]>",
+    \     'filters': 'html',
+    \     'snippets': {
+    \         'jq': "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js\"></script>\n<script>\n\\$(function() {\n\t|\n})();\n</script>",
+    \         'cd': "<![CDATA[|]]>",
     \     },
     \ }
 
@@ -1715,18 +1718,18 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
     " vimprocにて非同期実行を行う
     let g:quickrun_config._ = {
-    \     'runner' : 'vimproc',
-    \     'runner/vimproc/updatetime' : 50,
+    \     'runner': 'vimproc',
+    \     'runner/vimproc/updatetime': 50,
     \ }
 
     " 各filetype設定
     let g:quickrun_config.javascript = {
-    \     'command' : 'node',
+    \     'command': 'node',
     \ }
     let g:quickrun_config.coffee = {
-    \     'command' : 'coffee',
-    \     'exec' : '%c -cbp %s',
-    \     'outputter/buffer/filetype' : 'javascript',
+    \     'command': 'coffee',
+    \     'exec': '%c -cbp %s',
+    \     'outputter/buffer/filetype': 'javascript',
     \ }
 
 " }}}
