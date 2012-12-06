@@ -522,6 +522,8 @@ function! s:RemapPHPSectionJump()
 endfunction
 
 " f/F強化版
+" TODO omap/vmap
+" TODO hintchars以上のヒット
 noremap <silent>f :<C-u>call <SID>FHint(0)<CR>
 noremap <silent>F :<C-u>call <SID>FHint(1)<CR>
 let g:fhint_hintchars = [
@@ -560,6 +562,13 @@ function! s:FHint(direction)
         if exists('move')
             call cursor(move[0], move[1])
         endif
+        if mode(1) == 'no'
+            if a:direction == 0
+                normal l
+            else
+                normal h
+            endif
+        endif
     endtry
 endfunction
 function! s:GetChar()
@@ -587,15 +596,15 @@ function! s:GetPosList(c, direction)
     return pos_list
 endfunction
 function! s:DrawHint(pos_list, direction)
-    let hint_chars_index = 0
+    let hintchars_index = 0
     let matchadd_list = []
     if a:direction == 1
         call reverse(a:pos_list)
     endif
     for pos in a:pos_list
         call cursor(pos[0], pos[1])
-        execute 'normal r' . g:fhint_hintchars[hint_chars_index]
-        let hint_chars_index = (hint_chars_index + 1) % len(g:fhint_hintchars)
+        execute 'normal r' . g:fhint_hintchars[hintchars_index]
+        let hintchars_index = (hintchars_index + 1) % len(g:fhint_hintchars)
         call add(matchadd_list, '\%' . pos[0] . 'l\%' . pos[1] . 'c')
     endfor
     return matchadd('FHint', join(matchadd_list, '\|'), 100)
