@@ -789,7 +789,7 @@ function! InitTabpageCd()
 endfunction
 
 " 現在のバッファ名をヤンク
-nnoremap <silent>y% :<C-u>let @* = expand('%:p')<CR>
+nnoremap <silent>y% :<C-u>let @" = expand('%:p')<CR>
 
 " カレントバッファの情報を表示
 nnoremap <silent><C-g> :<C-u>call <SID>BufInfo()<CR>
@@ -1327,7 +1327,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 " vim-operator-replace : {{{
 
     " xpを置換用キーに設定
-    map xp "*<Plug>(operator-replace)
+    map xp ""<Plug>(operator-replace)
     map xP xp$
 
 " }}}
@@ -1480,7 +1480,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
             return
         endif
         if !a:banged
-            let @* = decoded_response.rhs
+            let @" = decoded_response.rhs
         endif
         echo decoded_response.lhs . ' = ' . decoded_response.rhs
     endfunction
