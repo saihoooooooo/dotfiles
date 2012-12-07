@@ -219,7 +219,7 @@ endif
 if has('gui_running')
     autocmd MyAutoCmd GUIEnter * set cmdheight=1
 else
-    set cmdheight=1
+    set cmdheight=2
 endif
 
 " 現在のモードを表示
@@ -1505,7 +1505,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     let g:user_zen_settings.html = {
     \     'filters': 'html',
     \     'snippets': {
-    \         'jq': "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js\"></script>\n<script>\n\\$(function() {\n\t|\n})();\n</script>",
+    \         'jq': "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js\"></script>\n<script>\n\\$(function() {\n\t${cursor}${child}\n});\n</script>",
     \         'cd': "<![CDATA[|]]>",
     \     },
     \ }
