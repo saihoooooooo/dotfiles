@@ -525,20 +525,25 @@ endfunction
 " TODO omap/vmap
 " TODO hintchars以上のヒット
 " TODO tにも対応
-noremap <silent>f :<C-u>call <SID>FHint(0)<CR>
-noremap <silent>F :<C-u>call <SID>FHint(1)<CR>
-let g:fhint_hintchars = [
+noremap <silent>f :<C-u>call <SID>Fint(0)<CR>
+noremap <silent>F :<C-u>call <SID>Fint(1)<CR>
+let g:fint_hintchars = [
 \     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
 \     'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 \     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
 \     'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
 \ ]
-let g:fhint_ignorecase = 1
-autocmd MyAutoCmd ColorScheme * nested highlight FHint cterm=bold ctermfg=NONE ctermbg=red
-function! s:FHint(direction)
+let g:fint_ignorecase = 1
+autocmd MyAutoCmd ColorScheme * nested highlight Fint cterm=bold ctermfg=NONE ctermbg=red
+function! s:Fint(direction)
     try
+        let old_modifiable = &modifiable
+        let &modifiable = 1
+
         let initial_seq_cur = undotree().seq_cur
+
         let pos_list = s:GetPosList(s:GetChar(), a:direction)
+
         if len(pos_list) == 0
             return 0
         elseif len(pos_list) == 1
@@ -546,29 +551,34 @@ function! s:FHint(direction)
         else
             let match_id = s:DrawHint(pos_list, a:direction)
             redraw
-            let i = index(g:fhint_hintchars, s:GetChar())
+            let i = index(g:fint_hintchars, s:GetChar())
             if exists('pos_list[i]')
                 let move = pos_list[i]
             endif
         endif
     catch /esc/
-        echo 'fhint press esc'
+        echo 'fint press esc'
     finally
         if exists('match_id')
             call matchdelete(match_id)
         endif
+
         for i in range(undotree().seq_cur - initial_seq_cur)
             silent normal! g-
         endfor
+
         if 0
             normal! v
         endif
+
         if exists('move')
             if mode(1) == 'no' && a:direction == 0
                 let move[1] += 1
             endif
             call cursor(move[0], move[1])
         endif
+
+        let &modifiable = old_modifiable
     endtry
 endfunction
 function! s:GetChar()
@@ -585,7 +595,7 @@ function! s:GetPosList(c, direction)
     let col = col('.')
     let flags = (a:direction == 0) ? '' : 'b'
     while 1
-        let ic = g:fhint_ignorecase ? '\c' : ''
+        let ic = g:fint_ignorecase ? '\c' : ''
         let pos = searchpos('\V' . ic . a:c, flags, line('.'))
         if pos == [0, 0]
             break
@@ -603,11 +613,11 @@ function! s:DrawHint(pos_list, direction)
     endif
     for pos in a:pos_list
         call cursor(pos[0], pos[1])
-        execute 'normal! r' . g:fhint_hintchars[hintchars_index]
-        let hintchars_index = (hintchars_index + 1) % len(g:fhint_hintchars)
+        execute 'normal! r' . g:fint_hintchars[hintchars_index]
+        let hintchars_index = (hintchars_index + 1) % len(g:fint_hintchars)
         call add(matchadd_list, '\%' . pos[0] . 'l\%' . pos[1] . 'c')
     endfor
-    return matchadd('FHint', join(matchadd_list, '\|'), 100)
+    return matchadd('Fint', join(matchadd_list, '\|'), 100)
 endfunction
 
 " }}}
