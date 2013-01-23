@@ -994,6 +994,10 @@ nnoremap <silent>[QuickFix]p :<C-u>cprevious<CR>
 nnoremap <silent>[QuickFix]r :<C-u>crewind<CR>
 nnoremap <silent>[QuickFix]l :<C-u>clast<CR>
 
+" QuickFixリストの進む/戻る
+nnoremap <silent>[QuickFix]N :<C-u>cnewer<CR>
+nnoremap <silent>[QuickFix]P :<C-u>colder<CR>
+
 " QuickFixリストが生成されたら自動で開く
 autocmd MyAutoCmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd call s:AutoQf()
 function! s:AutoQf()
