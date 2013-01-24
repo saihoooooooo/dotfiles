@@ -1016,7 +1016,7 @@ autocmd MyAutoCmd filetype qf set statusline<
 " php自動構文チェック
 autocmd MyAutoCmd FileType php setlocal makeprg=php\ -l\ %
 autocmd MyAutoCmd FileType php setlocal errorformat=%m\ in\ %f\ on\ line\ %l,%-GErrors\ parsing\ %f,%-G
-autocmd MyAutoCmd BufWritePost *.php silent make
+autocmd MyAutoCmd BufWritePost *.php silent make | if !has('gui_running') | execute "normal! \<C-l>" | endif
 
 " grep
 set grepprg=grep\ -Hnd\ skip
