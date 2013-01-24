@@ -1018,9 +1018,22 @@ autocmd MyAutoCmd FileType php setlocal makeprg=php\ -l\ %
 autocmd MyAutoCmd FileType php setlocal errorformat=%m\ in\ %f\ on\ line\ %l,%-GErrors\ parsing\ %f,%-G
 autocmd MyAutoCmd BufWritePost *.php silent make | if !has('gui_running') | execute "normal! \<C-l>" | endif
 
-" grep
+" grep設定
 set grepprg=grep\ -Hnd\ skip\ -r
 set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m
+
+" ファイルパターン指定grep
+command! -complete=file -nargs=+ Grep  call s:grep(<f-args>)
+function! s:grep(pattern, directory, ...)
+    let grepcmd = []
+    call add(grepcmd, 'grep')
+    if a:0 && a:1 != ''
+        call add(grepcmd, '--include="' . a:1 . '"')
+    endif
+    call add(grepcmd, a:pattern)
+    call add(grepcmd, a:directory)
+    execute join(grepcmd, ' ')
+endfunction
 
 " }}}
 "=============================================================================
@@ -1561,14 +1574,6 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
     " バッファ
     nnoremap [Unite]b :<C-u>Unite buffer_tab -no-split<CR>
-
-    " grep
-    nnoremap [Unite]g :<C-u>Unite grep -no-quit<CR>
-    let g:unite_source_grep_default_opts = '-iRHn'
-
-    " ヘルプ
-    nnoremap [Unite]h :<C-u>Unite help -no-split<CR>
-    nnoremap [Unite]H :<C-u>UniteWithCursorWord help -no-split<CR>
 
     " アウトライン
     nnoremap [Unite]o :<C-u>Unite outline -no-split<CR>
