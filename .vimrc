@@ -1023,7 +1023,7 @@ set grepprg=grep\ -Hnd\ skip\ -r
 set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m
 
 " ファイルパターン指定grep
-command! -complete=file -nargs=+ Grep  call s:grep(<f-args>)
+command! -complete=file -nargs=+ Grep call s:grep(<f-args>)
 function! s:grep(pattern, directory, ...)
     let grepcmd = []
     call add(grepcmd, 'grep')
