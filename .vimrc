@@ -981,7 +981,7 @@ nnoremap [Tab]o :<C-u>tabonly<CR>
 
 " 基本マップ
 nnoremap [QuickFix] <Nop>
-nmap <C-c> [QuickFix]
+nmap q [QuickFix]
 
 " 開く/閉じる
 nnoremap <silent>[QuickFix]w :<C-u>cwindow<CR>
@@ -1079,6 +1079,9 @@ nnoremap R :<C-u>registers<CR>
 " クリップボードと連携
 set clipboard&
 set clipboard+=unnamed
+
+" キーボードマクロの記録開始
+nnoremap Q q
 
 " }}}
 "=============================================================================
