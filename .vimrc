@@ -640,10 +640,10 @@ set smartcase
 set wrapscan
 
 " *による検索時に初回は移動しない
-nnoremap <silent>* viw"zy:<C-u>let @/ = '\V' . escape(@z, '/\')<CR>:set hlsearch<CR>`<
+nnoremap <silent>* viw"zy:let @/ = '\V' . escape(@z, '/\')<CR>:set hlsearch<CR>`<
 
 " ビジュアルモード時の*検索
-vnoremap <silent>* "zy:<C-u>let @/ = '\V' . escape(@z, '/\')<CR>:set hlsearch<CR>
+vnoremap <silent>* "zy:let @/ = '\V' . escape(@z, '/\')<CR>:set hlsearch<CR>
 
 " '/'と'?'を自動エスケープ
 cnoremap <expr>/ getcmdtype() == '/' ? '\/' : '/'
@@ -989,14 +989,14 @@ nnoremap <silent>[QuickFix]o :<C-u>copen<CR>
 nnoremap <silent>[QuickFix]c :<C-u>cclose<CR>
 
 " 進む/戻る/先頭/最後
-nnoremap <silent>[QuickFix]n :<C-u>cnext<CR>
-nnoremap <silent>[QuickFix]p :<C-u>cprevious<CR>
+nnoremap <silent>[QuickFix]n :cnext<CR>
+nnoremap <silent>[QuickFix]p :cprevious<CR>
 nnoremap <silent>[QuickFix]r :<C-u>crewind<CR>
 nnoremap <silent>[QuickFix]l :<C-u>clast<CR>
 
 " QuickFixリストの進む/戻る
-nnoremap <silent>[QuickFix]N :<C-u>cnewer<CR>
-nnoremap <silent>[QuickFix]P :<C-u>colder<CR>
+nnoremap <silent>[QuickFix]N :cnewer<CR>
+nnoremap <silent>[QuickFix]P :colder<CR>
 
 " QuickFixリストが生成されたら自動で開く
 autocmd MyAutoCmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd call s:AutoQf()
