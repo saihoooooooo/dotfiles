@@ -1019,7 +1019,7 @@ autocmd MyAutoCmd FileType php setlocal errorformat=%m\ in\ %f\ on\ line\ %l,%-G
 autocmd MyAutoCmd BufWritePost *.php silent make | if !has('gui_running') | execute "normal! \<C-l>" | endif
 
 " grep
-set grepprg=grep\ -Hnd\ skip
+set grepprg=grep\ -Hnd\ skip\ -r
 set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m
 
 " }}}
