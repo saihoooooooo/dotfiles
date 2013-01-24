@@ -1,45 +1,45 @@
-# $B%9%F!<%?%9%i%$%s(B
+# ステータスライン
 hardstatus alwayslastline "%{=b ..}[%m/%d %02c] %-w%{=u .y}%n %t%{-}%+w %=$USER@$HOSTNAME[$LANG]"
 
-# $B5/F0%a%C%;!<%8$rHsI=<((B
+# 起動メッセージを非表示
 startup_message off
 
-# $B6/@)=*N;;~$K<+F0%G%?%C%A(B
+# 強制終了時に自動デタッチ
 autodetach on
 
-# $B%(%9%1!<%W(B
+# エスケープ
 escape ^j^j
 
-# $B%G%U%)%k%H%(%s%3!<%G%#%s%0(B
+# デフォルトエンコーディング
 defencoding utf8
 
-# $B%^%k%A%P%$%HJ8;z$N2#I}BP1~(B
+# マルチバイト文字の横幅対応
 cjkwidth on
 
-# vim/less$B$+$i=P$?;~$KI=<($r4p$KLa$9(B
+# vim/lessから出た時に表示を基に戻す
 altscreen on
 
-# $B%9%/%m!<%k%P%C%/9T?t(B
+# スクロールバック行数
 defscrollback 10000
 
-# $B%^%&%9%9%/%m!<%k(B
+# マウススクロール
 termcapinfo xterm* ti@:te@
 
-# $B%&%#%s%I%&$,=*N;$7$?>l9g$K(Bk$B$r2!$9$^$G=*N;$;$:!"(Br$B$G:F<B9T$9$k(B
+# ウィンドウが終了した場合にkを押すまで終了せず、rで再実行する
 # zombie kr
 
-# <C-w>$B$G(Bwindowlist
+# <C-w>でwindowlist
 bind w  windowlist -b
 
-# <C-]>$B$G$b%Z!<%9%H2DG=(B
+# <C-]>でもペースト可能
 bind ^] paste .
 
-# windowlist$BI=<(FbMF(B
+# windowlist表示内容
 windowlist title  '%{u .y}Num Flags Title%=[0-9] select the number [movement] j,C-n:Down k,C-p:Up (C-)f:PageDown (C-)b:PageUp'
 windowlist string '%{..}%3n %f%09= %t %='
 
-# $BF~NOBT$A;~4V(B
+# 入力待ち時間
 maptimeout 0
 
-# c1$B%3!<%I$r=hM}$7$J$$(B
+# c1コードを処理しない
 defc1 off
