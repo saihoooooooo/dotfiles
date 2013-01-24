@@ -640,10 +640,10 @@ set smartcase
 set wrapscan
 
 " *による検索時に初回は移動しない
-nnoremap <silent>* viw"zy:let @/ = '\V' . escape(@z, '/\')<CR>:set hlsearch<CR>`<
+nnoremap <silent>* viw"zy:let @/ = '\V' . escape(@z, '\/')<CR>:set hlsearch<CR>`<
 
 " ビジュアルモード時の*検索
-vnoremap <silent>* "zy:let @/ = '\V' . escape(@z, '/\')<CR>:set hlsearch<CR>
+vnoremap <silent>* "zy:let @/ = '\V' . substitute(escape(@z, '\/'), '\n', '\\n', 'g')<CR>:set hlsearch<CR>
 
 " '/'と'?'を自動エスケープ
 cnoremap <expr>/ getcmdtype() == '/' ? '\/' : '/'
