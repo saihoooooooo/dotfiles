@@ -1,0 +1,45 @@
+# ステータスライン
+hardstatus alwayslastline "%{=b ..}[%m/%d %02c] %-w%{=u .y}%n %t%{-}%+w %=$USER@$HOSTNAME[$LANG]"
+
+# 起動メッセージを非表示
+startup_message off
+
+# 強制終了時に自動デタッチ
+autodetach on
+
+# エスケープ
+escape ^j^j
+
+# デフォルトエンコーディング
+defencoding utf8
+
+# マルチバイト文字の横幅対応
+cjkwidth on
+
+# vim/lessから出た時に表示を基に戻す
+altscreen on
+
+# スクロールバック行数
+defscrollback 10000
+
+# マウススクロール
+termcapinfo xterm* ti@:te@
+
+# ウィンドウが終了した場合にkを押すまで終了せず、rで再実行する
+# zombie kr
+
+# <C-w>でwindowlist
+bind w  windowlist -b
+
+# <C-]>でもペースト可能
+bind ^] paste .
+
+# windowlist表示内容
+windowlist title  '%{u .y}Num Flags Title%=[0-9] select the number [movement] j,C-n:Down k,C-p:Up (C-)f:PageDown (C-)b:PageUp'
+windowlist string '%{..}%3n %f%09= %t %='
+
+# 入力待ち時間
+maptimeout 0
+
+# c1コードを処理しない
+defc1 off
