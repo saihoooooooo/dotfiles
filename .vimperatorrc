@@ -76,6 +76,17 @@ set focuscontent
 " :[tab]open の補完対象と順番
 set complete=slb
 
+" ページ内の画像を削除
+js <<EOM
+var gazouDelete = function () {
+    var images = content.document.wrappedJSObject.images;
+    while (images[0]) {
+        images[0].parentNode.removeChild(images[0]);
+    }
+}
+EOM
+nnoremap x :<C-u>javascript gazouDelete();<CR>
+
 " コマンドラインでIMEを自動的にOFFにする
 style -name commandline-ime chrome://* #liberator-commandline-command input {ime-mode: inactive;}
 
