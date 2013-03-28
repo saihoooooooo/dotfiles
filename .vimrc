@@ -934,9 +934,9 @@ else
     set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m
 endif
 
-" ファイルパターン指定grep
-command! -complete=file -nargs=+ Grep call s:grep(<f-args>)
-function! s:grep(pattern, directory, ...)
+" 拡張子指定grep
+command! -complete=file -nargs=+ Grep call s:Grep(<f-args>)
+function! s:Grep(pattern, directory, ...)
     let grepcmd = []
     call add(grepcmd, 'grep')
     if s:HasCommand('ack')
