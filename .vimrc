@@ -1651,10 +1651,11 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     " 初期化
     let g:quickrun_config = {}
 
-    " vimprocにて非同期実行を行う
+    " デフォルト設定
     let g:quickrun_config._ = {
     \     'runner': 'vimproc',
     \     'runner/vimproc/updatetime': 50,
+    \     'hook/time/enable': 1,
     \ }
 
     " 各filetype設定
@@ -1669,7 +1670,23 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     let g:quickrun_config.sql = {
     \     'runner': 'system',
     \     'cmdopt': '-h [host] -U [user] -p [port] -d [db]',
+    \     'hook/nowrap/enable' : 1,
     \ }
+
+    " 行を折り返さないようにするフック
+    let s:hook_nowrap = {
+    \     'name': 'nowrap',
+    \     'kind': 'hook',
+    \     'index_counter': 0,
+    \     'config': {
+    \         'enable': 0,
+    \     },
+    \ }
+    function! s:hook_nowrap.on_outputter_buffer_opened(session, context)
+        setlocal nowrap
+    endfunction
+    call quickrun#module#register(s:hook_nowrap, 1)
+    unlet s:hook_nowrap"
 
 " }}}
 "=============================================================================
