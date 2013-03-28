@@ -91,6 +91,12 @@ function! s:ExecuteKeepView(expr)
     call winrestview(wininfo)
 endfunction
 
+" 外部コマンドが使用可能か調べる
+function! s:HasCommand(cmd)
+    let path = substitute($PATH, ':', ',', 'g')
+    return (globpath(path, a:cmd) != '' ? 1 : 0)
+endfunction
+
 " エラーメッセージ
 function! s:ErrorMsg(msg)
     echohl ErrorMsg
@@ -920,16 +926,29 @@ autocmd MyAutoCmd FileType php setlocal errorformat=%m\ in\ %f\ on\ line\ %l,%-G
 autocmd MyAutoCmd BufWritePost *.php silent make | if !has('gui_running') | execute "normal! \<C-l>" | endif
 
 " grep設定
-set grepprg=grep\ -Hnd\ skip\ -r
-set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m
+if s:HasCommand('ack')
+    set grepprg=ack\ --nogroup
+    set grepformat=%f:%l:%m
+else
+    set grepprg=grep\ -Hnd\ skip\ -r
+    set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m
+endif
 
 " ファイルパターン指定grep
 command! -complete=file -nargs=+ Grep call s:grep(<f-args>)
 function! s:grep(pattern, directory, ...)
     let grepcmd = []
     call add(grepcmd, 'grep')
-    if a:0 && a:1 != ''
-        call add(grepcmd, '--include="' . a:1 . '"')
+    if s:HasCommand('ack')
+        if a:0 && a:1 != ''
+            call add(grepcmd, '--' . a:1)
+        else
+            call add(grepcmd, '--all')
+        endif
+    else
+        if a:0 && a:1 != ''
+            call add(grepcmd, '--include="*.' . a:1 . '"')
+        endif
     endif
     call add(grepcmd, a:pattern)
     call add(grepcmd, a:directory)
