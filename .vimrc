@@ -1666,6 +1666,9 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     \     'exec': '%c -cbp %s',
     \     'outputter/buffer/filetype': 'javascript',
     \ }
+    let g:quickrun_config.sql = {
+    \     'runner': 'system',
+    \ }
 
 " }}}
 "=============================================================================
