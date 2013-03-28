@@ -1668,6 +1668,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     \ }
     let g:quickrun_config.sql = {
     \     'runner': 'system',
+    \     'cmdopt': '-h [host] -U [user] -p [port] -d [db]',
     \ }
 
 " }}}
