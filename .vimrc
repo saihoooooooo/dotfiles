@@ -1591,6 +1591,9 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     imap <C-k> <Plug>(neosnippet_expand_or_jump)
     smap <C-k> <Plug>(neosnippet_expand_or_jump)
 
+    " プレビューウィンドウを表示しない
+    set completeopt-=preview
+
 " }}}
 "=============================================================================
 " vimfiler : {{{
