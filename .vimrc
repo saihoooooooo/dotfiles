@@ -923,7 +923,7 @@ autocmd MyAutoCmd filetype qf set statusline<
 " php自動構文チェック
 autocmd MyAutoCmd FileType php setlocal makeprg=php\ -l\ %
 autocmd MyAutoCmd FileType php setlocal errorformat=%m\ in\ %f\ on\ line\ %l,%-GErrors\ parsing\ %f,%-G
-autocmd MyAutoCmd BufWritePost *.php silent make | if !has('gui_running') | execute "normal! \<C-l>" | endif
+autocmd MyAutoCmd BufWritePost *.php silent make | if !has('gui_running') | redraw! | endif
 
 " grep設定
 if s:HasCommand('ack')
@@ -1690,13 +1690,13 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     \     'runner': 'system',
     \     'cmdopt': '-h [host] -U [user] -p [port] -d [db]',
     \     'hook/nowrap/enable' : 1,
+    \     'hook/redraw/enable' : 1,
     \ }
 
-    " 行を折り返さないようにするフック
+    " 折り返し解除フック
     let s:hook_nowrap = {
     \     'name': 'nowrap',
     \     'kind': 'hook',
-    \     'index_counter': 0,
     \     'config': {
     \         'enable': 0,
     \     },
@@ -1706,6 +1706,20 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     endfunction
     call quickrun#module#register(s:hook_nowrap, 1)
     unlet s:hook_nowrap"
+
+    " 再描画フック
+    let s:hook_redraw = {
+    \     'name': 'redraw',
+    \     'kind': 'hook',
+    \     'config': {
+    \         'enable': 0,
+    \     },
+    \ }
+    function! s:hook_redraw.on_exit(session, context)
+        redraw!
+    endfunction
+    call quickrun#module#register(s:hook_redraw, 1)
+    unlet s:hook_redraw"
 
 " }}}
 "=============================================================================
