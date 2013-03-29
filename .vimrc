@@ -1157,11 +1157,6 @@ function! s:Scouter(file, ...)
     return len(filter(lines,'v:val !~ pat'))
 endfunction
 
-" gene辞書のファイルパスを設定
-if has('kaoriya') && s:iswin
-    let g:dicwin_dictpath = substitute($DOTVIM, '\', '/', 'g') . '/dict/gene.txt'
-endif
-
 " }}}
 "=============================================================================
 " プラグイン設定 : {{{
@@ -1194,18 +1189,17 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'git://github.com/kana/vim-textobj-syntax.git'
     NeoBundle 'git://github.com/kana/vim-textobj-user.git'
     NeoBundle 'git://github.com/kchmck/vim-coffee-script.git'
+    NeoBundle 'git://github.com/koron/dicwin-vim.git'
     NeoBundle 'git://github.com/mattn/calendar-vim.git'
     NeoBundle 'git://github.com/mattn/mahjong-vim.git'
-    NeoBundle 'git://github.com/mattn/sonictemplate-vim.git'
     NeoBundle 'git://github.com/mattn/webapi-vim.git'
-    NeoBundle 'git://github.com/mattn/zencoding-vim.git' " , { 'rev': 'emmet' }
+    NeoBundle 'git://github.com/mattn/zencoding-vim.git'
     NeoBundle 'git://github.com/saihoooooooo/vim-auto-colorscheme.git'
     NeoBundle 'git://github.com/saihoooooooo/vim-textobj-space.git'
     NeoBundle 'git://github.com/Shougo/unite.vim.git'
     NeoBundle 'git://github.com/Shougo/neobundle.vim.git'
     NeoBundle 'git://github.com/Shougo/neocomplcache.git'
     NeoBundle 'git://github.com/Shougo/neosnippet.git'
-    NeoBundle 'git://github.com/Shougo/vimfiler.git'
     NeoBundle 'git://github.com/Shougo/vimproc.git'
     NeoBundle 'git://github.com/Shougo/vimshell.git'
     NeoBundle 'git://github.com/teramako/jscomplete-vim.git'
@@ -1216,7 +1210,6 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'git://github.com/tyru/open-browser.vim.git'
     NeoBundle 'git://github.com/tyru/operator-camelize.vim.git'
     NeoBundle 'git://github.com/vim-scripts/TwitVim.git'
-    NeoBundle 'git://github.com/vim-scripts/vcscommand.vim.git'
 
     " colorscheme
     NeoBundle 'git://github.com/vim-scripts/nevfn.git'
@@ -1398,6 +1391,15 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
 " }}}
 "=============================================================================
+" dicwin-vim : {{{
+
+    " gene辞書のファイルパスを設定
+    if s:iswin
+        let g:dicwin_dictpath = substitute($DOTVIM, '\', '/', 'g') . '/dict/gene.txt'
+    endif
+
+" }}}
+"=============================================================================
 " calendar-vim : {{{
 
     " キーマップ
@@ -1410,12 +1412,6 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 " }}}
 "=============================================================================
 " mahjong-vim : {{{
-
-    " 設定なし
-
-" }}}
-"=============================================================================
-" sonictemplate-vim : {{{
 
     " 設定なし
 
@@ -1630,32 +1626,6 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
 " }}}
 "=============================================================================
-" vimfiler : {{{
-
-    " デフォルトのファイラに設定
-    let vimfilerAsDefaultExplorer = 1
-
-    " vimfilerを開く
-    nnoremap xf :<C-u>VimFiler -simple -winwidth=45 -no-quit -split<CR>
-
-    " filetype設定
-    autocmd MyAutoCmd FileType vimfiler call s:VimfilerMySetting()
-    function! s:VimfilerMySetting()
-        " ドットファイルを表示
-        normal .
-
-        " リネーム
-        nmap <buffer><silent>R <Plug>(vimfiler_rename_file)
-
-        " ディレクトリをリロード
-        nmap <buffer><silent>r <Plug>(vimfiler_redraw_screen)
-
-        " トグル選択
-        nmap <buffer><silent><SPACE> <Plug>(vimfiler_toggle_mark_current_line)
-    endfunction
-
-" }}}
-"=============================================================================
 " vimproc : {{{
 
     " 設定なし
@@ -1780,12 +1750,6 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
     " 取得数
     let twitvim_count = 256
-
-" }}}
-"=============================================================================
-" vcscommand.vim : {{{
-
-    " 設定なし
 
 " }}}
 "=============================================================================
