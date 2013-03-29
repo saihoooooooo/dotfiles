@@ -91,6 +91,14 @@ function! s:ExecuteKeepView(expr)
     call winrestview(wininfo)
 endfunction
 
+" 現在のバッファを作業用領域に設定
+function! s:SetScratch()
+    setlocal bufhidden=unload
+    setlocal nobuflisted
+    setlocal buftype=nofile
+    setlocal noswapfile
+endfunction
+
 " エラーメッセージ
 function! s:ErrorMsg(msg)
     echohl ErrorMsg
@@ -601,7 +609,7 @@ function! s:CmdCapture(cmd)
     execute a:cmd
     redir END
     new
-    setlocal bufhidden=unload nobuflisted buftype=nofile noswapfile
+    call s:SetScratch()
     file `='Capture: ' . a:cmd`
     call setline(1, split(substitute(result, '^\n\+', '', ''), '\n'))
 endfunction
@@ -641,10 +649,23 @@ function! s:Rename()
     endif
 endfunction
 
+" スクラッチバッファ
+command! -nargs=? Scratch call s:MakeScratchBuffer(<q-args>)
+function! s:MakeScratchBuffer(open)
+    if a:open == 'v'
+        vnew
+    elseif a:open == 't'
+        tabnew
+    else
+        new
+    endif
+    call s:SetScratch()
+endfunction
+
 " ジャンクファイル
 command! -nargs=0 JunkFile call s:OpenJunkFile()
 function! s:OpenJunkFile()
-    let junk_dir = $HOME . '/.vim_junk' . strftime('/%Y/%m')
+    let junk_dir = $DOTVIM . strftime('/tmp/junk/%Y/%m')
     call s:Mkdir(junk_dir)
     let filename = input('Junk name: ', junk_dir . strftime('/%Y-%m-%d-%H%M%S.'))
     if filename != ''
@@ -960,10 +981,10 @@ set diffopt=filler
 command! DiffNew silent call s:DiffNew()
 function! s:DiffNew()
     99tabnew
-    setlocal bufhidden=unload nobuflisted buftype=nofile noswapfile
+    call s:SetScratch()
     file [Diff Right]
     vnew
-    setlocal bufhidden=unload nobuflisted buftype=nofile noswapfile
+    call s:SetScratch()
     file [Diff Left]
     windo diffthis
     execute "normal! \<C-w>h"
@@ -1500,7 +1521,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
     " ジャンクファイル
     nnoremap [Unite]j :<C-u>Unite junk -no-split<CR>
-    let g:unite_source_alias_aliases = {'junk': {'source': 'file_rec', 'args': $HOME . '/.vim_junk/', }, }
+    let g:unite_source_alias_aliases = {'junk': {'source': 'file_rec', 'args': $DOTVIM . '/tmp/junk/', }, }
 
     " unite source
     nnoremap [Unite]<SPACE> :<C-u>Unite source -no-split<CR>
