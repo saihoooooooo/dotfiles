@@ -650,14 +650,19 @@ function! s:Rename()
 endfunction
 
 " スクラッチバッファ
-command! -nargs=? Scratch call s:MakeScratchBuffer(<q-args>)
-function! s:MakeScratchBuffer(open)
+command! -nargs=? -complete=filetype Scratch call s:MakeScratchBuffer(<q-args>, '')
+command! -nargs=? -complete=filetype VScratch call s:MakeScratchBuffer(<q-args>, 'v')
+command! -nargs=? -complete=filetype TScratch call s:MakeScratchBuffer(<q-args>, 't')
+function! s:MakeScratchBuffer(filetype, open)
     if a:open == 'v'
         vnew
     elseif a:open == 't'
         tabnew
     else
         new
+    endif
+    if a:filetype != ''
+        let &filetype = a:filetype
     endif
     call s:SetScratch()
 endfunction
