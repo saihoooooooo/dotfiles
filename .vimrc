@@ -91,12 +91,6 @@ function! s:ExecuteKeepView(expr)
     call winrestview(wininfo)
 endfunction
 
-" 外部コマンドが使用可能か調べる
-function! s:HasCommand(cmd)
-    let path = substitute($PATH, ':', ',', 'g')
-    return (globpath(path, a:cmd) != '' ? 1 : 0)
-endfunction
-
 " エラーメッセージ
 function! s:ErrorMsg(msg)
     echohl ErrorMsg
@@ -926,7 +920,7 @@ autocmd MyAutoCmd FileType php setlocal errorformat=%m\ in\ %f\ on\ line\ %l,%-G
 autocmd MyAutoCmd BufWritePost *.php silent make | if !has('gui_running') | redraw! | endif
 
 " grep設定
-if s:HasCommand('ack')
+if executable('ack')
     set grepprg=ack\ --nogroup
     set grepformat=%f:%l:%m
 else
@@ -939,7 +933,7 @@ command! -complete=file -nargs=+ Grep call s:Grep(<f-args>)
 function! s:Grep(pattern, directory, ...)
     let grepcmd = []
     call add(grepcmd, 'grep')
-    if s:HasCommand('ack')
+    if executable('ack')
         if a:0 && a:1 != ''
             call add(grepcmd, '--' . a:1)
         else
