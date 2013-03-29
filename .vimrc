@@ -299,7 +299,7 @@ set autoindent
 set smartindent
 
 " tabstopの段階調整
-nnoremap <silent> <F4> :let &tabstop = (&tabstop * 2 > 16) ? 2 : &tabstop * 2<CR>:echo 'tabstop:' &tabstop<CR>
+nnoremap <silent><F4> :let &tabstop = (&tabstop * 2 > 16) ? 2 : &tabstop * 2<CR>:echo 'tabstop:' &tabstop<CR>
 
 " }}}
 "=============================================================================
@@ -1624,13 +1624,13 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
         normal .
 
         " リネーム
-        nmap <buffer><silent> R <Plug>(vimfiler_rename_file)
+        nmap <buffer><silent>R <Plug>(vimfiler_rename_file)
 
         " ディレクトリをリロード
-        nmap <buffer><silent> r <Plug>(vimfiler_redraw_screen)
+        nmap <buffer><silent>r <Plug>(vimfiler_redraw_screen)
 
         " トグル選択
-        nmap <buffer><silent> <SPACE> <Plug>(vimfiler_toggle_mark_current_line)
+        nmap <buffer><silent><SPACE> <Plug>(vimfiler_toggle_mark_current_line)
     endfunction
 
 " }}}
@@ -1714,6 +1714,9 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     endfunction
     call quickrun#module#register(s:hook_redraw, 1)
     unlet s:hook_redraw"
+
+    " <C-c> で実行を強制終了させる
+    nnoremap <expr><silent><C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "\<C-c>"
 
 " }}}
 "=============================================================================
