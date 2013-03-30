@@ -651,15 +651,18 @@ endfunction
 
 " スクラッチバッファ
 command! -nargs=? -complete=filetype Scratch call s:MakeScratchBuffer(<q-args>, '')
+command! -nargs=? -complete=filetype NScratch call s:MakeScratchBuffer(<q-args>, 'n')
 command! -nargs=? -complete=filetype VScratch call s:MakeScratchBuffer(<q-args>, 'v')
 command! -nargs=? -complete=filetype TScratch call s:MakeScratchBuffer(<q-args>, 't')
 function! s:MakeScratchBuffer(filetype, open)
-    if a:open == 'v'
+    if a:open == 'n'
+        new
+    elseif a:open == 'v'
         vnew
     elseif a:open == 't'
         tabnew
     else
-        new
+        enew
     endif
     if a:filetype != ''
         let &filetype = a:filetype
@@ -1522,7 +1525,12 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
     " ジャンクファイル
     nnoremap [Unite]j :<C-u>Unite junk -no-split<CR>
-    let g:unite_source_alias_aliases = {'junk': {'source': 'file_rec', 'args': $DOTVIM . '/tmp/junk/', }, }
+    let g:unite_source_alias_aliases = {
+    \     'junk': {
+    \         'source': 'file_rec',
+    \         'args': $DOTVIM . '/tmp/junk/',
+    \     }
+    \ }
 
     " unite source
     nnoremap [Unite]<SPACE> :<C-u>Unite source -no-split<CR>
@@ -1536,9 +1544,6 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
         " uniteを終了
         imap <buffer><ESC> <Plug>(unite_exit)
         nmap <buffer><ESC> <Plug>(unite_exit)
-
-        " 編集
-        inoremap <silent><buffer><expr><C-e> unite#do_action('edit')
 
         " ノーマルモードでの上下移動
         nmap <buffer><C-n> <Plug>(unite_loop_cursor_down)
