@@ -1174,12 +1174,9 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
     " 初期化
     if has('vim_starting')
-        filetype off
         set runtimepath+=$DOTVIM/bundle/neobundle.vim
-        call neobundle#rc(expand($DOTVIM . '/bundle'))
-        filetype plugin on
-        filetype indent on
     endif
+    call neobundle#rc(expand($DOTVIM . '/bundle'))
 
     " plugin
     NeoBundle 'git://github.com/anyakichi/vim-surround.git'
@@ -1226,6 +1223,11 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'git://github.com/vim-scripts/oceandeep.git'
     NeoBundle 'git://github.com/vim-scripts/lilac.vim.git'
     NeoBundle 'git://github.com/vim-scripts/dusk.git'
+
+    " 後処理
+    NeoBundleCheck
+    filetype plugin on
+    filetype indent on
 
 "=============================================================================
 " vim-textobj-php : {{{
