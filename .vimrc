@@ -1205,7 +1205,14 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'git://github.com/Shougo/neobundle.vim.git'
     NeoBundle 'git://github.com/Shougo/neocomplcache.git'
     NeoBundle 'git://github.com/Shougo/neosnippet.git'
-    NeoBundle 'git://github.com/Shougo/vimproc.git'
+    NeoBundle 'git://github.com/Shougo/vimproc.git', {
+    \     'build': {
+    \         'windows': 'make -f make_mingw32.mak',
+    \         'cygwin': 'make -f make_cygwin.mak',
+    \         'mac': 'make -f make_mac.mak',
+    \         'unix': 'make -f make_unix.mak',
+    \     },
+    \ }
     NeoBundle 'git://github.com/Shougo/vimshell.git'
     NeoBundle 'git://github.com/teramako/jscomplete-vim.git'
     NeoBundle 'git://github.com/thinca/vim-textobj-between.git'
