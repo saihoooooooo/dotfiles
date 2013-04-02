@@ -1150,7 +1150,7 @@ function! s:ToggleOption(option)
     endif
 endfunction
 let g:toggle_option_extra = {
-\     'number' : ['number', 'relativenumber']
+\     'number': ['number', 'relativenumber']
 \ }
 
 " vimスカウター
@@ -1693,8 +1693,8 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     let g:quickrun_config.sql = {
     \     'runner': 'system',
     \     'cmdopt': '-h [host] -U [user] -p [port] -d [db]',
-    \     'hook/nowrap/enable' : 1,
-    \     'hook/redraw/enable' : 1,
+    \     'hook/nowrap/enable': 1,
+    \     'hook/redraw/enable': 1,
     \ }
 
     " 折り返し解除フック
