@@ -1043,29 +1043,26 @@ nnoremap Q q
 "=============================================================================
 " マーク設定 : {{{
 
-" 起動時に初期化を行う
-autocmd MyAutoCmd VimEnter * delmarks!
-
 " 基本マップ
 nnoremap [Mark] <Nop>
 nmap m [Mark]
 
 " 現在位置をマーク
-nnoremap <silent>[Mark]m :<C-u>call <SID>AutoMark()<CR>
-if !exists('g:marks_pos')
-    let g:marks_char = [
+nnoremap <silent>[Mark]m :<C-u>call <SID>AutoMarkrement()<CR>
+if !exists('g:markrement_char')
+    let g:markrement_char = [
     \     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
     \     'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
     \ ]
 endif
-function! s:AutoMark()
-    if !exists('b:marks_current_pos')
-        let b:marks_current_pos = 0
+function! s:AutoMarkrement()
+    if !exists('b:markrement_pos')
+        let b:markrement_pos = 0
     else
-        let b:marks_current_pos = (b:marks_current_pos + 1) % len(g:marks_char)
+        let b:markrement_pos = (b:markrement_pos + 1) % len(g:markrement_char)
     endif
-    execute 'mark' g:marks_char[b:marks_current_pos]
-    echo 'marked' g:marks_char[b:marks_current_pos]
+    execute 'mark' g:markrement_char[b:markrement_pos]
+    echo 'marked' g:markrement_char[b:markrement_pos]
 endfunction
 
 " 次/前のマーク
@@ -1076,7 +1073,10 @@ nnoremap [Mark]p [`
 nnoremap [Mark]l :<C-u>marks<CR>
 
 " 前回終了位置に移動
-autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g`\"" | endif
+autocmd MyAutoCmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line('$') | exe 'normal g`"' | endif
+
+" バッファ読み込み時にマークを初期化
+autocmd MyAutoCmd BufReadPost * delmarks!
 
 " }}}
 "=============================================================================
