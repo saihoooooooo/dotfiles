@@ -205,24 +205,6 @@ else
     autocmd MyAutoCmd GUIEnter * set guifont=Osaka-Mono:h14
 endif
 
-" カラースキーム
-if !exists('g:colors_name')
-    if has('gui_running')
-        autocmd MyAutoCmd GUIEnter * colorscheme desert
-    else
-        colorscheme desert
-    endif
-endif
-
-" 半透明
-if has('gui_running')
-    if s:iswin
-        autocmd MyAutoCmd GUIEnter * set transparency=220
-    else
-        set transparency=10
-    endif
-endif
-
 " コマンドライン行数
 if has('gui_running')
     autocmd MyAutoCmd GUIEnter * set cmdheight=1
@@ -257,18 +239,36 @@ set list
 set listchars=tab:>\ ,trail:-,nbsp:%,extends:>,precedes:<
 
 " 全角スペースを視覚化
-autocmd MyAutoCmd VimEnter,WinEnter * match IdeographicSpace /　/
+autocmd MyAutoCmd ColorScheme * highlight IdeographicSpace ctermbg=Gray guibg=Gray50
+autocmd MyAutoCmd VimEnter,WinEnter * call s:VisualizeIS()
+function! s:VisualizeIS()
+    if !exists('w:is_match')
+        let w:is_match = matchadd('IdeographicSpace', '　')
+    endif
+endfunction
+
+" カラースキーム
+if !exists('g:colors_name')
+    if has('gui_running')
+        autocmd MyAutoCmd GUIEnter * colorscheme desert
+    else
+        colorscheme desert
+    endif
+endif
+
+" 半透明
 if has('gui_running')
-    autocmd MyAutoCmd GUIEnter,ColorScheme * highlight IdeographicSpace guibg=Gray50
-else
-    highlight IdeographicSpace ctermbg=Gray
-    autocmd MyAutoCmd ColorScheme * highlight IdeographicSpace ctermbg=Gray
+    if s:iswin
+        autocmd MyAutoCmd GUIEnter * set transparency=220
+    else
+        set transparency=10
+    endif
 endif
 
 " 全角文字表示幅
 if exists('+ambiwidth')
     if has('gui_running')
-        autocmd MyAutoCmd GUIEnter * set ambiwidth=double
+        autocmd MyAutoCmd GUIEnter * nested set ambiwidth=double
     else
         set ambiwidth=double
     endif
