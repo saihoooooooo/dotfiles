@@ -998,15 +998,20 @@ function! s:DiffNew()
     execute "normal! \<C-w>h"
 endfunction
 
-" 差分情報を更新
-nnoremap <silent>du :<C-u>call <SID>DiffUpdate()<CR>
-function! s:DiffUpdate()
+" 差分モード時のみコマンドを実行
+function! s:InDiffExecute(cmd)
     if &diff
-        diffupdate
+        execute a:cmd
     else
         call s:ErrorMsg('Current buffer is not in diff mode.')
     endif
 endfunction
+
+" 差分情報を更新
+nnoremap <silent>du :<C-u>call <SID>InDiffExecute('diffupdate')<CR>
+
+" 差分モード終了
+nnoremap <silent>de :<C-u>call <SID>InDiffExecute('diffoff!')<CR>
 
 " }}}
 "=============================================================================
