@@ -9,9 +9,6 @@
 " アプリケーション名
 set titlestring="Mozilla Firegorilla"
 
-" ローカルrc
-source! /Users/sinsaiho/.vimperatorrc.local
-
 " デフォルトの検索エンジン
 set defsearch=google
 
@@ -29,8 +26,8 @@ set! browser.tabs.closeWindowWithLastTab=false
 " gui
 " Alt+↑/↓でナビゲーションバーの表示/非表示
 set gui=tabs,nonavigation,noaddons
-map <A-Up> :set gui=navigation<CR>
-map <A-Down> :set gui=nonavigation<CR>
+noremap <A-Up> :set gui=navigation<CR>
+noremap <A-Down> :set gui=nonavigation<CR>
 
 " カラースキーム
 colorscheme mycolor
@@ -40,17 +37,7 @@ set verbose=9
 
 " ステータスライン左寄せ
 js <<EOM
-    document.getElementById("liberator-status").style.textAlign = "start"
-EOM
-
-" ステータスラインにfaviconを移動
-js <<EOM
-let statusLine = document.getElementById("liberator-statusline");
-let (favicon = document.getElementById("page-proxy-stack")) {
-  favicon.style.maxWidth = favicon.style.maxHeight = "20px";
-  favicon.style.margin = "0 -6px 0 5px";
-  statusLine.insertBefore(favicon, statusLine.firstChild);
-}
+    document.getElementById("liberator-status").style.textAlign = "left"
 EOM
 
 "-----------------------------------------------------------------------
