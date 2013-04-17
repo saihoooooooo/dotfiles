@@ -1692,7 +1692,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     \ }
     let g:quickrun_config.coffee = {
     \     'command': 'coffee',
-    \     'exec': '%c -cbp %s',
+    \     'cmdopt': '-pb',
     \     'outputter/buffer/filetype': 'javascript',
     \ }
     let g:quickrun_config.sql = {
