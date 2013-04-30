@@ -38,6 +38,9 @@ autocmd MyAutoCmd BufWritePost $MYVIMRC source $MYVIMRC
 " 起動時に.vimrcを開く
 autocmd MyAutoCmd VimEnter * nested if @% == '' && s:GetBufByte() == 0 | edit $MYVIMRC | endif
 
+" 起動時は常に変更なしとする（標準入力対策）
+autocmd MyAutoCmd VimEnter * set nomodified
+
 " }}}
 "=============================================================================
 " 共通関数設定 : {{{
