@@ -36,7 +36,7 @@ nnoremap <silent>vv :<C-u>edit $MYVIMRC<CR>
 autocmd MyAutoCmd BufWritePost $MYVIMRC source $MYVIMRC
 
 " 起動時に.vimrcを開く
-autocmd MyAutoCmd VimEnter * nested if @% == '' | edit $MYVIMRC | endif
+autocmd MyAutoCmd VimEnter * nested if @% == '' && s:GetBufByte() == 0 | edit $MYVIMRC | endif
 
 " }}}
 "=============================================================================
@@ -74,6 +74,16 @@ function! s:GetBufBasename(...)
         endif
     endif
     return fnamemodify(bufname, ':t')
+endfunction
+
+" カレントバッファのサイズを取得
+function! s:GetBufByte()
+    let byte = line2byte(line('$') + 1)
+    if byte == -1
+        return 0
+    else
+        return byte - 1
+    endif
 endfunction
 
 " ハイライトグループを取得
@@ -740,7 +750,7 @@ function! s:BufInfo()
         echo '[ mtime ] ' . strftime('%Y-%m-%d %H:%M:%S', getftime(expand('%')))
     endif
     echo '[ fline ] ' . (line('$')) . ' lines'
-    echo '[ fsize ] ' . (line2byte(line('$') + 1) - 1) . ' bytes'
+    echo '[ fsize ] ' . s:GetBufByte() . ' bytes'
 endfunction
 
 " 現在のバッファを削除
