@@ -437,16 +437,18 @@ function! s:ToggleComment(cs, ce) range
     let current = a:firstline
     while (current <= a:lastline)
         let line = getline(current)
-        if strpart(line, match(line, "[^[:blank:]]"), strlen(a:cs)) ==# a:cs
-            execute 'normal! ^d' . strlen(a:cs) . 'l'
-        else
-            execute 'normal! I' . a:cs
-        endif
-        if !empty(a:ce)
-            if strpart(line, strlen(line) - strlen(a:ce)) ==# a:ce
-                execute 'normal! $v' . (strlen(a:ce) - 1) . 'hd'
+        if strlen(line) > 0
+            if strpart(line, match(line, "[^[:blank:]]"), strlen(a:cs)) ==# a:cs
+                execute 'normal! ^d' . strlen(a:cs) . 'l'
             else
-                execute 'normal! A' . a:ce
+                execute 'normal! I' . a:cs
+            endif
+            if !empty(a:ce)
+                if strpart(line, strlen(line) - strlen(a:ce)) ==# a:ce
+                    execute 'normal! $v' . (strlen(a:ce) - 1) . 'hd'
+                else
+                    execute 'normal! A' . a:ce
+                endif
             endif
         endif
         normal! j
