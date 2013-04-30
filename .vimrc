@@ -747,13 +747,13 @@ nnoremap <silent>y% :<C-u>let @" = expand('%:p')<CR>
 " カレントバッファの情報を表示
 nnoremap <silent><C-g> :<C-u>call <SID>BufInfo()<CR>
 function! s:BufInfo()
-    echo '[ fpath ] ' . expand('%:p')
-    echo '[ bufnr ] ' . bufnr('%')
+    echo '[ fpath ]' expand('%:p')
+    echo '[ bufnr ]' bufnr('%')
     if filereadable(expand('%'))
-        echo '[ mtime ] ' . strftime('%Y-%m-%d %H:%M:%S', getftime(expand('%')))
+        echo '[ mtime ]' strftime('%Y-%m-%d %H:%M:%S', getftime(expand('%')))
     endif
-    echo '[ fline ] ' . (line('$')) . ' lines'
-    echo '[ fsize ] ' . s:GetBufByte() . ' bytes'
+    echo '[ fline ]' line('$') 'lines'
+    echo '[ fsize ]' s:GetBufByte() 'bytes'
 endfunction
 
 " 現在のバッファを削除
