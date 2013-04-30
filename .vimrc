@@ -604,12 +604,12 @@ set showcmd
 set history=1000
 
 " Emacs風キーバインド
-:cnoremap <C-a> <Home>
-:cnoremap <C-e> <End>
-:cnoremap <C-b> <Left>
-:cnoremap <C-f> <Right>
-:cnoremap <C-d> <Del>
-:cnoremap <C-h> <BS>
+cnoremap <C-a> <Home>
+cnoremap <C-e> <End>
+cnoremap <C-b> <Left>
+cnoremap <C-f> <Right>
+cnoremap <C-d> <Del>
+cnoremap <C-h> <BS>
 
 " zsh風履歴検索
 cnoremap <C-p> <Up>
