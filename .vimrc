@@ -403,10 +403,10 @@ set backspace=indent,eol,start
 map Y y$
 
 " 空行を挿入
-nnoremap <silent><S-CR> :<C-u>call append('.', '')<CR>j
+nnoremap <silent>O :<C-u>call append('.', '')<CR>j
 
 " ノーマルモードでの改行
-nnoremap <C-CR> i<CR><ESC>
+nnoremap x<CR> i<CR><ESC>
 
 " コメントを継続しない
 autocmd MyAutoCmd FileType * setlocal formatoptions& formatoptions-=o formatoptions-=r
