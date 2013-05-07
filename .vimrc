@@ -1215,6 +1215,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'git://github.com/kana/vim-textobj-syntax.git'
     NeoBundle 'git://github.com/kana/vim-textobj-user.git'
     NeoBundle 'git://github.com/kchmck/vim-coffee-script.git'
+    NeoBundle 'git://github.com/koron/chalice.git'
     NeoBundle 'git://github.com/koron/dicwin-vim.git'
     NeoBundle 'git://github.com/mattn/calendar-vim.git'
     NeoBundle 'git://github.com/mattn/mahjong-vim.git'
@@ -1426,6 +1427,13 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 " vim-coffee-script : {{{
 
     " 設定なし
+
+" }}}
+"=============================================================================
+" chalice : {{{
+
+    " 自動プレビューをOFF
+    let g:chalice_preview = 0
 
 " }}}
 "=============================================================================
