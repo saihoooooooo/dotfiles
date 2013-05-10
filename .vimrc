@@ -1227,14 +1227,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'git://github.com/Shougo/neobundle.vim.git'
     NeoBundle 'git://github.com/Shougo/neocomplcache.git'
     NeoBundle 'git://github.com/Shougo/neosnippet.git'
-    NeoBundle 'git://github.com/Shougo/vimproc.git', {
-    \     'build': {
-    \         'windows': 'make -f make_mingw32.mak',
-    \         'cygwin': 'make -f make_cygwin.mak',
-    \         'mac': 'make -f make_mac.mak',
-    \         'unix': 'make -f make_unix.mak',
-    \     },
-    \ }
+    NeoBundle 'git://github.com/Shougo/vimproc.git'
     NeoBundle 'git://github.com/Shougo/vimshell.git'
     NeoBundle 'git://github.com/teramako/jscomplete-vim.git'
     NeoBundle 'git://github.com/thinca/vim-textobj-between.git'
@@ -1512,8 +1505,8 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     let g:user_zen_settings.html = {
     \     'filters': 'html',
     \     'snippets': {
-    \         'jq': "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js\"></script>\n<script>\n\\$(function() {\n\t${cursor}${child}\n});\n</script>",
-    \         'cd': "<![CDATA[|]]>",
+    \         'jq': "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js\"></script>\n"
+    \             . "<script>\n\\$(function() {\n\t${cursor}${child}\n});\n</script>",
     \     },
     \ }
 
@@ -1676,7 +1669,15 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 "=============================================================================
 " vimproc : {{{
 
-    " 設定なし
+    " 自動ビルド
+    call neobundle#config('vimproc', {
+    \     'build': {
+    \         'windows': 'make -f make_mingw32.mak',
+    \         'cygwin': 'make -f make_cygwin.mak',
+    \         'mac': 'make -f make_mac.mak',
+    \         'unix': 'make -f make_unix.mak',
+    \     },
+    \ })
 
 " }}}
 "=============================================================================
