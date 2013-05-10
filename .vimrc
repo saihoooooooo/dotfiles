@@ -1230,9 +1230,10 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'git://github.com/Shougo/vimproc.git'
     NeoBundle 'git://github.com/Shougo/vimshell.git'
     NeoBundle 'git://github.com/teramako/jscomplete-vim.git'
-    NeoBundle 'git://github.com/thinca/vim-textobj-between.git'
+    NeoBundle 'git://github.com/thinca/vim-poslist.git'
     NeoBundle 'git://github.com/thinca/vim-quickrun.git'
     NeoBundle 'git://github.com/thinca/vim-ref.git'
+    NeoBundle 'git://github.com/thinca/vim-textobj-between.git'
     NeoBundle 'git://github.com/tsaleh/vim-matchit.git'
     NeoBundle 'git://github.com/tyru/open-browser.vim.git'
     NeoBundle 'git://github.com/tyru/operator-camelize.vim.git'
@@ -1693,9 +1694,14 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
 " }}}
 "=============================================================================
-" vim-textobj-between : {{{
+" vim-poslist : {{{
 
-    " 設定なし
+    " 履歴の最大数
+    let g:poslist_histsize = 1000
+
+    " バッファ単位で戻る/進む
+    nmap <C-o> <Plug>(poslist-prev-buf)
+    nmap <C-i> <Plug>(poslist-next-buf)
 
 " }}}
 "=============================================================================
@@ -1771,6 +1777,12 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
     " phpマニュアルパス
     let g:ref_phpmanual_path = $DOTVIM . '/ref/php/php-chunked-xhtml/'
+
+" }}}
+"=============================================================================
+" vim-textobj-between : {{{
+
+    " 設定なし
 
 " }}}
 "=============================================================================
