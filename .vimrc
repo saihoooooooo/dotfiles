@@ -1230,7 +1230,6 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'git://github.com/Shougo/vimproc.git'
     NeoBundle 'git://github.com/Shougo/vimshell.git'
     NeoBundle 'git://github.com/teramako/jscomplete-vim.git'
-    NeoBundle 'git://github.com/thinca/vim-poslist.git'
     NeoBundle 'git://github.com/thinca/vim-quickrun.git'
     NeoBundle 'git://github.com/thinca/vim-ref.git'
     NeoBundle 'git://github.com/thinca/vim-textobj-between.git'
@@ -1691,17 +1690,6 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 " jscomplete-vim : {{{
 
     " 設定なし
-
-" }}}
-"=============================================================================
-" vim-poslist : {{{
-
-    " 履歴の最大数
-    let g:poslist_histsize = 1000
-
-    " バッファ単位で戻る/進む
-    nmap <C-o> <Plug>(poslist-prev-buf)
-    nmap <C-i> <Plug>(poslist-next-buf)
 
 " }}}
 "=============================================================================
