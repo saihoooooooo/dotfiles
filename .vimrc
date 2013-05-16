@@ -218,6 +218,11 @@ else
     autocmd MyAutoCmd GUIEnter * set guifont=Osaka-Mono:h14
 endif
 
+" ターミナルの場合は256色指定
+if !has('gui_running')
+    set t_Co=256
+endif
+
 " コマンドライン行数
 if has('gui_running')
     autocmd MyAutoCmd GUIEnter * set cmdheight=1
@@ -1221,6 +1226,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'git://github.com/mattn/mahjong-vim.git'
     NeoBundle 'git://github.com/mattn/webapi-vim.git'
     NeoBundle 'git://github.com/mattn/zencoding-vim.git'
+    NeoBundle 'git://github.com/nathanaelkane/vim-indent-guides.git'
     NeoBundle 'git://github.com/saihoooooooo/vim-auto-colorscheme.git'
     NeoBundle 'git://github.com/saihoooooooo/vim-textobj-space.git'
     NeoBundle 'git://github.com/Shougo/unite.vim.git'
@@ -1509,6 +1515,24 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     \             . "<script>\n\\$(function() {\n\t${cursor}${child}\n});\n</script>",
     \     },
     \ }
+
+" }}}
+"=============================================================================
+" vim-indent-guides {{{
+
+    " 手動起動
+    let g:indent_guides_enable_on_vim_startup = 0
+
+    " ガイドの幅
+    let g:indent_guides_guide_size = &shiftwidth
+
+    " ガイドの表示を開始するインデントレベル
+    let g:indent_guides_start_level = 1
+
+    " 色設定
+    let g:indent_guides_auto_colors = 0
+    autocmd MyAutoCmd ColorScheme * highlight IndentGuidesOdd guibg=Black ctermbg=Black
+    autocmd MyAutoCmd ColorScheme * highlight IndentGuidesEven guibg=DarkGrey ctermbg=DarkGrey
 
 " }}}
 "=============================================================================
