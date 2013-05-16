@@ -1246,13 +1246,13 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'git://github.com/vim-scripts/TwitVim.git'
 
     " colorscheme
+    NeoBundle 'git://github.com/vim-scripts/chlordane.vim.git'
     NeoBundle 'git://github.com/vim-scripts/ChocolateLiquor.git'
     NeoBundle 'git://github.com/vim-scripts/desert256.vim.git'
-    NeoBundle 'git://github.com/vim-scripts/dusk.git'
-    NeoBundle 'git://github.com/vim-scripts/lilac.vim.git'
     NeoBundle 'git://github.com/vim-scripts/nevfn.git'
     NeoBundle 'git://github.com/vim-scripts/newspaper.vim.git'
-    NeoBundle 'git://github.com/vim-scripts/oceandeep.git'
+    NeoBundle 'git://github.com/vim-scripts/pyte.git'
+    NeoBundle 'git://github.com/w0ng/vim-hybrid.git'
 
     " 後処理
     NeoBundleCheck
@@ -1555,8 +1555,8 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
     " 自動colorscheme設定
     let g:auto_colorscheme_config = [
-    \     ['\~/\.vimperatorrc', 'dusk'],
-    \     ['\.js$', 'oceandeep'],
+    \     ['^\\\\win-file-server\\', 'desert'],
+    \     ['\.extention$', 'blue'],
     \ ]
 
 " }}}
