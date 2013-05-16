@@ -1207,6 +1207,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     " plugin
     NeoBundle 'git://github.com/anyakichi/vim-surround.git'
     NeoBundle 'git://github.com/digitaltoad/vim-jade.git'
+    NeoBundle 'git://github.com/godlygeek/csapprox.git'
     NeoBundle 'git://github.com/h1mesuke/unite-outline.git'
     NeoBundle 'git://github.com/h1mesuke/vim-alignta.git'
     NeoBundle 'git://github.com/kana/vim-operator-replace.git'
@@ -1275,6 +1276,12 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 " }}}
 "=============================================================================
 " vim-jade : {{{
+
+    " 設定なし
+
+" }}}
+"=============================================================================
+" csapprox : {{{
 
     " 設定なし
 
@@ -1519,7 +1526,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
 " }}}
 "=============================================================================
-" vim-indent-guides {{{
+" vim-indent-guides : {{{
 
     " 手動起動
     let g:indent_guides_enable_on_vim_startup = 0
@@ -1540,7 +1547,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 " vim-auto-colorscheme : {{{
 
     " デフォルトカラースキーム
-    if has('gui_running')
+    if has('gui_running') || has('gui')
         let g:auto_colorscheme_default = 'nevfn'
     else
         let g:auto_colorscheme_default = 'desert256'
