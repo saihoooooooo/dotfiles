@@ -233,8 +233,12 @@ endif
 " 現在のモードを表示
 set showmode
 
-" 相対行番号を表示
-set relativenumber
+" 行番号/相対行番号を表示
+if v:version < 703
+    set number
+else
+    set relativenumber
+endif
 
 " 行を折り返して表示
 set wrap
