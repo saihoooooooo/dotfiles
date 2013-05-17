@@ -1554,11 +1554,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 " vim-auto-colorscheme : {{{
 
     " デフォルトカラースキーム
-    if has('gui_running') || has('gui')
-        let g:auto_colorscheme_default = 'nevfn'
-    else
-        let g:auto_colorscheme_default = 'desert256'
-    endif
+    let g:auto_colorscheme_default = 'nevfn'
 
     " 自動colorscheme設定
     let g:auto_colorscheme_config = [
