@@ -1251,6 +1251,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'tyru/open-browser.vim'
     NeoBundle 'tyru/operator-camelize.vim'
     NeoBundle 'vim-scripts/TwitVim'
+    NeoBundle 'vim-scripts/vcscommand.vim'
 
     " colorscheme
     NeoBundle 'vim-scripts/chlordane.vim'
@@ -1838,6 +1839,80 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
     " 取得数
     let twitvim_count = 256
+
+" }}}
+"=============================================================================
+" vcscommand.vim : {{{
+
+    " キーマップ
+    let g:VCSCommandMapPrefix = 'xv'
+
+    " ファイルタイプ設定
+    augroup VCSCommand
+        autocmd!
+        autocmd User VCSBufferCreated call s:VcscommandMySetting()
+    augroup END
+    function! s:VcscommandMySetting()
+        if !exists('b:VCSCommandCommand')
+            return
+        endif
+        if b:VCSCommandCommand !=# 'commitlog'
+            setlocal readonly
+        endif
+        if b:VCSCommandCommand ==# 'log'
+            nnoremap <silent><buffer> r :<C-u>call <SID>VcscommandVscReviewByLog()<CR>
+            nnoremap <silent><buffer> <CR> :<C-u>call <SID>VcscommandVscDiffByLog()<CR>
+        endif
+    endfunction
+
+    " リビジョン指定VCSReview
+    function! s:VcscommandVscReviewByLog()
+        let rev = s:VcscommandGetRevisionByCursorLine(0)
+        execute 'VCSReview' rev
+    endfunction
+
+    " リビジョン指定VCSDiff
+    function! s:VcscommandVscDiffByLog()
+        let rev = s:VcscommandGetRevisionByCursorLine(0)
+        let preview = s:VcscommandGetRevisionByCursorLine(1)
+        execute 'VCSDiff' preview rev
+    endfunction
+
+    " カーソル上のリビジョン番号を取得
+    function! s:VcscommandGetRevisionByCursorLine(fluctuation)
+        let save_cursor = getpos('.')
+        let save_yank_register = getreg('"')
+        if line('.') == 1
+            normal! j
+        endif
+        normal! j
+        if b:VCSCommandVCSType ==# 'SVN'
+            ?^r\d\+\ |
+        elseif b:VCSCommandVCSType ==# 'git'
+            ?^commit\ \w\+$
+        elseif b:VCSCommandVCSType ==# 'HG'
+            ?^changeset:\ \+\d\+:\w\+$
+        endif
+        if a:fluctuation + 0 != 0
+            let cmd = a:fluctuation > 0 ? '/' : '?'
+            let cnt = abs(a:fluctuation)
+            while cnt > 0
+                /
+                let cnt -= 1
+            endwhile
+        endif
+        if b:VCSCommandVCSType ==# 'SVN'
+            normal! 0lye
+        elseif b:VCSCommandVCSType ==# 'git'
+            normal! 0wy7l
+        elseif b:VCSCommandVCSType ==# 'HG'
+            normal! 0Wyw
+        endif
+        let rev = @"
+        call setpos('.', save_cursor)
+        call setreg('"', save_yank_register)
+        return rev
+    endfunction
 
 " }}}
 "=============================================================================
