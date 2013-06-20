@@ -28,8 +28,9 @@ termcapinfo xterm* ti@:te@
 # ウィンドウが終了した場合にkを押すまで終了せず、rで再実行する
 # zombie kr
 
-# <C-w>でwindowlist
+# w/<C-w>でwindowlist
 bind w  windowlist -b
+bind ^w  windowlist -b
 
 # <C-]>でもペースト可能
 bind ^] paste .

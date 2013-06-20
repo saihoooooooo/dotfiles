@@ -573,10 +573,15 @@ set smartcase
 set wrapscan
 
 " *による検索時に初回は移動しない
-nnoremap <silent>* viw"zy:let @/ = '\V' . escape(@z, '\/')<CR>:set hlsearch<CR>`<
-
-" ビジュアルモード時の*検索
-vnoremap <silent>* "zy:let @/ = '\V' . substitute(escape(@z, '\/'), '\n', '\\n', 'g')<CR>:set hlsearch<CR>
+nnoremap <silent>* viw:<C-u>call <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>`<
+vnoremap <silent>* :<C-u>call <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>
+function! s:StarSearch()
+    let orig = @"
+    normal! gvy
+    let text = @"
+    let @/ = '\V' . substitute(escape(text, '\/'), '\n', '\\n', 'g')
+    let @" = orig
+endfunction
 
 " '/'と'?'を自動エスケープ
 cnoremap <expr>/ getcmdtype() == '/' ? '\/' : '/'
@@ -660,7 +665,7 @@ autocmd MyAutoCmd BufRead,BufNewFile *.coffee set filetype=coffee
 autocmd MyAutoCmd FileType js set filetype=javascript
 
 " 手動filetype設定
-nnoremap xof :set filetype=
+nnoremap xof :<C-u>set filetype=
 
 " 編集中ファイルのリネーム
 command! -nargs=0 Rename call s:Rename()
