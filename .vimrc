@@ -234,9 +234,8 @@ endif
 set showmode
 
 " 行番号/相対行番号を表示
-if v:version < 703
-    set number
-else
+set number
+if v:version >= 703
     set relativenumber
 endif
 
@@ -772,9 +771,6 @@ function! s:BufInfo()
     echo '[ fsize ]' s:GetBufByte() 'bytes'
 endfunction
 
-" 現在のバッファを削除
-nnoremap <silent><S-BS> :<C-u>bwipeout!<CR>
-
 " 全バッファを削除
 command! -nargs=0 AllWipeout call s:AllWipeout()
 function! s:AllWipeout()
@@ -814,9 +810,6 @@ set equalalways
 
 " サイズ調整は幅と高さ
 set eadirection=both
-
-" ウィンドウを閉じる
-nnoremap <BS> <C-w>c
 
 " ウィンドウを最大化
 nnoremap <C-w>o <C-w>_<C-w>\|
@@ -1175,9 +1168,8 @@ nnoremap <silent>[Option]/ :<C-u>call <SID>ToggleOption('wrapscan')<CR>
 function! s:ToggleOption(option)
     if has_key(g:toggle_option_extra, a:option)
         for e in g:toggle_option_extra[a:option]
-            if exists('+' . e) && eval("&" . e) == 0
+            if exists('+' . e)
                 execute 'setlocal' e . '!' e . '?'
-                return
             endif
         endfor
     elseif exists('+' . a:option)
@@ -1198,6 +1190,32 @@ function! s:Scouter(file, ...)
         let lines = split(substitute(join(lines, "\n"), '\n\s*\\', '', 'g'), "\n")
     endif
     return len(filter(lines,'v:val !~ pat'))
+endfunction
+
+" ターミナル起動時のコピペ用設定変更
+command! -nargs=0 CopipeTerm call s:CopipeTerm()
+function! s:CopipeTerm()
+    if !exists('b:copipe_term_temp')
+        let b:copipe_term_temp = {
+        \     'number': &number,
+        \     'relativenumber': &relativenumber,
+        \     'foldcolumn': &foldcolumn,
+        \     'wrap': &wrap,
+        \     'showbreak': &showbreak
+        \ }
+        setlocal foldcolumn=0
+        setlocal nonumber
+        setlocal norelativenumber
+        setlocal wrap
+        set showbreak=
+    else
+        let &l:number = b:copipe_term_temp['number']
+        let &l:relativenumber = b:copipe_term_temp['relativenumber']
+        let &l:foldcolumn = b:copipe_term_temp['foldcolumn']
+        let &l:wrap = b:copipe_term_temp['wrap']
+        let &showbreak = b:copipe_term_temp['showbreak']
+        unlet b:copipe_term_temp
+    endif
 endfunction
 
 " }}}
@@ -1778,7 +1796,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
         setlocal nowrap
     endfunction
     call quickrun#module#register(s:hook_nowrap, 1)
-    unlet s:hook_nowrap"
+    unlet s:hook_nowrap
 
     " 再描画フック
     let s:hook_redraw = {
@@ -1792,7 +1810,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
         redraw!
     endfunction
     call quickrun#module#register(s:hook_redraw, 1)
-    unlet s:hook_redraw"
+    unlet s:hook_redraw
 
     " <C-c> で実行を強制終了させる
     nnoremap <expr><silent><C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "\<C-c>"
