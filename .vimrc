@@ -1192,7 +1192,7 @@ function! s:Scouter(file, ...)
     return len(filter(lines,'v:val !~ pat'))
 endfunction
 
-" ターミナル起動時のコピペ用設定変更
+" ターミナル起動時のコピペ用設定
 command! -nargs=0 CopipeTerm call s:CopipeTerm()
 function! s:CopipeTerm()
     if !exists('b:copipe_term_temp')
