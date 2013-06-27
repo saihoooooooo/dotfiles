@@ -1195,8 +1195,8 @@ endfunction
 " ターミナル起動時のコピペ用設定
 command! -nargs=0 CopipeTerm call s:CopipeTerm()
 function! s:CopipeTerm()
-    if !exists('b:copipe_term_temp')
-        let b:copipe_term_temp = {
+    if !exists('b:copipe_term_save')
+        let b:copipe_term_save = {
         \     'number': &number,
         \     'relativenumber': &relativenumber,
         \     'foldcolumn': &foldcolumn,
@@ -1209,12 +1209,12 @@ function! s:CopipeTerm()
         setlocal wrap
         set showbreak=
     else
-        let &l:number = b:copipe_term_temp['number']
-        let &l:relativenumber = b:copipe_term_temp['relativenumber']
-        let &l:foldcolumn = b:copipe_term_temp['foldcolumn']
-        let &l:wrap = b:copipe_term_temp['wrap']
-        let &showbreak = b:copipe_term_temp['showbreak']
-        unlet b:copipe_term_temp
+        let &l:number = b:copipe_term_save['number']
+        let &l:relativenumber = b:copipe_term_save['relativenumber']
+        let &l:foldcolumn = b:copipe_term_save['foldcolumn']
+        let &l:wrap = b:copipe_term_save['wrap']
+        let &showbreak = b:copipe_term_save['showbreak']
+        unlet b:copipe_term_save
     endif
 endfunction
 
