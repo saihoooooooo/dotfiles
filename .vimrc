@@ -993,10 +993,10 @@ else
 endif
 
 " 拡張子指定grep
-command! -complete=file -nargs=+ Grep call s:Grep(<f-args>)
-function! s:Grep(pattern, directory, ...)
+command! -bang -nargs=+ -complete=file Grep call s:Grep(<bang>0, <f-args>)
+function! s:Grep(bang, pattern, directory, ...)
     let grepcmd = []
-    call add(grepcmd, 'grep')
+    call add(grepcmd, 'grep' . (a:bang ? '!' : ''))
     if executable('ack')
         if a:0 && a:1 != ''
             call add(grepcmd, '--' . a:1)
