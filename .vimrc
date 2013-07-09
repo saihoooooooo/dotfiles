@@ -1206,7 +1206,7 @@ function! s:Scouter(file, ...)
 endfunction
 
 " ターミナル起動時のコピペ用設定
-command! -nargs=0 CopipeTerm call s:CopipeTerm()
+nnoremap <silent><F9> :<C-u>call <SID>CopipeTerm()<CR>
 function! s:CopipeTerm()
     if !exists('b:copipe_term_save')
         let b:copipe_term_save = {
