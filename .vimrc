@@ -1132,14 +1132,14 @@ nnoremap [Tag] <Nop>
 nmap t [Tag]
 
 " タグジャンプ
-nnoremap [Tag]t <C-]>
+nnoremap [Tag]t g<C-]>
 
 " 進む/戻る
 nnoremap [Tag]n :<C-u>tag<CR>
 nnoremap [Tag]p :<C-u>pop<CR>
 
 " 別ウィンドウで開く
-nnoremap [Tag]o <C-w>]
+nnoremap [Tag]o <C-w>g<C-]>
 
 " プレビューウィンドウで開く
 nnoremap [Tag]O <C-w>}<C-w>P
