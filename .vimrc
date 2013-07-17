@@ -971,7 +971,10 @@ autocmd MyAutoCmd FileType php setlocal errorformat=%m\ in\ %f\ on\ line\ %l,%-G
 autocmd MyAutoCmd BufWritePost *.php silent make | if !has('gui_running') | redraw! | endif
 
 " grep設定
-if executable('ack')
+if executable('ag')
+    set grepprg=ag\ --nogroup\ -iS
+    set grepformat=%f:%l:%m
+elseif executable('ack')
     set grepprg=ack\ --nogroup
     set grepformat=%f:%l:%m
 else
@@ -984,7 +987,13 @@ command! -bang -nargs=+ -complete=file Grep call s:Grep(<bang>0, <f-args>)
 function! s:Grep(bang, pattern, directory, ...)
     let grepcmd = []
     call add(grepcmd, 'grep' . (a:bang ? '!' : ''))
-    if executable('ack')
+    if executable('ag')
+        if a:0 && a:1 != ''
+            call add(grepcmd, '-G "\.' . a:1 . '$"')
+        else
+            call add(grepcmd, '-a')
+        endif
+    elseif executable('ack')
         if a:0 && a:1 != ''
             call add(grepcmd, '--' . a:1)
         else
