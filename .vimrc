@@ -1266,9 +1266,9 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'koron/chalice'
     NeoBundle 'koron/dicwin-vim'
     NeoBundle 'mattn/calendar-vim'
+    NeoBundle 'mattn/emmet-vim'
     NeoBundle 'mattn/mahjong-vim'
     NeoBundle 'mattn/webapi-vim'
-    NeoBundle 'mattn/zencoding-vim'
     NeoBundle 'nathanaelkane/vim-indent-guides'
     NeoBundle 'saihoooooooo/vim-auto-colorscheme'
     NeoBundle 'saihoooooooo/vim-textobj-space'
@@ -1545,22 +1545,25 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
 " }}}
 "=============================================================================
-" zencoding-vim : {{{
+" emmet-vim : {{{
+
+    " 全モードで使用
+    let g:user_emmet_mode = 'a'
 
     " キーマップ
-    let g:user_zen_leader_key = '<C-z>'
+    let g:user_emmet_leader_key = '<C-z>'
 
     " 初期化
-    let g:user_zen_settings = {}
+    let g:user_emmet_settings = {}
 
     " 言語設定
-    let g:user_zen_settings.lang = 'ja'
+    let g:user_emmet_settings.lang = 'ja'
 
     " インデント設定
-    let g:user_zen_settings.indentation = '    '
+    let g:user_emmet_settings.indentation = '    '
 
     " 各filetype設定
-    let g:user_zen_settings.html = {
+    let g:user_emmet_settings.html = {
     \     'filters': 'html',
     \     'snippets': {
     \         'jq': "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js\"></script>\n"
@@ -1662,14 +1665,14 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
     " ¥を/に変換
     if s:iswin && &shellslash == 0
-        call unite#set_substitute_pattern('files', '\', '/')
+        call unite#custom#substitute('files', '\', '/')
     endif
 
     " カレントディレクトリ以下を探す
-    call unite#set_substitute_pattern('files', '^@/', '\=getcwd()', 1)
+    call unite#custom#substitute('files', '^@', '\=getcwd()', 1)
 
     " 親ディレクトリを探す
-    call unite#set_substitute_pattern('files', ';', '../')
+    call unite#custom#substitute('files', ';', '../')
 
     " file_mruの保存数
     let g:unite_source_file_mru_limit = 1000
