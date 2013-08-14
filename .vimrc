@@ -410,6 +410,10 @@ set backspace=indent,eol,start
 " Yの動作をDやCと同じにする
 map Y y$
 
+" インデントを考慮したペーストを使用
+nnoremap p ]p
+nnoremap P [p
+
 " 空行を挿入
 nnoremap <silent>O :<C-u>call append('.', '')<CR>j
 
