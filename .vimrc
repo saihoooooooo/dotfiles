@@ -1247,6 +1247,9 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     " プロトコル
     let g:neobundle#types#git#default_protocol = 'git'
 
+    " neobundle自体を管理
+    NeoBundleFetch 'Shougo/neobundle.vim'
+
     " plugin
     NeoBundle 'anyakichi/vim-surround'
     NeoBundle 'digitaltoad/vim-jade'
@@ -1274,7 +1277,6 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'saihoooooooo/vim-textobj-space'
     NeoBundle 'Shougo/unite.vim'
     NeoBundle 'Shougo/unite-outline'
-    NeoBundle 'Shougo/neobundle.vim'
     NeoBundle 'Shougo/neocomplcache'
     NeoBundle 'Shougo/neosnippet'
     NeoBundle 'Shougo/vimproc'
@@ -1298,10 +1300,20 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'vim-scripts/pyte'
     NeoBundle 'w0ng/vim-hybrid'
 
+    " 各plugin設定
+    call neobundle#config('vimproc', {
+    \     'build': {
+    \         'windows': 'make -f make_mingw32.mak',
+    \         'cygwin': 'make -f make_cygwin.mak',
+    \         'mac': 'make -f make_mac.mak',
+    \         'unix': 'make -f make_unix.mak',
+    \     },
+    \ })
+
     " 後処理
-    NeoBundleCheck
     filetype plugin on
     filetype indent on
+    NeoBundleCheck
 
 "=============================================================================
 " vim-textobj-php : {{{
@@ -1748,15 +1760,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 "=============================================================================
 " vimproc : {{{
 
-    " 自動ビルド
-    call neobundle#config('vimproc', {
-    \     'build': {
-    \         'windows': 'make -f make_mingw32.mak',
-    \         'cygwin': 'make -f make_cygwin.mak',
-    \         'mac': 'make -f make_mac.mak',
-    \         'unix': 'make -f make_unix.mak',
-    \     },
-    \ })
+    " 設定なし
 
 " }}}
 "=============================================================================
@@ -1886,7 +1890,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     " キーマップ
     let g:VCSCommandMapPrefix = 'xv'
 
-    " ファイルタイプ設定
+    " 各filetype設定
     augroup VCSCommand
         autocmd!
         autocmd User VCSBufferCreated call s:VcscommandMySetting()
