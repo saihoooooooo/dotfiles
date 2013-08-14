@@ -1796,6 +1796,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     \     'command': 'coffee',
     \     'cmdopt': '-pb',
     \     'outputter/buffer/filetype': 'javascript',
+    \     'hook/time/enable': 0,
     \ }
     let g:quickrun_config.sql = {
     \     'runner': 'system',
