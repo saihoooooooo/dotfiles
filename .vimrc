@@ -863,7 +863,7 @@ let s:hl_statusline = ''
 function! s:SwitchStatusLine(insert)
     if a:insert
         silent! let s:hl_statusline = s:GetHighlight('StatusLine')
-        execute 'highlight StatusLine ctermfg=DarkRed ctermbg=Black guifg=#000000 guibg=#aa4400'
+        execute 'highlight StatusLine ctermfg=Black ctermbg=Yellow guifg=#000000 guibg=#aa4400'
     else
         highlight clear StatusLine
         execute 'highlight ' . s:hl_statusline
