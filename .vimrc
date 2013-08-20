@@ -1252,6 +1252,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
     " plugin
     NeoBundle 'anyakichi/vim-surround'
+    NeoBundle 'bling/vim-airline'
     NeoBundle 'digitaltoad/vim-jade'
     NeoBundle 'godlygeek/csapprox'
     NeoBundle 'h1mesuke/vim-alignta'
@@ -1275,10 +1276,10 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'nathanaelkane/vim-indent-guides'
     NeoBundle 'saihoooooooo/vim-auto-colorscheme'
     NeoBundle 'saihoooooooo/vim-textobj-space'
-    NeoBundle 'Shougo/unite.vim'
-    NeoBundle 'Shougo/unite-outline'
     NeoBundle 'Shougo/neocomplcache'
     NeoBundle 'Shougo/neosnippet'
+    NeoBundle 'Shougo/unite.vim'
+    NeoBundle 'Shougo/unite-outline'
     NeoBundle 'Shougo/vimproc'
     NeoBundle 'Shougo/vimshell'
     NeoBundle 'teramako/jscomplete-vim'
@@ -1316,18 +1317,19 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundleCheck
 
 "=============================================================================
-" vim-textobj-php : {{{
-
-    " 設定なし
-
-" }}}
-"=============================================================================
 " vim-surround : {{{
 
     " キーマップ
     nmap s <Plug>Ysurround
     nmap ss <Plug>Yssurround
     nmap S <Plug>Ysurround$
+
+" }}}
+"=============================================================================
+" vim-airline : {{{
+
+    " powerlineでパッチを当てたフォントを使用
+    let g:airline_powerline_fonts=1
 
 " }}}
 "=============================================================================
@@ -1338,12 +1340,6 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 " }}}
 "=============================================================================
 " csapprox : {{{
-
-    " 設定なし
-
-" }}}
-"=============================================================================
-" unite-outline : {{{
 
     " 設定なし
 
@@ -1520,6 +1516,34 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
 " }}}
 "=============================================================================
+" emmet-vim : {{{
+
+    " 全モードで使用
+    let g:user_emmet_mode = 'a'
+
+    " キーマップ
+    let g:user_emmet_leader_key = '<C-z>'
+
+    " 初期化
+    let g:user_emmet_settings = {}
+
+    " 言語設定
+    let g:user_emmet_settings.lang = 'ja'
+
+    " インデント設定
+    let g:user_emmet_settings.indentation = '    '
+
+    " 各filetype設定
+    let g:user_emmet_settings.html = {
+    \     'filters': 'html',
+    \     'snippets': {
+    \         'jq': "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js\"></script>\n"
+    \             . "<script>\n\\$(function() {\n\t${cursor}${child}\n});\n</script>",
+    \     },
+    \ }
+
+" }}}
+"=============================================================================
 " mahjong-vim : {{{
 
     " 設定なし
@@ -1557,34 +1581,6 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
 " }}}
 "=============================================================================
-" emmet-vim : {{{
-
-    " 全モードで使用
-    let g:user_emmet_mode = 'a'
-
-    " キーマップ
-    let g:user_emmet_leader_key = '<C-z>'
-
-    " 初期化
-    let g:user_emmet_settings = {}
-
-    " 言語設定
-    let g:user_emmet_settings.lang = 'ja'
-
-    " インデント設定
-    let g:user_emmet_settings.indentation = '    '
-
-    " 各filetype設定
-    let g:user_emmet_settings.html = {
-    \     'filters': 'html',
-    \     'snippets': {
-    \         'jq': "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js\"></script>\n"
-    \             . "<script>\n\\$(function() {\n\t${cursor}${child}\n});\n</script>",
-    \     },
-    \ }
-
-" }}}
-"=============================================================================
 " vim-indent-guides : {{{
 
     " 手動起動
@@ -1619,6 +1615,56 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 " vim-textobj-space : {{{
 
     " 設定なし
+
+" }}}
+"=============================================================================
+" neocomplcache : {{{
+
+    " neocomplcache有効
+    let g:neocomplcache_enable_at_startup = 1
+
+    " 大文字小文字を区別しない
+    let g:neocomplcache_enable_ignore_case = 1
+
+    " 大文字が含まれている場合は区別して補完
+    let g:neocomplcache_enable_smart_case = 1
+
+    " キャメルケース補完
+    let g:neocomplcache_enable_camel_case_completion = 1
+
+    " スネークケース補完
+    let g:neocomplcache_enable_underbar_completion = 1
+
+    " 日本語は収集しない
+    if !exists('g:neocomplcache_keyword_patterns')
+        let g:neocomplcache_keyword_patterns = {}
+    endif
+    let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
+
+    " <TAB>で補完
+    inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+
+    " 選択中の候補を確定
+    imap <expr><C-y> neocomplcache#close_popup()
+
+    " <CR>は候補を確定しながら改行
+    " imap <expr><CR> neocomplcache#smart_close_popup() . "\<CR>"
+    " autocmd MyAutoCmd InsertCharPre * if v:char == "\<CR>" | echoerr '1' | endif
+
+    " 補完をキャンセル
+    imap <expr><C-e> neocomplcache#cancel_popup()
+
+" }}}
+"=============================================================================
+" neosnippet : {{{
+
+    " スニペット補完
+    imap <C-k> <Plug>(neosnippet_expand_or_jump)
+    smap <C-k> <Plug>(neosnippet_expand_or_jump)
+
+    " プレビューウィンドウを表示しない
+    set completeopt-=preview
 
 " }}}
 "=============================================================================
@@ -1702,59 +1748,9 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
 " }}}
 "=============================================================================
-" neobundle.vim : {{{
+" unite-outline : {{{
 
     " 設定なし
-
-" }}}
-"=============================================================================
-" neocomplcache : {{{
-
-    " neocomplcache有効
-    let g:neocomplcache_enable_at_startup = 1
-
-    " 大文字小文字を区別しない
-    let g:neocomplcache_enable_ignore_case = 1
-
-    " 大文字が含まれている場合は区別して補完
-    let g:neocomplcache_enable_smart_case = 1
-
-    " キャメルケース補完
-    let g:neocomplcache_enable_camel_case_completion = 1
-
-    " スネークケース補完
-    let g:neocomplcache_enable_underbar_completion = 1
-
-    " 日本語は収集しない
-    if !exists('g:neocomplcache_keyword_patterns')
-        let g:neocomplcache_keyword_patterns = {}
-    endif
-    let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
-
-    " <TAB>で補完
-    inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-
-    " 選択中の候補を確定
-    imap <expr><C-y> neocomplcache#close_popup()
-
-    " <CR>は候補を確定しながら改行
-    " imap <expr><CR> neocomplcache#smart_close_popup() . "\<CR>"
-    " autocmd MyAutoCmd InsertCharPre * if v:char == "\<CR>" | echoerr '1' | endif
-
-    " 補完をキャンセル
-    imap <expr><C-e> neocomplcache#cancel_popup()
-
-" }}}
-"=============================================================================
-" neosnippet : {{{
-
-    " スニペット補完
-    imap <C-k> <Plug>(neosnippet_expand_or_jump)
-    smap <C-k> <Plug>(neosnippet_expand_or_jump)
-
-    " プレビューウィンドウを表示しない
-    set completeopt-=preview
 
 " }}}
 "=============================================================================
