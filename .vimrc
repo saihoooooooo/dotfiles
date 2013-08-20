@@ -841,34 +841,34 @@ endfunction
 set laststatus=2
 
 " ステータスライン表示内容
-let &statusline = ''
-let &statusline .= '%{' . s:SID() . 'GetBufBasename()}'
-let &statusline .= '%h'
-let &statusline .= '%w'
-let &statusline .= '%m'
-let &statusline .= '%r'
-let &statusline .= ' (%<%{expand("%:p:~:h")}) '
-let &statusline .= '%='
-let &statusline .= '[HEX:%B]'
-let &statusline .= '[R:%l(%p%%)]'
-let &statusline .= '[C:%c]'
-let &statusline .= '%y'
-let &statusline .= '[%{&fileencoding != "" ? &fileencoding : &encoding}%{&bomb ? "(BOM)" : ""}]'
-let &statusline .= '[%{&fileformat}]'
+" let &statusline = ''
+" let &statusline .= '%{' . s:SID() . 'GetBufBasename()}'
+" let &statusline .= '%h'
+" let &statusline .= '%w'
+" let &statusline .= '%m'
+" let &statusline .= '%r'
+" let &statusline .= ' (%<%{expand("%:p:~:h")}) '
+" let &statusline .= '%='
+" let &statusline .= '[HEX:%B]'
+" let &statusline .= '[R:%l(%p%%)]'
+" let &statusline .= '[C:%c]'
+" let &statusline .= '%y'
+" let &statusline .= '[%{&fileencoding != "" ? &fileencoding : &encoding}%{&bomb ? "(BOM)" : ""}]'
+" let &statusline .= '[%{&fileformat}]'
 
 " インサートモード時のステータスラインの色を変更
-autocmd MyAutoCmd InsertEnter * call s:SwitchStatusLine(1)
-autocmd MyAutoCmd InsertLeave * call s:SwitchStatusLine(0)
-let s:hl_statusline = ''
-function! s:SwitchStatusLine(insert)
-    if a:insert
-        silent! let s:hl_statusline = s:GetHighlight('StatusLine')
-        execute 'highlight StatusLine ctermfg=Black ctermbg=Yellow guifg=#000000 guibg=#aa4400'
-    else
-        highlight clear StatusLine
-        execute 'highlight ' . s:hl_statusline
-    endif
-endfunction
+" autocmd MyAutoCmd InsertEnter * call s:SwitchStatusLine(1)
+" autocmd MyAutoCmd InsertLeave * call s:SwitchStatusLine(0)
+" let s:hl_statusline = ''
+" function! s:SwitchStatusLine(insert)
+    " if a:insert
+        " silent! let s:hl_statusline = s:GetHighlight('StatusLine')
+        " execute 'highlight StatusLine ctermfg=Black ctermbg=Yellow guifg=#000000 guibg=#aa4400'
+    " else
+        " highlight clear StatusLine
+        " execute 'highlight ' . s:hl_statusline
+    " endif
+" endfunction
 
 " }}}
 "=============================================================================
@@ -1247,14 +1247,14 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     " プロトコル
     let g:neobundle#types#git#default_protocol = 'git'
 
-    " neobundle自体を管理
+    " neobundle自体の管理
     NeoBundleFetch 'Shougo/neobundle.vim'
 
     " plugin
     NeoBundle 'anyakichi/vim-surround'
-    NeoBundle 'bling/vim-airline'
     NeoBundle 'digitaltoad/vim-jade'
     NeoBundle 'godlygeek/csapprox'
+    NeoBundle 'bling/vim-airline'
     NeoBundle 'h1mesuke/vim-alignta'
     NeoBundle 'kana/vim-operator-replace'
     NeoBundle 'kana/vim-operator-user'
@@ -1328,8 +1328,13 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 "=============================================================================
 " vim-airline : {{{
 
-    " powerlineでパッチを当てたフォントを使用
-    let g:airline_powerline_fonts=1
+    " powerlineにてパッチを当てたフォントを使用
+    let g:airline_powerline_fonts = 1
+
+    " 文字コードのBOMを判別
+    let g:airline_section_y = ''
+    let g:airline_section_y .= '%{&fileencoding != "" ? &fileencoding : &encoding}%{&bomb ? "(BOM)" : ""}'
+    let g:airline_section_y .= '[%{&fileformat}]'
 
 " }}}
 "=============================================================================

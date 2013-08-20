@@ -1,5 +1,5 @@
 BoldAsFont=no
-Transparency=glass
+Transparency=high
 OpaqueWhenFocused=no
 CursorType=block
 BackgroundColour=0,0,0
@@ -15,3 +15,4 @@ Charset=UTF-8
 ClicksTargetApp=no
 PgUpDnScroll=yes
 FontSmoothing=default
+Scrollbar=none
