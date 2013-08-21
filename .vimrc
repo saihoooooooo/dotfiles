@@ -299,7 +299,9 @@ if exists('+ambiwidth')
 endif
 
 " 全角入力時のカーソルの色を変更
-autocmd MyAutoCmd ColorScheme * highlight CursorIM ctermfg=White ctermbg=LightRed guifg=#000000 guibg=#cc9999
+if has('gui_running')
+    autocmd MyAutoCmd ColorScheme * highlight CursorIM guifg=#000000 guibg=#cc9999
+endif
 
 " CUI環境でも挿入モード時のカーソル形状を変更
 let &t_SI.="\eP\e[5 q\e\\"
@@ -1078,9 +1080,11 @@ autocmd MyAutoCmd FileType diff setlocal nofoldenable
 " 内容確認
 nnoremap R :<C-u>registers<CR>
 
-" クリップボードと連携
-set clipboard&
-set clipboard+=unnamed
+" クリップボードと連携（gvimのみ）
+if has('gui_running')
+    set clipboard&
+    set clipboard+=unnamed
+endif
 
 " キーボードマクロの記録開始
 nnoremap Q q
