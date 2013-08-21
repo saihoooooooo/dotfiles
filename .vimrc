@@ -18,6 +18,9 @@ augroup END
 " windows環境用変数
 let s:iswin = has('win32') || has('win64') || has('win32unix')
 
+" mac環境用変数
+let s:ismac = has('mac')
+
 " 現在のファイルを基準として$MYVIMRC、$HOMEを設定
 let $MYVIMRC = expand('<sfile>')
 let $HOME = expand('<sfile>:h')
@@ -1050,20 +1053,23 @@ nnoremap <silent>de :<C-u>call <SID>InDiffExecute('diffoff!')<CR>
 
 " }}}
 "=============================================================================
-" 折畳設定 : {{{
+" 折り畳み設定 : {{{
 
-" 折畳有効
+" 折り畳み有効
 set foldenable
 
-" 折畳方法
+" 折り畳み方法
 set foldmethod=marker
 
-" 折畳範囲表示幅
+" 折り畳み範囲表示幅
 set foldcolumn=1
 
 " l/hで開閉
 nnoremap <expr>h col('.') == 1 && foldlevel(line('.')) > 0 ? 'zc' : '<Left>'
 nnoremap <expr>l foldclosed(line('.')) != -1 ? 'zo' : '<Right>'
+
+" 差分ファイル確認時は折り畳み無効
+autocmd MyAutoCmd FileType diff setlocal nofoldenable
 
 " }}}
 "=============================================================================
@@ -1607,7 +1613,11 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 " vim-auto-colorscheme : {{{
 
     " デフォルトカラースキーム
-    let g:auto_colorscheme_default = 'hybrid'
+    if s:ismac
+        let g:auto_colorscheme_default = 'hybrid'
+    else
+        let g:auto_colorscheme_default = 'nevfn'
+    endif
 
     " 自動colorscheme設定
     let g:auto_colorscheme_config = [
