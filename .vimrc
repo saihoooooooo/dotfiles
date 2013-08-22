@@ -1287,7 +1287,6 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'Shougo/unite.vim'
     NeoBundle 'Shougo/unite-outline'
     NeoBundle 'Shougo/vimproc'
-    NeoBundle 'Shougo/vimshell'
     NeoBundle 'teramako/jscomplete-vim'
     NeoBundle 'thinca/vim-quickrun'
     NeoBundle 'thinca/vim-ref'
@@ -1773,20 +1772,6 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 " vimproc : {{{
 
     " 設定なし
-
-" }}}
-"=============================================================================
-" vimshell : {{{
-
-    " 分割して開く
-    nnoremap <silent>xs :<C-u>VimShellPop -toggle<CR>
-    let g:vimshell_popup_height = 50
-
-    " ディレクトリ移動時にls
-    autocmd FileType vimshell call vimshell#hook#add('chpwd', 'my_chpwd', 'g:my_chpwd')
-    function! g:my_chpwd(args, context)
-        call vimshell#execute('ls')
-    endfunction
 
 " }}}
 "=============================================================================
