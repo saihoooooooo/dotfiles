@@ -1532,14 +1532,11 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     " ノーマルモードでは使用しない
     let g:user_emmet_mode = 'iv'
 
-    " 初期化
-    let g:user_emmet_settings = {}
-
-    " 言語設定
-    let g:user_emmet_settings.lang = 'ja'
-
-    " インデント設定
-    let g:user_emmet_settings.indentation = '    '
+    " デフォルト設定
+    let g:user_emmet_settings = {
+    \     'lang': 'ja',
+    \     'indentation': repeat(' ', &shiftwidth),
+    \ }
 
     " 各filetype設定
     let g:user_emmet_settings.html = {
