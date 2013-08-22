@@ -424,7 +424,7 @@ nnoremap x<CR> i<CR><ESC>
 " コメントを継続しない
 autocmd MyAutoCmd FileType * setlocal formatoptions& formatoptions-=o formatoptions-=r
 
-" インサートモード中の履歴保存
+" 挿入モード中の履歴保存
 inoremap <C-u> <C-g>u<C-u>
 inoremap <C-w> <C-g>u<C-w>
 
@@ -857,7 +857,7 @@ set laststatus=2
 " let &statusline .= '[%{&fileencoding != "" ? &fileencoding : &encoding}%{&bomb ? "(BOM)" : ""}]'
 " let &statusline .= '[%{&fileformat}]'
 
-" インサートモード時のステータスラインの色を変更
+" 挿入モード時のステータスラインの色を変更
 " autocmd MyAutoCmd InsertEnter * call s:SwitchStatusLine(1)
 " autocmd MyAutoCmd InsertLeave * call s:SwitchStatusLine(0)
 " let s:hl_statusline = ''
@@ -1529,11 +1529,8 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 "=============================================================================
 " emmet-vim : {{{
 
-    " 全モードで使用
-    let g:user_emmet_mode = 'a'
-
-    " キーマップ
-    let g:user_emmet_leader_key = '<C-z>'
+    " ノーマルモードでは使用しない
+    let g:user_emmet_mode = 'iv'
 
     " 初期化
     let g:user_emmet_settings = {}
@@ -1659,16 +1656,6 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     " <TAB>で補完
     inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
     inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-
-    " 選択中の候補を確定
-    imap <expr><C-y> neocomplcache#close_popup()
-
-    " <CR>は候補を確定しながら改行
-    " imap <expr><CR> neocomplcache#smart_close_popup() . "\<CR>"
-    " autocmd MyAutoCmd InsertCharPre * if v:char == "\<CR>" | echoerr '1' | endif
-
-    " 補完をキャンセル
-    imap <expr><C-e> neocomplcache#cancel_popup()
 
 " }}}
 "=============================================================================
