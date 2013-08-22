@@ -415,10 +415,6 @@ set backspace=indent,eol,start
 " Yの動作をDやCと同じにする
 map Y y$
 
-" インデントを考慮したペーストを使用
-nnoremap p ]p
-nnoremap P [p
-
 " 空行を挿入
 nnoremap <silent>O :<C-u>call append('.', '')<CR>j
 
@@ -1782,7 +1778,15 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 "=============================================================================
 " vimshell : {{{
 
-    " 設定なし
+    " 分割して開く
+    nnoremap <silent>xs :<C-u>VimShellPop -toggle<CR>
+    let g:vimshell_popup_height = 50
+
+    " ディレクトリ移動時にls
+    autocmd FileType vimshell call vimshell#hook#add('chpwd', 'my_chpwd', 'g:my_chpwd')
+    function! g:my_chpwd(args, context)
+        call vimshell#execute('ls')
+    endfunction
 
 " }}}
 "=============================================================================
