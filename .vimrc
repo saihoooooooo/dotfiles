@@ -351,6 +351,9 @@ set ttimeout
 " キーコード入力待ち時間
 set ttimeoutlen=50
 
+" CursorHold発生時間
+set updatetime=4000
+
 " ;と:を入れ替え
 noremap ; :
 noremap : ;
@@ -1280,6 +1283,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'mattn/mahjong-vim'
     NeoBundle 'mattn/webapi-vim'
     NeoBundle 'nathanaelkane/vim-indent-guides'
+    NeoBundle 'osyo-manga/vim-anzu'
     NeoBundle 'saihoooooooo/vim-auto-colorscheme'
     NeoBundle 'saihoooooooo/vim-textobj-space'
     NeoBundle 'Shougo/neocomplcache'
@@ -1601,6 +1605,20 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     let g:indent_guides_auto_colors = 0
     autocmd MyAutoCmd ColorScheme * highlight IndentGuidesOdd guibg=Black ctermbg=Black
     autocmd MyAutoCmd ColorScheme * highlight IndentGuidesEven guibg=DarkGrey ctermbg=DarkGrey
+
+" }}}
+"=============================================================================
+" vim-anzu : {{{
+
+    " キーマップ
+    nmap n <Plug>(anzu-n)
+    nmap N <Plug>(anzu-N)
+
+    " 表示フォーマット
+    let g:anzu_status_format = "anzu(%i/%l)"
+
+    " BufLeave/CursorHold時に隠す
+    autocmd MyAutoCmd BufLeave,CursorHold,CursorHoldI * AnzuClearSearchStatus
 
 " }}}
 "=============================================================================
