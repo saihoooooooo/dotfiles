@@ -4,11 +4,8 @@
 " vi互換をOFF
 set nocompatible
 
-" filetypeプラグイン
-filetype plugin on
-
-" filetypeインデント
-filetype indent on
+" filetype別プラグイン/インデントを有効化
+filetype plugin indent on
 
 " augroup設定
 augroup MyAutoCmd
@@ -1311,7 +1308,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'vim-scripts/pyte'
     NeoBundle 'w0ng/vim-hybrid'
 
-    " 各plugin設定
+    " config
     call neobundle#config('vimproc', {
     \     'build': {
     \         'windows': 'make -f make_mingw32.mak',
@@ -1322,8 +1319,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     \ })
 
     " 後処理
-    filetype plugin on
-    filetype indent on
+    filetype plugin indent on
     NeoBundleCheck
 
 "=============================================================================
