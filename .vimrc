@@ -1292,6 +1292,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'thinca/vim-quickrun'
     NeoBundle 'thinca/vim-ref'
     NeoBundle 'thinca/vim-textobj-between'
+    NeoBundle 'tpope/vim-endwise'
     NeoBundle 'tpope/vim-fugitive'
     NeoBundle 'tsaleh/vim-matchit'
     NeoBundle 'tyru/open-browser.vim'
@@ -1856,6 +1857,12 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 " }}}
 "=============================================================================
 " vim-textobj-between : {{{
+
+    " 設定なし
+
+" }}}
+"=============================================================================
+" vim-endwise : {{{
 
     " 設定なし
 
