@@ -488,9 +488,9 @@ endfunction
 " HTMLインデント
 command! HtmlIndent call s:HtmlIndent()
 function! s:HtmlIndent()
-    %s/>\zs\ze</\r/g
+    %substitute/>\zs\ze</\r/ge
     let old = &filetype
-    set filetype=html
+    set filetype=xml
     normal! ggVG=
     let &filetype = old
 endfunction
