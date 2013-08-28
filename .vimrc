@@ -667,6 +667,8 @@ autocmd MyAutoCmd BufRead,BufNewFile *.coffee set filetype=coffee
 
 " filetypeのエイリアス
 autocmd MyAutoCmd FileType js set filetype=javascript
+autocmd MyAutoCmd FileType rb set filetype=ruby
+autocmd MyAutoCmd FileType py set filetype=python
 
 " 手動filetype設定
 nnoremap xof :<C-u>set filetype=
@@ -842,34 +844,36 @@ endfunction
 set laststatus=2
 
 " ステータスライン表示内容
-" let &statusline = ''
-" let &statusline .= '%{' . s:SID() . 'GetBufBasename()}'
-" let &statusline .= '%h'
-" let &statusline .= '%w'
-" let &statusline .= '%m'
-" let &statusline .= '%r'
-" let &statusline .= ' (%<%{expand("%:p:~:h")}) '
-" let &statusline .= '%='
-" let &statusline .= '[HEX:%B]'
-" let &statusline .= '[R:%l(%p%%)]'
-" let &statusline .= '[C:%c]'
-" let &statusline .= '%y'
-" let &statusline .= '[%{&fileencoding != "" ? &fileencoding : &encoding}%{&bomb ? "(BOM)" : ""}]'
-" let &statusline .= '[%{&fileformat}]'
+if has('vim_starting')
+    let &statusline = ''
+    let &statusline .= '%{' . s:SID() . 'GetBufBasename()}'
+    let &statusline .= '%h'
+    let &statusline .= '%w'
+    let &statusline .= '%m'
+    let &statusline .= '%r'
+    let &statusline .= ' (%<%{expand("%:p:~:h")}) '
+    let &statusline .= '%='
+    let &statusline .= '[HEX:%B]'
+    let &statusline .= '[R:%l(%p%%)]'
+    let &statusline .= '[C:%c]'
+    let &statusline .= '%y'
+    let &statusline .= '[%{&fileencoding != "" ? &fileencoding : &encoding}%{&bomb ? "(BOM)" : ""}]'
+    let &statusline .= '[%{&fileformat}]'
+endif
 
 " 挿入モード時のステータスラインの色を変更
-" autocmd MyAutoCmd InsertEnter * call s:SwitchStatusLine(1)
-" autocmd MyAutoCmd InsertLeave * call s:SwitchStatusLine(0)
-" let s:hl_statusline = ''
-" function! s:SwitchStatusLine(insert)
-    " if a:insert
-        " silent! let s:hl_statusline = s:GetHighlight('StatusLine')
-        " execute 'highlight StatusLine ctermfg=Black ctermbg=Yellow guifg=#000000 guibg=#aa4400'
-    " else
-        " highlight clear StatusLine
-        " execute 'highlight ' . s:hl_statusline
-    " endif
-" endfunction
+autocmd MyAutoCmd InsertEnter * call s:SwitchStatusLine(1)
+autocmd MyAutoCmd InsertLeave * call s:SwitchStatusLine(0)
+let s:hl_statusline = ''
+function! s:SwitchStatusLine(insert)
+    if a:insert
+        silent! let s:hl_statusline = s:GetHighlight('StatusLine')
+        execute 'highlight StatusLine ctermfg=Black ctermbg=Yellow guifg=#000000 guibg=#aa4400'
+    else
+        highlight clear StatusLine
+        execute 'highlight ' . s:hl_statusline
+    endif
+endfunction
 
 " }}}
 "=============================================================================
