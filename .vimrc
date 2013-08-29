@@ -1304,6 +1304,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'tsaleh/vim-matchit'
     NeoBundle 'tyru/open-browser.vim'
     NeoBundle 'tyru/operator-camelize.vim'
+    NeoBundle 'vimtaku/hl_matchit.vim'
     NeoBundle 'vim-scripts/TwitVim'
     NeoBundle 'vim-scripts/vcscommand.vim'
 
@@ -1899,6 +1900,16 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
     " カーソル位置の単語をキャメルケース化/解除のトグル
     map _ <Plug>(operator-camelize-toggle)iwbvu
+
+" }}}
+"=============================================================================
+" hl_matchit.vim : {{{
+
+    " hl_matchit有効
+    let g:hl_matchit_enable_on_vim_startup = 1
+
+    " ハイライトグループ名
+    let g:hl_matchit_hl_groupname = 'MatchParen'
 
 " }}}
 "=============================================================================
