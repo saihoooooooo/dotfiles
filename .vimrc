@@ -615,6 +615,9 @@ set wildmenu
 " 補完モード
 set wildmode=longest,list,full
 
+" 補完時に大文字小文字を区別しない
+set wildignorecase
+
 " 入力中コマンドを表示
 set showcmd
 
