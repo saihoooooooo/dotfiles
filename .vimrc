@@ -908,7 +908,7 @@ function! s:MyTabLabel(n)
     return label
 endfunction
 
-" 次/前のタプ
+" 次/前のタブ
 nnoremap <C-n> gt
 nnoremap <C-p> gT
 
@@ -933,10 +933,10 @@ function! s:MoveTabPosition(direction)
     endif
 endfunction
 
-" タプを閉じる
+" タブを閉じる
 nnoremap [Tab]c :<C-u>tabclose<CR>
 
-" 現在以外のタプを閉じる
+" 現在以外のタブを閉じる
 nnoremap [Tab]o :<C-u>tabonly<CR>
 
 " }}}
