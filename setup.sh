@@ -9,4 +9,4 @@ for FILE in `ls -a`; do
 done
 
 mkdir -p ../.vim/bundle
-git clone https://github.com/Shougo/neobundle.vim $_
+git clone https://github.com/Shougo/neobundle.vim.git $_/neobundle.vim
