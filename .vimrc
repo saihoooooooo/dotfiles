@@ -1299,6 +1299,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'kchmck/vim-coffee-script'
     NeoBundle 'koron/chalice'
     NeoBundle 'koron/dicwin-vim'
+    NeoBundle 'lilydjwg/colorizer'
     NeoBundle 'mattn/calendar-vim'
     NeoBundle 'mattn/emmet-vim'
     NeoBundle 'mattn/mahjong-vim'
@@ -1538,6 +1539,12 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     if s:iswin
         let g:dicwin_dictpath = substitute($DOTVIM, '\', '/', 'g') . '/dict/gene.txt'
     endif
+
+" }}}
+"=============================================================================
+" colorizer : {{{
+
+    " 設定なし
 
 " }}}
 "=============================================================================
