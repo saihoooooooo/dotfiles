@@ -1326,14 +1326,12 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'vim-scripts/vcscommand.vim'
 
     " colorscheme
-    NeoBundle 'vim-scripts/chlordane.vim'
-    NeoBundle 'vim-scripts/ChocolateLiquor'
     NeoBundle 'vim-scripts/desert256.vim'
     NeoBundle 'vim-scripts/github-theme'
     NeoBundle 'vim-scripts/nevfn'
     NeoBundle 'vim-scripts/newspaper.vim'
     NeoBundle 'vim-scripts/pyte'
-    NeoBundle 'vim-scripts/Wombat'
+    NeoBundle 'saihoooooooo/tasmaniandevil'
     NeoBundle 'w0ng/vim-hybrid'
 
     " config
@@ -1658,7 +1656,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     if s:ismac
         let g:auto_colorscheme_default = 'hybrid'
     else
-        let g:auto_colorscheme_default = 'nevfn'
+        let g:auto_colorscheme_default = 'tasmaniandevil'
     endif
 
     " 自動colorscheme設定
