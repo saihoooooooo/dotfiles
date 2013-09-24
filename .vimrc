@@ -1368,6 +1368,9 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     let g:airline_section_y .= '%{&fileencoding != "" ? &fileencoding : &encoding}%{&bomb ? "(BOM)" : ""}'
     let g:airline_section_y .= '[%{&fileformat}]'
 
+    " wombatテーマを使用
+    autocmd MyAutoCmd VimEnter * AirlineTheme wombat
+
 " }}}
 "=============================================================================
 " vim-jade : {{{
