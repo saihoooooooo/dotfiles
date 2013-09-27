@@ -41,6 +41,10 @@ autocmd MyAutoCmd VimEnter * nested if @% == '' && s:GetBufByte() == 0 | edit $M
 " 起動時は常に変更なしとする（標準入力対策）
 autocmd MyAutoCmd VimEnter * set nomodified
 
+" boolean値
+let s:true = 1
+let s:false = 0
+
 " }}}
 "=============================================================================
 " 共通関数設定 : {{{
@@ -498,7 +502,7 @@ function! s:DropUndoInfo()
     let old_undolevels = &undolevels
     set undolevels=-1
     execute "normal! aa\<BS>\<ESC>"
-    let &modified = 0
+    let &modified = s:false
     let &undolevels = old_undolevels
 endfunction
 
@@ -867,8 +871,8 @@ if has('vim_starting')
 endif
 
 " 挿入モード時のステータスラインの色を変更
-autocmd MyAutoCmd InsertEnter * call s:SwitchStatusLine(1)
-autocmd MyAutoCmd InsertLeave * call s:SwitchStatusLine(0)
+autocmd MyAutoCmd InsertEnter * call s:SwitchStatusLine(s:true)
+autocmd MyAutoCmd InsertLeave * call s:SwitchStatusLine(s:false)
 let s:hl_statusline = ''
 function! s:SwitchStatusLine(insert)
     if a:insert
@@ -1013,7 +1017,7 @@ else
 endif
 
 " 拡張子指定grep
-command! -bang -nargs=+ -complete=file Grep call s:Grep(<bang>0, <f-args>)
+command! -bang -nargs=+ -complete=file Grep call s:Grep(<bang>s:false, <f-args>)
 function! s:Grep(bang, pattern, directory, ...)
     let grepcmd = []
     call add(grepcmd, 'grep' . (a:bang ? '!' : ''))
@@ -1225,15 +1229,14 @@ let g:toggle_option_extra = {
 \ }
 
 " vimスカウター
-command! -bar -bang -nargs=? -complete=file Scouter echo s:Scouter(empty(<q-args>) ? $MYVIMRC : expand(<q-args>), <bang>0)
-command! -bar -bang -nargs=? -complete=file GScouter echo s:Scouter(empty(<q-args>) ? $MYGVIMRC : expand(<q-args>), <bang>0)
-function! s:Scouter(file, ...)
+command! -bar -bang -nargs=? -complete=file Scouter call s:Scouter(<bang>s:false)
+function! s:Scouter(...)
     let pat = '^\s*$\|^\s*"'
-    let lines = readfile(a:file)
+    let lines = readfile($MYVIMRC)
     if !a:0 || !a:1
         let lines = split(substitute(join(lines, "\n"), '\n\s*\\', '', 'g'), "\n")
     endif
-    return len(filter(lines,'v:val !~ pat'))
+    echo len(filter(lines,'v:val !~ pat'))
 endfunction
 
 " ターミナル起動時のコピペ用設定
@@ -1363,7 +1366,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 " vim-airline : {{{
 
     " powerlineにてパッチを当てたフォントを使用
-    let g:airline_powerline_fonts = 1
+    let g:airline_powerline_fonts = s:true
 
     " 文字コードのBOMを判別
     let g:airline_section_y = ''
@@ -1455,7 +1458,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 " vim-submode : {{{
 
     " タイムアウトあり
-    let g:submode_timeout = 1
+    let g:submode_timeout = s:true
 
     " 入力待ち時間
     let g:submode_timeoutlen = 800
@@ -1534,7 +1537,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 " chalice : {{{
 
     " 自動プレビューをOFF
-    let g:chalice_preview = 0
+    let g:chalice_preview = s:false
 
 " }}}
 "=============================================================================
@@ -1597,7 +1600,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     " Google電卓
     nnoremap <F8> :<C-u>GCalc<CR>
     nnoremap <S-F8> :<C-u>GCalc!<CR>
-    command! -bang -nargs=0 GCalc call GCalc(<bang>0)
+    command! -bang -nargs=0 GCalc call GCalc(<bang>s:false)
     function! GCalc(banged)
         let expr = input('GCalc Expr: ')
         redraw
@@ -1626,7 +1629,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 " vim-indent-guides : {{{
 
     " 手動起動
-    let g:indent_guides_enable_on_vim_startup = 0
+    let g:indent_guides_enable_on_vim_startup = s:false
 
     " ガイドの幅
     let g:indent_guides_guide_size = &shiftwidth
@@ -1635,7 +1638,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     let g:indent_guides_start_level = 1
 
     " 色設定
-    let g:indent_guides_auto_colors = 0
+    let g:indent_guides_auto_colors = s:false
     autocmd MyAutoCmd ColorScheme * highlight IndentGuidesOdd guibg=Black ctermbg=Black
     autocmd MyAutoCmd ColorScheme * highlight IndentGuidesEven guibg=DarkGrey ctermbg=DarkGrey
 
@@ -1681,19 +1684,19 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 " neocomplcache : {{{
 
     " neocomplcache有効
-    let g:neocomplcache_enable_at_startup = 1
+    let g:neocomplcache_enable_at_startup = s:true
 
     " 大文字小文字を区別しない
-    let g:neocomplcache_enable_ignore_case = 1
+    let g:neocomplcache_enable_ignore_case = s:true
 
     " 大文字が含まれている場合は区別して補完
-    let g:neocomplcache_enable_smart_case = 1
+    let g:neocomplcache_enable_smart_case = s:true
 
     " キャメルケース補完
-    let g:neocomplcache_enable_camel_case_completion = 1
+    let g:neocomplcache_enable_camel_case_completion = s:true
 
     " スネークケース補完
-    let g:neocomplcache_enable_underbar_completion = 1
+    let g:neocomplcache_enable_underbar_completion = s:true
 
     " 日本語は収集しない
     if !exists('g:neocomplcache_keyword_patterns')
@@ -1769,10 +1772,10 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     endfunction
 
     " 入力モードで開始
-    let g:unite_enable_start_insert = 1
+    let g:unite_enable_start_insert = s:true
 
     " ¥を/に変換
-    if s:iswin && &shellslash == 0
+    if s:iswin && &shellslash == s:false
         call unite#custom#substitute('files', '\', '/')
     endif
 
@@ -1794,7 +1797,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     let g:unite_source_file_mru_ignore_pattern .= '\|AppData/Local/Temp'
 
     " 検索キーワードをハイライトしない
-    let g:unite_source_line_enable_highlight = 0
+    let g:unite_source_line_enable_highlight = s:false
 
 " }}}
 "=============================================================================
@@ -1825,7 +1828,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     let g:quickrun_config._ = {
     \     'runner': 'vimproc',
     \     'runner/vimproc/updatetime': 50,
-    \     'hook/time/enable': 1,
+    \     'hook/time/enable': s:true,
     \ }
 
     " 各filetype設定
@@ -1836,13 +1839,13 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     \     'command': 'coffee',
     \     'cmdopt': '-pb',
     \     'outputter/buffer/filetype': 'javascript',
-    \     'hook/time/enable': 0,
+    \     'hook/time/enable': s:false,
     \ }
     let g:quickrun_config.sql = {
     \     'runner': 'system',
     \     'cmdopt': '-h [host] -U [user] -p [port] -d [db]',
-    \     'hook/nowrap/enable': 1,
-    \     'hook/redraw/enable': 1,
+    \     'hook/nowrap/enable': s:true,
+    \     'hook/redraw/enable': s:true,
     \ }
 
     " 折り返し解除フック
@@ -1850,13 +1853,13 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     \     'name': 'nowrap',
     \     'kind': 'hook',
     \     'config': {
-    \         'enable': 0,
+    \         'enable': s:false,
     \     },
     \ }
     function! s:hook_nowrap.on_outputter_buffer_opened(session, context)
         setlocal nowrap
     endfunction
-    call quickrun#module#register(s:hook_nowrap, 1)
+    call quickrun#module#register(s:hook_nowrap, s:true)
     unlet s:hook_nowrap
 
     " 再描画フック
@@ -1864,13 +1867,13 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     \     'name': 'redraw',
     \     'kind': 'hook',
     \     'config': {
-    \         'enable': 0,
+    \         'enable': s:false,
     \     },
     \ }
     function! s:hook_redraw.on_exit(session, context)
         redraw!
     endfunction
-    call quickrun#module#register(s:hook_redraw, 1)
+    call quickrun#module#register(s:hook_redraw, s:true)
     unlet s:hook_redraw
 
     " <C-c> で実行を強制終了させる
@@ -1973,14 +1976,14 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 
     " リビジョン指定VCSReview
     function! s:VcscommandVscReviewByLog()
-        let rev = s:VcscommandGetRevisionByCursorLine(0)
+        let rev = s:VcscommandGetRevisionByCursorLine(s:false)
         execute 'VCSReview' rev
     endfunction
 
     " リビジョン指定VCSDiff
     function! s:VcscommandVscDiffByLog()
-        let rev = s:VcscommandGetRevisionByCursorLine(0)
-        let preview = s:VcscommandGetRevisionByCursorLine(1)
+        let rev = s:VcscommandGetRevisionByCursorLine(s:false)
+        let preview = s:VcscommandGetRevisionByCursorLine(s:true)
         execute 'VCSDiff' preview rev
     endfunction
 
@@ -1999,13 +2002,8 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
         elseif b:VCSCommandVCSType ==# 'HG'
             ?^changeset:\ \+\d\+:\w\+$
         endif
-        if a:fluctuation + 0 != 0
-            let cmd = a:fluctuation > 0 ? '/' : '?'
-            let cnt = abs(a:fluctuation)
-            while cnt > 0
-                /
-                let cnt -= 1
-            endwhile
+        if a:fluctuation
+            /
         endif
         if b:VCSCommandVCSType ==# 'SVN'
             normal! 0lye
