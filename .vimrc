@@ -456,7 +456,7 @@ command! RemoveCr call s:ExecuteKeepView('silent! %substitute/\r$//g | nohlsearc
 command! RemoveEolSpace call s:ExecuteKeepView('silent! %substitute/ \+$//g | nohlsearch')
 
 " 空行を取り除く
-command! RemoveBlankLine silent! %global/^$/delete | nohlsearch | normal! ``
+command! RemoveBlankLine silent! global/^$/delete | nohlsearch | normal! ``
 
 " 手動コメントアウト
 noremap [Comment] <Nop>
