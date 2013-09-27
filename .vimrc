@@ -468,17 +468,33 @@ noremap <silent>[Comment]p :call <SID>ToggleComment('# ', '')<CR>
 noremap <silent>[Comment]s :call <SID>ToggleComment('-- ', '')<CR>
 noremap <silent>[Comment]v :call <SID>ToggleComment('" ', '')<CR>
 function! s:ToggleComment(cs, ce) range
+    let remove = s:true
     let current = a:firstline
     while (current <= a:lastline)
         let line = getline(current)
         if strlen(line) > 0
-            if strpart(line, match(line, "[^[:blank:]]"), strlen(a:cs)) ==# a:cs
+            if strpart(line, match(line, "[^[:blank:]]"), strlen(a:cs)) !=# a:cs
+                let remove = s:false
+                break
+            endif
+            if !empty(a:ce) && strpart(line, strlen(line) - strlen(a:ce)) !=# a:ce
+                let remove = s:false
+                break
+            endif
+        endif
+        let current += 1
+    endwhile
+    let current = a:firstline
+    while (current <= a:lastline)
+        let line = getline(current)
+        if strlen(line) > 0
+            if remove
                 execute 'normal! ^d' . strlen(a:cs) . 'l'
             else
-                execute 'normal! I' . a:cs
+                execute 'normal! 0i' . a:cs
             endif
             if !empty(a:ce)
-                if strpart(line, strlen(line) - strlen(a:ce)) ==# a:ce
+                if remove
                     execute 'normal! $v' . (strlen(a:ce) - 1) . 'hd'
                 else
                     execute 'normal! A' . a:ce
@@ -486,7 +502,7 @@ function! s:ToggleComment(cs, ce) range
             endif
         endif
         normal! j
-        let current = current + 1
+        let current += 1
     endwhile
     execute a:firstline
     normal! ^
