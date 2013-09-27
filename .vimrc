@@ -456,7 +456,7 @@ command! RemoveBlankLine silent! %global/^$/delete | nohlsearch | normal! ``
 
 " 手動コメントアウト
 noremap [Comment] <Nop>
-map gc [Comment]
+map gC [Comment]
 noremap <silent>[Comment]c :call <SID>ToggleComment('// ', '')<CR>
 noremap <silent>[Comment]h :call <SID>ToggleComment('<!-- ', ' -->')<CR>
 noremap <silent>[Comment]i :call <SID>ToggleComment('; ', '')<CR>
@@ -668,8 +668,9 @@ function! s:CmdCapture(cmd)
 endfunction
 
 " ファイルパス簡易入力
-cnoremap <C-g>f <C-r>=expand('%:t')<CR>
-cnoremap <C-g>d <C-r>=expand('%:p:h')<CR>/
+cnoremap <C-l>f <C-r>=expand('%:t')<CR>
+cnoremap <C-l>d <C-r>=expand('%:p:h')<CR>/
+cnoremap <C-l>c <C-r>=getcwd()<CR>/
 
 " }}}
 "=============================================================================
@@ -766,22 +767,6 @@ set hidden
 
 " 他のプログラムで書き換えられたら自動で再読み込み
 set autoread
-
-" タブ毎にカレントディレクトリを保持
-autocmd MyAutoCmd TabEnter * if exists('t:cwd') | execute "cd" fnameescape(t:cwd) | endif
-autocmd MyAutoCmd TabLeave * let t:cwd = getcwd()
-autocmd MyAutoCmd BufEnter * if !exists('t:cwd') | call InitTabpageCd() | endif
-function! InitTabpageCd()
-    if !has('vim_starting')
-        if @% != ''
-            let curdir = input('Current directory: ', expand("%:p:h"), 'file')
-            silent! cd `=fnameescape(curdir)`
-        else
-            cd ~
-        endif
-    endif
-    let t:cwd = getcwd()
-endfunction
 
 " 現在のバッファ名をヤンク
 nnoremap <silent>y% :<C-u>let @" = expand('%:p')<CR>
@@ -955,6 +940,22 @@ nnoremap [Tab]c :<C-u>tabclose<CR>
 
 " 現在以外のタブを閉じる
 nnoremap [Tab]o :<C-u>tabonly<CR>
+
+" タブ毎にカレントディレクトリを保持
+autocmd MyAutoCmd TabEnter * if exists('t:cwd') | execute "cd" fnameescape(t:cwd) | endif
+autocmd MyAutoCmd TabLeave * let t:cwd = getcwd()
+autocmd MyAutoCmd BufEnter * if !exists('t:cwd') | call InitTabpageCd() | endif
+function! InitTabpageCd()
+    if !has('vim_starting')
+        if @% != ''
+            let curdir = input('Current directory: ', expand("%:p:h"), 'file')
+            silent! cd `=fnameescape(curdir)`
+        else
+            cd ~
+        endif
+    endif
+    let t:cwd = getcwd()
+endfunction
 
 " }}}
 "=============================================================================
@@ -1317,6 +1318,7 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     NeoBundle 'thinca/vim-quickrun'
     NeoBundle 'thinca/vim-ref'
     NeoBundle 'thinca/vim-textobj-between'
+    NeoBundle 'tomtom/tcomment_vim'
     NeoBundle 'tpope/vim-endwise'
     NeoBundle 'tpope/vim-fugitive'
     NeoBundle 'tsaleh/vim-matchit'
@@ -1893,6 +1895,16 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
 " vim-textobj-between : {{{
 
     " 設定なし
+
+" }}}
+"=============================================================================
+" tcomment_vim : {{{
+
+    " キーマップ
+    let g:tcommentMapLeader1 = ''
+    let g:tcommentMapLeader2 = ''
+    let g:tcommentMapLeaderOp1 = 'gc'
+    let g:tcommentMapLeaderOp2 = ''
 
 " }}}
 "=============================================================================
