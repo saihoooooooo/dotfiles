@@ -690,6 +690,7 @@ endfunction
 " ファイルパス簡易入力
 cnoremap <C-l>f <C-r>=expand('%:t')<CR>
 cnoremap <C-l>d <C-r>=expand('%:p:h')<CR>/
+cnoremap <C-l>a <C-r>=expand('%:p')<CR>
 cnoremap <C-l>c <C-r>=getcwd()<CR>/
 
 " }}}
@@ -770,10 +771,6 @@ nnoremap [Edit]e :edit<SPACE>
 nnoremap [Edit]n :new<SPACE>
 nnoremap [Edit]t :tabedit<SPACE>
 nnoremap [Edit]v :vnew<SPACE>
-nnoremap [Edit]<SPACE>e :edit <C-r>=expand("%:p:h") . '/'<CR>
-nnoremap [Edit]<SPACE>n :new <C-r>=expand("%:p:h") . '/'<CR>
-nnoremap [Edit]<SPACE>t :tabedit <C-r>=expand("%:p:h") . '/'<CR>
-nnoremap [Edit]<SPACE>v :vnew <C-r>=expand("%:p:h") . '/'<CR>
 
 " mkdirコマンド
 command! -nargs=1 -complete=file Mkdir call s:Mkdir(<q-args>)
