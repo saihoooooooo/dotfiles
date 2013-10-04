@@ -1860,6 +1860,10 @@ if glob($DOTVIM . '/bundle/neobundle.vim') != ''
     \     'hook/nowrap/enable': s:true,
     \     'hook/redraw/enable': s:true,
     \ }
+    let g:quickrun_config.markdown = {
+    \     'outputter': 'browser',
+    \     'hook/time/enable': s:false,
+    \ }
 
     " 折り返し解除フック
     let s:hook_nowrap = {
