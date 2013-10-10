@@ -943,8 +943,8 @@ set foldmethod=marker
 set foldcolumn=1
 
 " l/hで開閉
-nmap <expr>h col('.') == 1 && foldlevel(line('.')) > 0 ? 'zc' : 'h'
-nmap <expr>l foldclosed(line('.')) != -1 ? 'zo' : 'l'
+nnoremap <expr>h col('.') == 1 && foldlevel(line('.')) > 0 ? 'zc' : '<left>'
+nnoremap <expr>l foldclosed(line('.')) != -1 ? 'zo' : '<right>'
 
 " 差分ファイル確認時は折り畳み無効
 autocmd MyAutoCmd FileType diff setlocal nofoldenable
