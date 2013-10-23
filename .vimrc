@@ -1277,16 +1277,16 @@ map xP xp$
 " vim-operator-user : {{{
 
 " 検索オペレータ
-" map x/ <Plug>(operator-search)
-" call operator#user#define('search', 'OperatorSearch')
-" function! OperatorSearch(motion_wise)
-    " if a:motion_wise == 'char'
-        " silent normal! `[v`]"zy
-        " let @/ = @z
-        " set hlsearch
-        " redraw
-    " endif
-" endfunction
+map x/ <Plug>(operator-search)
+call operator#user#define('search', 'OperatorSearch')
+function! OperatorSearch(motion_wise)
+    let orig = @"
+    normal! `[v`]"zy
+    let text = @"
+    let @/ = '\V' . substitute(escape(text, '\/'), '\n', '\\n', 'g')
+    let @" = orig
+    call feedkeys(":set hlsearch\<CR>", "n")
+endfunction
 
 " }}}
 "=============================================================================
