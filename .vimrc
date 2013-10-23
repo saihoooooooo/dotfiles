@@ -538,8 +538,7 @@ vnoremap <silent>* :<C-u>call <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>
 function! s:StarSearch()
     let orig = @"
     normal! gvy
-    let text = @"
-    let @/ = '\V' . substitute(escape(text, '\/'), '\n', '\\n', 'g')
+    let @/ = '\V' . substitute(escape(@", '\/'), '\n', '\\n', 'g')
     let @" = orig
 endfunction
 
@@ -1152,6 +1151,7 @@ NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'osyo-manga/vim-anzu'
 NeoBundle 'saihoooooooo/vim-auto-colorscheme'
 NeoBundle 'saihoooooooo/vim-textobj-space'
+NeoBundle 'sgur/vim-textobj-parameter'
 NeoBundle 'Shougo/junkfile.vim'
 NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'Shougo/neosnippet'
@@ -1282,8 +1282,7 @@ call operator#user#define('search', 'OperatorSearch')
 function! OperatorSearch(motion_wise)
     let orig = @"
     normal! `[v`]"zy
-    let text = @"
-    let @/ = '\V' . substitute(escape(text, '\/'), '\n', '\\n', 'g')
+    let @/ = '\V' . substitute(escape(@", '\/'), '\n', '\\n', 'g')
     let @" = orig
     call feedkeys(":set hlsearch\<CR>", "n")
 endfunction
@@ -1523,6 +1522,12 @@ let g:auto_colorscheme_config = [
 " }}}
 "=============================================================================
 " vim-textobj-space : {{{
+
+" 設定なし
+
+" }}}
+"=============================================================================
+" vim-textobj-parameter : {{{
 
 " 設定なし
 
