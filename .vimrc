@@ -24,9 +24,9 @@ let $HOME = expand('<sfile>:h')
 
 " .vimとvimfilesの違いを吸収する
 if s:iswin
-    let $DOTVIM = $HOME."/vimfiles"
+    let $DOTVIM = $HOME . '/vimfiles'
 else
-    let $DOTVIM = $HOME."/.vim"
+    let $DOTVIM = $HOME . '/.vim'
 endif
 
 " .vimrcを開く
@@ -114,6 +114,11 @@ function! s:SetScratch()
     setlocal nobuflisted
     setlocal buftype=nofile
     setlocal noswapfile
+endfunction
+
+" 検索文字列用エスケープ
+function! s:Escape4Search(str)
+    return '\V' . substitute(escape(a:str, '\/'), '\n', '\\n', 'g')
 endfunction
 
 " エラーメッセージ
@@ -320,9 +325,9 @@ set t_vb=
 noremap x <Nop>
 
 " 日時の短縮入力
-iabbrev *dt* <C-r>=strftime("%Y/%m/%d %H:%M:%S")<CR><C-r>=<SID>Eatchar('\s')<CR>
-iabbrev *d* <C-r>=strftime("%Y/%m/%d")<CR><C-r>=<SID>Eatchar('\s')<CR>
-iabbrev *t* <C-r>=strftime("%H:%M:%S")<CR><C-r>=<SID>Eatchar('\s')<CR>
+iabbrev *dt* <C-r>=strftime('%Y/%m/%d %H:%M:%S')<CR><C-r>=<SID>Eatchar('\s')<CR>
+iabbrev *d* <C-r>=strftime('%Y/%m/%d')<CR><C-r>=<SID>Eatchar('\s')<CR>
+iabbrev *t* <C-r>=strftime('%H:%M:%S')<CR><C-r>=<SID>Eatchar('\s')<CR>
 function! s:Eatchar(pattern)
     let c = nr2char(getchar(0))
     return (c =~ a:pattern) ? '' : c
@@ -392,7 +397,7 @@ function! s:ToggleComment(cs, ce) range
     while (current <= a:lastline)
         let line = getline(current)
         if strlen(line) > 0
-            if strpart(line, match(line, "[^[:blank:]]"), strlen(a:cs)) !=# a:cs
+            if strpart(line, match(line, '[^[:blank:]]'), strlen(a:cs)) !=# a:cs
                 let remove = s:false
                 break
             endif
@@ -507,10 +512,10 @@ function! s:RemapPHPSectionJump()
     let class = '\(abstract\s\+\|final\s\+\)*class'
     let interface = 'interface'
     let section = '\(.*\%#\)\@!\_^\s*\zs\('.function.'\|'.class.'\|'.interface.'\)'
-    exe "nno <buffer><silent>[[ :<C-u>call search('" . escape(section, '|') . "', 'b')<CR>"
-    exe "nno <buffer><silent>]] :<C-u>call search('" . escape(section, '|') . "')<CR>"
-    exe "ono <buffer><silent>[[ :<C-u>call search('" . escape(section, '|') . "', 'b')<CR>"
-    exe "ono <buffer><silent>]] :<C-u>call search('" . escape(section, '|') . "')<CR>"
+    execute "nnoremap <buffer><silent>[[ :<C-u>call search('" . escape(section, '|') . "', 'b')<CR>"
+    execute "nnoremap <buffer><silent>]] :<C-u>call search('" . escape(section, '|') . "')<CR>"
+    execute "onoremap <buffer><silent>[[ :<C-u>call search('" . escape(section, '|') . "', 'b')<CR>"
+    execute "onoremap <buffer><silent>]] :<C-u>call search('" . escape(section, '|') . "')<CR>"
 endfunction
 
 " }}}
@@ -538,7 +543,7 @@ vnoremap <silent>* :<C-u>call <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>
 function! s:StarSearch()
     let orig = @"
     normal! gvy
-    let @/ = '\V' . substitute(escape(@", '\/'), '\n', '\\n', 'g')
+    let @/ = s:Escape4Search(@")
     let @" = orig
 endfunction
 
@@ -1280,11 +1285,12 @@ map xP xp$
 map x/ <Plug>(operator-search)
 call operator#user#define('search', 'OperatorSearch')
 function! OperatorSearch(motion_wise)
+    let v = operator#user#visual_command_from_wise_name(a:motion_wise)
     let orig = @"
-    normal! `[v`]"zy
-    let @/ = '\V' . substitute(escape(@", '\/'), '\n', '\\n', 'g')
+    execute 'normal! `[' . v . '`]y'
+    let @/ = s:Escape4Search(@")
     let @" = orig
-    call feedkeys(":set hlsearch\<CR>", "n")
+    call feedkeys(":set hlsearch\<CR>", 'n')
 endfunction
 
 " }}}
@@ -1497,7 +1503,7 @@ nmap n <Plug>(anzu-n)
 nmap N <Plug>(anzu-N)
 
 " 表示フォーマット
-let g:anzu_status_format = "anzu(%i/%l)"
+let g:anzu_status_format = 'anzu(%i/%l)'
 
 " BufLeave/CursorHold時に隠す
 autocmd MyAutoCmd BufLeave,CursorHold,CursorHoldI * AnzuClearSearchStatus
@@ -1610,7 +1616,7 @@ nnoremap [Unite]<SPACE> :<C-u>Unite source -no-split<CR>
 autocmd MyAutoCmd FileType unite call s:UniteMySetting()
 function! s:UniteMySetting()
     " 入力欄にフォーカス
-    imap <buffer><expr>i unite#smart_map("i", "\<Plug>(unite_insert_leave)\<Plug>(unite_insert_enter)")
+    imap <buffer><expr>i unite#smart_map('i', "\<Plug>(unite_insert_leave)\<Plug>(unite_insert_enter)")
 
     " uniteを終了
     imap <buffer><ESC> <Plug>(unite_exit)
