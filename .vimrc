@@ -118,7 +118,7 @@ endfunction
 
 " 検索文字列用エスケープ
 function! s:Escape4NonRegex(str)
-    return '\V' . substitute(escape(a:str, '\/'), '\n', '\\n', 'g')
+    return '\V' . substitute(escape(a:str, '\'), '\n', '\\n', 'g')
 endfunction
 
 " エラーメッセージ
@@ -849,7 +849,16 @@ nnoremap <silent>[QuickFix]N :cnewer<CR>
 nnoremap <silent>[QuickFix]P :colder<CR>
 
 " QuickFixリストが生成されたら自動で開く
-autocmd MyAutoCmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd cwindow
+autocmd MyAutoCmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd call s:AutoQf()
+function! s:AutoQf()
+    for i in getqflist()
+        if i['valid'] == 1
+            copen
+            return
+        endif
+    endfor
+    cclose
+endfunction
 
 " QuickFixウィンドウでのステータスラインのローカル設定を削除
 autocmd MyAutoCmd filetype qf set statusline<
