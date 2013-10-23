@@ -117,7 +117,7 @@ function! s:SetScratch()
 endfunction
 
 " 検索文字列用エスケープ
-function! s:Escape4NonRegexSearch(str)
+function! s:Escape4NonRegex(str)
     return '\V' . substitute(escape(a:str, '\/'), '\n', '\\n', 'g')
 endfunction
 
@@ -543,7 +543,7 @@ vnoremap <silent>* :<C-u>call <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>
 function! s:StarSearch()
     let orig = @"
     normal! gvy
-    let @/ = s:Escape4NonRegexSearch(@")
+    let @/ = s:Escape4NonRegex(@")
     let @" = orig
 endfunction
 
@@ -1288,7 +1288,7 @@ function! OperatorSearch(motion_wise)
     let v = operator#user#visual_command_from_wise_name(a:motion_wise)
     let orig = @"
     execute 'normal! `[' . v . '`]y'
-    let @/ = s:Escape4NonRegexSearch(@")
+    let @/ = s:Escape4NonRegex(@")
     let @" = orig
     call feedkeys(":set hlsearch\<CR>", 'n')
 endfunction
