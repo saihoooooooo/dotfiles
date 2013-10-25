@@ -121,6 +121,13 @@ function! s:Escape4NonRegex(str)
     return '\V' . substitute(escape(a:str, '\'), '\n', '\\n', 'g')
 endfunction
 
+" 関数内での検索パターン強調表示
+function! s:SetHlsearch()
+    if &hlsearch
+        call feedkeys(":set hlsearch\<CR>", 'n')
+    endif
+endfunction
+
 " エラーメッセージ
 function! s:ErrorMsg(msg)
     echohl ErrorMsg
@@ -538,13 +545,14 @@ set smartcase
 set wrapscan
 
 " *による検索時に初回は移動しない
-nnoremap <silent>* viw:<C-u>call <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>`<
-vnoremap <silent>* :<C-u>call <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>
+nnoremap <silent>* viw:<C-u>call <SID>StarSearch()<CR>`<
+vnoremap <silent>* :<C-u>call <SID>StarSearch()<CR>
 function! s:StarSearch()
     let orig = @"
     normal! gvy
     let @/ = s:Escape4NonRegex(@")
     let @" = orig
+    call s:SetHlsearch()
 endfunction
 
 " '/'と'?'を自動エスケープ
@@ -1299,7 +1307,7 @@ function! OperatorSearch(motion_wise)
     execute 'normal! `[' . v . '`]y'
     let @/ = s:Escape4NonRegex(@")
     let @" = orig
-    call feedkeys(":set hlsearch\<CR>", 'n')
+    call s:SetHlsearch()
 endfunction
 
 " }}}
