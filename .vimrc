@@ -552,6 +552,7 @@ function! s:StarSearch()
     normal! gvy
     let @/ = s:Escape4NonRegex(@")
     let @" = orig
+    call histadd('/', @/)
     call s:SetHlsearch()
 endfunction
 
@@ -1307,6 +1308,7 @@ function! OperatorSearch(motion_wise)
     execute 'normal! `[' . v . '`]y'
     let @/ = s:Escape4NonRegex(@")
     let @" = orig
+    call histadd('/', @/)
     call s:SetHlsearch()
 endfunction
 
