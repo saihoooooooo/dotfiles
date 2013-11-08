@@ -1562,6 +1562,7 @@ let g:auto_colorscheme_config = [
 
 " ジャンクファイル用ディレクトリ
 let g:junkfile#directory = $DOTVIM . '/tmp/junk'
+call s:Mkdir(g:junkfile#directory)
 
 " }}}
 "=============================================================================
@@ -1602,6 +1603,10 @@ smap <C-k> <Plug>(neosnippet_expand_or_jump)
 
 " プレビューウィンドウを表示しない
 set completeopt-=preview
+
+" スニペット保存ディレクトリ
+let g:neosnippet#snippets_directory = $DOTVIM . '/snippets'
+call s:Mkdir(g:neosnippet#snippets_directory)
 
 " }}}
 "=============================================================================
