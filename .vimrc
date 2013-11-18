@@ -236,7 +236,7 @@ set list
 set listchars=tab:>\ ,trail:-,nbsp:%,extends:>,precedes:<
 
 " 全角スペースを視覚化
-autocmd MyAutoCmd ColorScheme * highlight IdeographicSpace ctermbg=Gray
+autocmd MyAutoCmd ColorScheme * highlight IdeographicSpace ctermbg=Gray guibg=#999999
 autocmd MyAutoCmd VimEnter,WinEnter * call s:VisualizeIS()
 function! s:VisualizeIS()
     if !exists('w:is_match')
