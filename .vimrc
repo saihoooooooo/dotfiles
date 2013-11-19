@@ -624,6 +624,7 @@ autocmd MyAutoCmd BufRead,BufNewFile *.ctp set filetype=php
 autocmd MyAutoCmd FileType js set filetype=javascript
 autocmd MyAutoCmd FileType rb set filetype=ruby
 autocmd MyAutoCmd FileType py set filetype=python
+autocmd MyAutoCmd FileType md set filetype=markdown
 
 " 手動filetype設定
 nnoremap xof :<C-u>set filetype=
