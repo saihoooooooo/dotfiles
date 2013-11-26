@@ -1182,7 +1182,6 @@ NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/unite-outline'
 NeoBundle 'Shougo/vimproc'
-NeoBundle 'teramako/jscomplete-vim'
 NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'thinca/vim-scouter'
 NeoBundle 'thinca/vim-textobj-between'
@@ -1689,12 +1688,6 @@ let g:unite_source_line_enable_highlight = s:false
 " }}}
 "=============================================================================
 " vimproc : {{{
-
-" 設定なし
-
-" }}}
-"=============================================================================
-" jscomplete-vim : {{{
 
 " 設定なし
 
