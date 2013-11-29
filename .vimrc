@@ -1585,14 +1585,6 @@ if neobundle#is_installed('neocomplete')
     endif
     let g:neocomplete#keyword_patterns._ = '\h\w*'
 
-    " 言語別デリミタ
-    if !exists('g:neocomplete#delimiter_patterns')
-        let g:neocomplete#delimiter_patterns= {}
-    endif
-    let g:neocomplete#delimiter_patterns.vim = ['#']
-    let g:neocomplete#delimiter_patterns.cpp = ['::']
-    let g:neocomplete#delimiter_patterns.php = ['::']
-
     " <TAB>で補完
     inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
     inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
@@ -1624,7 +1616,7 @@ if neobundle#is_installed('neocomplcache')
     if !exists('g:neocomplcache_keyword_patterns')
         let g:neocomplcache_keyword_patterns = {}
     endif
-    let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
+    let g:neocomplcache_keyword_patterns._ = '\h\w*'
 
     " <TAB>で補完
     inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
