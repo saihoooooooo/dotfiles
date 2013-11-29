@@ -1177,7 +1177,7 @@ NeoBundle 'saihoooooooo/vim-auto-colorscheme'
 NeoBundle 'saihoooooooo/vim-textobj-space'
 NeoBundle 'sgur/vim-textobj-parameter'
 NeoBundle 'Shougo/junkfile.vim'
-NeoBundle 'Shougo/neocomplcache'
+NeoBundle has('lua') ? 'Shougo/neocomplete' : 'Shougo/neocomplcache'
 NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/unite-outline'
@@ -1566,32 +1566,71 @@ call s:Mkdir(g:junkfile#directory)
 
 " }}}
 "=============================================================================
+" neocomplete : {{{
+
+if neobundle#is_installed('neocomplete')
+
+    " neocomplete有効
+    let g:neocomplete#enable_at_startup = s:true
+
+    " 大文字小文字を区別しない
+    let g:neocomplete#enable_ignore_case = s:true
+
+    " 大文字が含まれている場合は区別して補完
+    let g:neocomplete#enable_smart_case = s:true
+
+    " 日本語は収集しない
+    if !exists('g:neocomplete#keyword_patterns')
+        let g:neocomplete#keyword_patterns = {}
+    endif
+    let g:neocomplete#keyword_patterns._ = '\h\w*'
+
+    " 言語別デリミタ
+    if !exists('g:neocomplete#delimiter_patterns')
+        let g:neocomplete#delimiter_patterns= {}
+    endif
+    let g:neocomplete#delimiter_patterns.vim = ['#']
+    let g:neocomplete#delimiter_patterns.cpp = ['::']
+    let g:neocomplete#delimiter_patterns.php = ['::']
+
+    " <TAB>で補完
+    inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+
+endif
+
+" }}}
+"=============================================================================
 " neocomplcache : {{{
 
-" neocomplcache有効
-let g:neocomplcache_enable_at_startup = s:true
+if neobundle#is_installed('neocomplcache')
 
-" 大文字小文字を区別しない
-let g:neocomplcache_enable_ignore_case = s:true
+    " neocomplcache有効
+    let g:neocomplcache_enable_at_startup = s:true
 
-" 大文字が含まれている場合は区別して補完
-let g:neocomplcache_enable_smart_case = s:true
+    " 大文字小文字を区別しない
+    let g:neocomplcache_enable_ignore_case = s:true
 
-" キャメルケース補完
-let g:neocomplcache_enable_camel_case_completion = s:true
+    " 大文字が含まれている場合は区別して補完
+    let g:neocomplcache_enable_smart_case = s:true
 
-" スネークケース補完
-let g:neocomplcache_enable_underbar_completion = s:true
+    " キャメルケース補完
+    let g:neocomplcache_enable_camel_case_completion = s:true
 
-" 日本語は収集しない
-if !exists('g:neocomplcache_keyword_patterns')
-    let g:neocomplcache_keyword_patterns = {}
+    " スネークケース補完
+    let g:neocomplcache_enable_underbar_completion = s:true
+
+    " 日本語は収集しない
+    if !exists('g:neocomplcache_keyword_patterns')
+        let g:neocomplcache_keyword_patterns = {}
+    endif
+    let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
+
+    " <TAB>で補完
+    inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+
 endif
-let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
-
-" <TAB>で補完
-inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
 " }}}
 "=============================================================================
