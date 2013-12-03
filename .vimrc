@@ -607,6 +607,12 @@ cnoremap <Up> <C-p>
 cnoremap <C-n> <Down>
 cnoremap <Down> <C-n>
 
+" ファイルパス簡易入力
+cnoremap <C-l>f <C-r>=expand('%:t')<CR>
+cnoremap <C-l>d <C-r>=expand('%:p:h')<CR>/
+cnoremap <C-l>a <C-r>=expand('%:p')<CR>
+cnoremap <C-l>c <C-r>=getcwd()<CR>/
+
 " }}}
 "=============================================================================
 " ファイル設定 : {{{
