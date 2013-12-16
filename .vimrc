@@ -1147,6 +1147,7 @@ let g:neobundle#types#git#default_protocol = 'git'
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 " plugin
+NeoBundle 'AndrewRadev/switch.vim'
 NeoBundle 'anyakichi/vim-surround'
 NeoBundle 'digitaltoad/vim-jade'
 NeoBundle 'godlygeek/csapprox'
@@ -1217,6 +1218,12 @@ call neobundle#config('vimproc', {
 filetype plugin indent on
 NeoBundleCheck
 
+"=============================================================================
+" switch.vim : {{{
+
+" 設定なし
+
+" }}}
 "=============================================================================
 " vim-surround : {{{
 
