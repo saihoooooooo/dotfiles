@@ -1222,7 +1222,7 @@ NeoBundleCheck
 " switch.vim : {{{
 
 " キーマップ
-nnoremap ? :<C-u>Switch<CR>
+nnoremap <silent>? :<C-u>Switch<CR>
 
 " }}}
 "=============================================================================
