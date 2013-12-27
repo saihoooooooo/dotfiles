@@ -1170,6 +1170,7 @@ NeoBundle 'koron/dicwin-vim'
 NeoBundle 'lilydjwg/colorizer'
 NeoBundle 'mattn/calendar-vim'
 NeoBundle 'mattn/emmet-vim'
+NeoBundle 'mattn/gist-vim'
 NeoBundle 'mattn/mahjong-vim'
 NeoBundle 'mattn/webapi-vim'
 NeoBundle 'nathanaelkane/vim-indent-guides'
@@ -1465,6 +1466,13 @@ let g:user_emmet_settings.html = {
 \             . "<script>\n\\$(function() {\n\t${cursor}${child}\n});\n</script>",
 \     },
 \ }
+
+" }}}
+"=============================================================================
+" gist-vim : {{{
+
+" Gistが複数ファイルの場合は全て開く
+let g:gist_get_multiplefile = 1
 
 " }}}
 "=============================================================================
