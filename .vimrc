@@ -1419,6 +1419,9 @@ call textobj#user#plugin('phptag', {
 " 自動プレビューをOFF
 let g:chalice_preview = s:false
 
+" タブで起動
+command! -nargs=0 TChalise tabnew | Chalice
+
 " }}}
 "=============================================================================
 " dicwin-vim : {{{
