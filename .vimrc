@@ -1153,6 +1153,7 @@ NeoBundle 'digitaltoad/vim-jade'
 NeoBundle 'godlygeek/csapprox'
 NeoBundle 'bling/vim-airline'
 NeoBundle 'h1mesuke/vim-alignta'
+NeoBundle 'itchyny/calendar.vim'
 NeoBundle 'kana/vim-operator-replace'
 NeoBundle 'kana/vim-operator-user'
 NeoBundle 'kana/vim-smartinput'
@@ -1168,7 +1169,6 @@ NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'koron/chalice'
 NeoBundle 'koron/dicwin-vim'
 NeoBundle 'lilydjwg/colorizer'
-NeoBundle 'mattn/calendar-vim'
 NeoBundle 'mattn/emmet-vim'
 NeoBundle 'mattn/gist-vim'
 NeoBundle 'mattn/mahjong-vim'
@@ -1295,6 +1295,12 @@ let g:unite_source_alignta_preset_options = [
 \     'g/' . s:comment_leadings,
 \ ]
 unlet s:comment_leadings
+
+" }}}
+"=============================================================================
+" calendar.vim : {{{
+
+" 設定なし
 
 " }}}
 "=============================================================================
@@ -1436,17 +1442,6 @@ endif
 " colorizer : {{{
 
 " 設定なし
-
-" }}}
-"=============================================================================
-" calendar-vim : {{{
-
-" キーマップ
-nnoremap <silent><F7> :<C-u>CalendarH<CR>
-autocmd MyAutoCmd FileType calendar nmap <buffer><F7> q
-
-" ステータスラインに現在日時を表示
-let g:calendar_datetime='statusline'
 
 " }}}
 "=============================================================================
