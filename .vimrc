@@ -1300,7 +1300,15 @@ unlet s:comment_leadings
 "=============================================================================
 " calendar.vim : {{{
 
-" 設定なし
+" キーマップ
+nnoremap <F7> :<C-u>Calendar -split=horizontal<CR>
+autocmd MyAutoCmd FileType calendar nmap <buffer><F7> q
+
+" 日曜日を先頭にする
+let g:calendar_first_day = 'sunday'
+
+" フレーム設定
+let g:calendar_frame = 'unicode'
 
 " }}}
 "=============================================================================
