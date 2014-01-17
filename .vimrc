@@ -501,6 +501,10 @@ set selection=old
 " 対応移動ペア
 set matchpairs=(:),{:},[:],<:>
 
+" スクロール量を設定
+nnoremap <C-y> 5<C-y>
+nnoremap <C-e> 5<C-e>
+
 " カーソルの上または下に表示する最低行数
 set scrolloff=5
 
