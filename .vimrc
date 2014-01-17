@@ -1873,6 +1873,9 @@ map _ <Plug>(operator-camelize-toggle)iwbvu
 " 取得数
 let twitvim_count = 256
 
+" 強制SSL
+let g:twitvim_force_ssl = 1
+
 " }}}
 "=============================================================================
 " vcscommand.vim : {{{
