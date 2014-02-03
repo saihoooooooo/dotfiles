@@ -625,6 +625,7 @@ cnoremap <C-l>c <C-r>=getcwd()<CR>/
 " ファイル設定 : {{{
 
 " 拡張子毎のfiletype指定
+autocmd MyAutoCmd BufRead,BufNewFile *.html,*.twig set filetype=htmldjango
 autocmd MyAutoCmd BufRead,BufNewFile *.ctp set filetype=php
 
 " filetypeのエイリアス
@@ -1199,6 +1200,7 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tsaleh/vim-matchit'
 NeoBundle 'tyru/open-browser.vim'
 NeoBundle 'tyru/operator-camelize.vim'
+NeoBundle 'vim-scripts/Jinja'
 NeoBundle 'vim-scripts/TwitVim'
 NeoBundle 'vim-scripts/vcscommand.vim'
 NeoBundle 'Yggdroot/indentLine'
@@ -1854,6 +1856,12 @@ xmap x@ <Plug>(openbrowser-smart-search)
 
 " カーソル位置の単語をキャメルケース化/解除のトグル
 map _ <Plug>(operator-camelize-toggle)iwbvu
+
+" }}}
+"=============================================================================
+" Jinja : {{{
+
+" 設定なし
 
 " }}}
 "=============================================================================
