@@ -1177,7 +1177,6 @@ NeoBundle 'mattn/emmet-vim'
 NeoBundle 'mattn/gist-vim'
 NeoBundle 'mattn/mahjong-vim'
 NeoBundle 'mattn/webapi-vim'
-NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'osyo-manga/vim-anzu'
 NeoBundle 'saihoooooooo/vim-auto-colorscheme'
 NeoBundle 'saihoooooooo/vim-textobj-space'
@@ -1199,6 +1198,7 @@ NeoBundle 'tyru/open-browser.vim'
 NeoBundle 'tyru/operator-camelize.vim'
 NeoBundle 'vim-scripts/TwitVim'
 NeoBundle 'vim-scripts/vcscommand.vim'
+NeoBundle 'Yggdroot/indentLine'
 
 " colorscheme
 NeoBundle 'saihoooooooo/tasmaniandevil'
@@ -1520,24 +1520,6 @@ function! GCalc(banged)
     endif
     echo decoded_response.lhs . ' = ' . decoded_response.rhs
 endfunction
-
-" }}}
-"=============================================================================
-" vim-indent-guides : {{{
-
-" 手動起動
-let g:indent_guides_enable_on_vim_startup = s:false
-
-" ガイドの幅
-let g:indent_guides_guide_size = &shiftwidth
-
-" ガイドの表示を開始するインデントレベル
-let g:indent_guides_start_level = 1
-
-" 色設定
-let g:indent_guides_auto_colors = s:false
-autocmd MyAutoCmd ColorScheme * highlight IndentGuidesOdd guibg=Black ctermbg=Black
-autocmd MyAutoCmd ColorScheme * highlight IndentGuidesEven guibg=DarkGrey ctermbg=DarkGrey
 
 " }}}
 "=============================================================================
@@ -1948,6 +1930,23 @@ function! s:VcscommandGetRevisionByCursorLine(fluctuation)
     call setreg('"', save_yank_register)
     return rev
 endfunction
+
+" }}}
+"=============================================================================
+" indentLine : {{{
+
+" デフォルトは非表示
+let g:indentLine_enabled = 0
+
+" 表示/非表示の切り替え
+nnoremap xi :<C-u>IndentLinesToggle<CR>
+
+" 色設定
+let g:indentLine_color_term = 247
+let g:indentLine_color_gui = '#99968B'
+
+" 可視化用の文字
+let g:indentLine_char = '¦'
 
 " }}}
 "=============================================================================
