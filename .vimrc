@@ -340,6 +340,9 @@ function! s:Eatchar(pattern)
     return (c =~ a:pattern) ? '' : c
 endfunction
 
+" vert sbufferの簡易入力
+cnoreabbrev vsb vert sbuffer
+
 " テキストオブジェクト簡易入力
 onoremap aa a<
 xnoremap aa a<
