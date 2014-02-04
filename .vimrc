@@ -1293,6 +1293,7 @@ let g:unite_source_alignta_preset_arguments = [
 \     ["Align at '|'", '|'],
 \     ["Align at '/'", '/\//'],
 \     ["Align at ','", ','],
+\     ["Align at '[Tab]'", '\t'],
 \ ]
 
 " オプション設定
