@@ -1158,6 +1158,7 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'AndrewRadev/switch.vim'
 NeoBundle 'anyakichi/vim-surround'
 NeoBundle 'digitaltoad/vim-jade'
+NeoBundle 'embear/vim-localvimrc'
 NeoBundle 'godlygeek/csapprox'
 NeoBundle 'bling/vim-airline'
 NeoBundle 'h1mesuke/vim-alignta'
@@ -1263,6 +1264,16 @@ let g:airline_theme = 'wombat'
 " vim-jade : {{{
 
 " 設定なし
+
+" }}}
+"=============================================================================
+" vim-localvimrc : {{{
+
+" ファイル名
+let g:localvimrc_name = '.local.vimrc'
+
+" ロード時の確認を省略
+let g:localvimrc_ask = 0
 
 " }}}
 "=============================================================================
@@ -1698,7 +1709,7 @@ endfunction
 " 入力モードで開始
 let g:unite_enable_start_insert = s:true
 
-" ¥を/に変換
+" \を/に変換
 if s:iswin
     call unite#custom#substitute('files', '\', '/')
 endif
