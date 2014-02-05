@@ -340,9 +340,6 @@ function! s:Eatchar(pattern)
     return (c =~ a:pattern) ? '' : c
 endfunction
 
-" vert sbufferの簡易入力
-cnoreabbrev vsb vert sbuffer
-
 " テキストオブジェクト簡易入力
 onoremap aa a<
 xnoremap aa a<
@@ -714,6 +711,14 @@ function! s:BufInfo()
     echo 'fline:' line('$') 'lines'
     echo 'fsize:' s:GetBufByte() 'bytes'
 endfunction
+
+" 各種バッファオープン
+nnoremap [Buffer] <Nop>
+nmap [Edit]b [Buffer]
+nnoremap [Buffer]b :buffer<SPACE>
+nnoremap [Buffer]n :sbuffer<SPACE>
+nnoremap [Buffer]t :tab sbuffer<SPACE>
+nnoremap [Buffer]v :vert sbuffer<SPACE>
 
 " }}}
 "=============================================================================
