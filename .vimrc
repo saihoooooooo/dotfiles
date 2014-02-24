@@ -124,7 +124,7 @@ endfunction
 " 関数内での検索パターン強調表示
 function! s:SetHlsearch()
     if &hlsearch
-        call feedkeys(":set hlsearch\<CR>", 'n')
+        call feedkeys(":set hlsearch | echo\<CR>", 'n')
     endif
 endfunction
 
@@ -215,6 +215,9 @@ set t_Co=256
 
 " 現在のモードを表示
 set showmode
+
+" ノーマルモードでの入力中キーを表示
+set showcmd
 
 " 行番号/相対行番号を表示
 set number
@@ -590,9 +593,6 @@ set wildmode=longest,list,full
 
 " 補完時に大文字小文字を区別しない
 set wildignorecase
-
-" 入力中コマンドを表示
-set showcmd
 
 " 履歴保存数
 set history=1000
@@ -1110,7 +1110,8 @@ let g:toggle_option_extra = {
 \ }
 
 " ターミナル起動時のコピペ用設定
-nnoremap <silent><F9> :<C-u>call <SID>CopipeTerm()<CR>
+nnoremap <silent><F9> :<C-u>CopipeTerm<CR>
+command! -nargs=0 CopipeTerm call s:CopipeTerm()
 function! s:CopipeTerm()
     if !exists('b:copipe_term_save')
         let b:copipe_term_save = {
