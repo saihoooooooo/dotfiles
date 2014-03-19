@@ -1563,11 +1563,7 @@ autocmd MyAutoCmd BufLeave,CursorHold,CursorHoldI * AnzuClearSearchStatus
 " vim-auto-colorscheme : {{{
 
 " デフォルトカラースキーム
-if s:ismac
-    let g:auto_colorscheme_default = 'hybrid'
-else
-    let g:auto_colorscheme_default = 'tasmaniandevil'
-endif
+let g:auto_colorscheme_default = 'tasmaniandevil'
 
 " 自動colorscheme設定
 let g:auto_colorscheme_config = [
