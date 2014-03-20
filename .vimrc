@@ -532,6 +532,9 @@ function! s:RemapPHPSectionJump()
     execute "onoremap <buffer><silent>]] :<C-u>call search('" . escape(section, '|') . "')<CR>"
 endfunction
 
+" matchitの有効化
+source $VIMRUNTIME/macros/matchit.vim
+
 " }}}
 "=============================================================================
 " 検索設定 : {{{
@@ -1195,6 +1198,7 @@ NeoBundle 'sgur/vim-textobj-parameter'
 NeoBundle 'Shougo/junkfile.vim'
 NeoBundle has('lua') ? 'Shougo/neocomplete' : 'Shougo/neocomplcache'
 NeoBundle 'Shougo/neosnippet'
+NeoBundle 'Shougo/neosnippet-snippets'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/unite-outline'
 NeoBundle 'Shougo/vimproc'
@@ -1204,7 +1208,6 @@ NeoBundle 'thinca/vim-textobj-between'
 NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'tpope/vim-endwise'
 NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'tsaleh/vim-matchit'
 NeoBundle 'tyru/open-browser.vim'
 NeoBundle 'tyru/operator-camelize.vim'
 NeoBundle 'vim-scripts/Jinja'
@@ -1668,6 +1671,12 @@ call s:Mkdir(g:neosnippet#snippets_directory)
 
 " }}}
 "=============================================================================
+" neosnippet-snippets : {{{
+
+" 設定なし
+
+" }}}
+"=============================================================================
 " unite.vim : {{{
 
 " 基本マップ
@@ -1847,12 +1856,6 @@ let g:tcommentTextObjectInlineComment = ''
 " }}}
 "=============================================================================
 " vim-fugitive : {{{
-
-" 設定なし
-
-" }}}
-"=============================================================================
-" vim-matchit : {{{
 
 " 設定なし
 
