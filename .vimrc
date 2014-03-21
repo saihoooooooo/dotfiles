@@ -986,7 +986,7 @@ nnoremap <expr>h col('.') == 1 && foldlevel(line('.')) > 0 ? 'zc' : '<left>'
 nnoremap <expr>l foldclosed(line('.')) != -1 ? 'zo' : '<right>'
 
 " 差分ファイル確認時は折り畳み無効
-autocmd MyAutoCmd FileType diff setlocal nofoldenable
+autocmd MyAutoCmd FileType diff,gitcommit setlocal nofoldenable
 
 " }}}
 "=============================================================================
@@ -1192,6 +1192,7 @@ NeoBundle 'mattn/gist-vim'
 NeoBundle 'mattn/mahjong-vim'
 NeoBundle 'mattn/webapi-vim'
 NeoBundle 'osyo-manga/vim-anzu'
+NeoBundle 'saihoooooooo/glowshi-ft.vim'
 NeoBundle 'saihoooooooo/vim-auto-colorscheme'
 NeoBundle 'saihoooooooo/vim-textobj-space'
 NeoBundle 'sgur/vim-textobj-parameter'
@@ -1560,6 +1561,12 @@ let g:anzu_status_format = 'anzu(%i/%l)'
 
 " BufLeave/CursorHold時に隠す
 autocmd MyAutoCmd BufLeave,CursorHold,CursorHoldI * AnzuClearSearchStatus
+
+" }}}
+"=============================================================================
+" glowshi-ft.vim : {{{
+
+" 設定なし
 
 " }}}
 "=============================================================================
