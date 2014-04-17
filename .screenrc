@@ -44,3 +44,6 @@ maptimeout 0
 
 # c1コードを処理しない
 defc1 off
+
+# 256色表示
+term xterm-256color
