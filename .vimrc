@@ -1566,7 +1566,14 @@ autocmd MyAutoCmd BufLeave,CursorHold,CursorHoldI * AnzuClearSearchStatus
 "=============================================================================
 " glowshi-ft.vim : {{{
 
-" 設定なし
+" キーマップ
+let g:glowshi_ft_no_default_key_mappings = s:true
+map f <plug>(glowshi-ft-f)
+map F <plug>(glowshi-ft-F)
+map t <plug>(glowshi-ft-t)
+map T <plug>(glowshi-ft-T)
+map : <plug>(glowshi-ft-repeat)
+map , <plug>(glowshi-ft-opposite)
 
 " }}}
 "=============================================================================
