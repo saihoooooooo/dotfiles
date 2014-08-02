@@ -16,7 +16,7 @@ bindkey "^N" history-beginning-search-forward-end
 # エイリアス
 alias ls='ls -a'
 alias rm='rm -i'
-alias vim="/Applications/MacVim.app/Contents/MacOS/Vim"
+alias vim="/usr/local/bin/vim"
 alias ctags="`brew --prefix`/bin/ctags"
 alias nave=$HOME/.nave/nave/nave.sh
 
@@ -91,7 +91,7 @@ bashcompinit
 source ~/.git-completion.sh
 
 # node
-nave use 0.8.0
+nave use 0.8.22
 
 # Ctrl-D でログアウトさせない
 setopt IGNOREEOF

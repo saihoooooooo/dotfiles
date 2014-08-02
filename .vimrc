@@ -1183,6 +1183,7 @@ NeoBundle 'kana/vim-textobj-lastpat'
 NeoBundle 'kana/vim-textobj-line'
 NeoBundle 'kana/vim-textobj-syntax'
 NeoBundle 'kana/vim-textobj-user'
+NeoBundle 'kana/vim-vspec'
 NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'koron/chalice'
 NeoBundle 'koron/dicwin-vim'
@@ -1453,6 +1454,12 @@ call textobj#user#plugin('phptag', {
 
 " }}}
 "=============================================================================
+" vim-vspec : {{{
+
+" 設定なし
+
+" }}}
+"=============================================================================
 " vim-coffee-script : {{{
 
 " 設定なし
@@ -1574,6 +1581,10 @@ map t <plug>(glowshi-ft-t)
 map T <plug>(glowshi-ft-T)
 map : <plug>(glowshi-ft-repeat)
 map , <plug>(glowshi-ft-opposite)
+
+" ハイライト
+let g:glowshi_ft_selected_hl_link = 'Cursor'
+let g:glowshi_ft_candidates_hl_link = 'DiffDelete'
 
 " }}}
 "=============================================================================
