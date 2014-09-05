@@ -1210,6 +1210,7 @@ NeoBundle 'thinca/vim-textobj-between'
 NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'tpope/vim-endwise'
 NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'tyru/autochmodx.vim'
 NeoBundle 'tyru/open-browser.vim'
 NeoBundle 'tyru/operator-camelize.vim'
 NeoBundle 'vim-scripts/Jinja'
@@ -1881,6 +1882,12 @@ let g:tcommentTextObjectInlineComment = ''
 " }}}
 "=============================================================================
 " vim-fugitive : {{{
+
+" 設定なし
+
+" }}}
+"=============================================================================
+" autochmodx.vim : {{{
 
 " 設定なし
 
