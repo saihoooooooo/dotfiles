@@ -1196,6 +1196,7 @@ NeoBundle 'osyo-manga/vim-anzu'
 NeoBundle 'saihoooooooo/glowshi-ft.vim'
 NeoBundle 'saihoooooooo/vim-auto-colorscheme'
 NeoBundle 'saihoooooooo/vim-textobj-space'
+NeoBundle 'scrooloose/syntastic'
 NeoBundle 'sgur/vim-textobj-parameter'
 NeoBundle 'Shougo/junkfile.vim'
 NeoBundle has('lua') ? 'Shougo/neocomplete' : 'Shougo/neocomplcache'
@@ -1605,6 +1606,27 @@ let g:auto_colorscheme_config = [
 " vim-textobj-space : {{{
 
 " 設定なし
+
+" }}}
+"=============================================================================
+" syntastic : {{{
+
+" 各filetype設定
+let g:syntastic_mode_map = {
+\     'mode': 'passive',
+\     'active_filetypes': ['php', 'javascript'],
+\ }
+let g:syntastic_php_checkers = ['php', 'phpcs']
+let g:syntastic_javascript_checkers = ['eslint']"
+
+" エラーをすべて表示
+let g:syntastic_always_populate_loc_list = 1
+
+" バッファオープン時にもチェックを行う
+let g:syntastic_check_on_open = 1
+
+" :wq時にはチェックしない
+let g:syntastic_check_on_wq = 0
 
 " }}}
 "=============================================================================
