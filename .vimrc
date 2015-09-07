@@ -889,11 +889,6 @@ endfunction
 " QuickFixウィンドウでのステータスラインのローカル設定を削除
 autocmd MyAutoCmd filetype qf set statusline<
 
-" php自動構文チェック
-autocmd MyAutoCmd FileType php setlocal makeprg=php\ -l\ %
-autocmd MyAutoCmd FileType php setlocal errorformat=%m\ in\ %f\ on\ line\ %l,%-GErrors\ parsing\ %f,%-G
-autocmd MyAutoCmd BufWritePost *.php silent make | redraw!
-
 " grep設定
 if executable('ag')
     set grepprg=ag\ --nogroup\ -iS
