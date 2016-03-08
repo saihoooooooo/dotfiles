@@ -1072,7 +1072,7 @@ call s:Mkdir(&backupdir)
 
 " スワップファイル作成
 set swapfile
-set directory=$DOTVIM/tmp/swap
+set directory=$DOTVIM/tmp/swap//
 call s:Mkdir(&directory)
 
 " }}}
